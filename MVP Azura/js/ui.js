@@ -75,9 +75,11 @@ function placeCursorAtPosition(el, position) {
 export function render() {
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
-
+    const progressEl = document.getElementById('progress');
     const current = state.sentences[state.currentIndex];
+    
     if (!current) return;
+    progressEl.innerText = `${state.sessionCount} / ${state.sentences.length}`;
 
     if (!sentenceInitialized) {
         sentenceEl.innerHTML = createGapSentence(current);

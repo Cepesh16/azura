@@ -11,6 +11,10 @@ body {
     text-align: center;
 }
 
+#progress {
+    text-align: right;
+}
+
 #sentence {
     font-size: 24px;
     margin-bottom: 20px;
@@ -19,19 +23,18 @@ body {
 
 .gap {
     display: inline-block;
-    min-width: 100px;
-    /*border-bottom: 2px solid gray;*/
-    outline: none;
+    /*min-width: 100px;*/
+    min-width: 6ch;
     font-size: 24px;
-    transition: border-color 0.4s ease;
+    outline: none;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.1);
-    /*transition: background-color 0.4s ease, border-color 0.4s ease;*/
+    /*background-color: rgba(0, 0, 0, 0.1);*/
+    border-bottom: 1px solid gray;
 }
 
 .gap.correct {
     border-bottom-color: #03C03C;
-    color: #03C03C;
+    color: rgba(50, 200, 50, 1.0);
 }
 
 /* temporary wrong flash */
