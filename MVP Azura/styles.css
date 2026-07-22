@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    background-color: #F5F5DC;
+}
+
+.app {
+    width: 400px;
+    text-align: center;
+}
+
+#sentence {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.gap {
+    display: inline-block;
+    min-width: 100px;
+    /*border-bottom: 2px solid gray;*/
+    outline: none;
+    font-size: 24px;
+    transition: border-color 0.4s ease;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    /*transition: background-color 0.4s ease, border-color 0.4s ease;*/
+}
+
+.gap.correct {
+    border-bottom-color: #03C03C;
+    color: #03C03C;
+}
+
+/* temporary wrong flash */
+.gap.flash-wrong {
+    color: rgba(255, 0, 0, 0.5);
+    border-bottom-color: rgba(255, 0, 0, 0.5);
+}
+
+/* hint (remaining letters) */
+.hint {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.correct {
+    color: black;
+    /*color: #03C03C;*/
+}
+
+#translation {
+    margin-top: 20px;
+    text-align: left;
+    color: gray;
+}
