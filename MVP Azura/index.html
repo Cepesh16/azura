@@ -7,10 +7,46 @@
 </head>
 <body>
 
-<div class="app">
+<div id="loading">
+    <div class="spinner"></div>
+    <div id="loading-text">Loading your words...</div>
+</div>
+<button id="reset-session" style="position:fixed; top:10px; right:10px; z-index:999;">
+    Reset Session (dev)
+</button>
+
+<div id="app" style="display: none;">
+    <!-- all your app content here -->
+    <button id="options-btn">Options</button>
+
+    <div id="study-mode">
+        <button id="mode-all">Study All</button>
+        <button id="mode-review">Review</button>
+    </div>
     <div id="progress"></div>
+    <div id="progress-bar">
+        <div id="progress-fill"></div>
+    </div>
     <div id="sentence"></div>
     <div id="translation"></div>
+</div>
+
+<div id="options-modal" style="display:none;">
+    <div class="modal-content">
+
+        <h3>Words per session</h3>
+
+        <select id="session-select">
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+        </select>
+
+        <br><br>
+
+        <button id="save-options">Save</button>
+
+    </div>
 </div>
 
 <script type="module" src="./js/app.js"></script>

@@ -3,6 +3,27 @@ import { submitAnswer } from './logic.js';
 
 let sentenceInitialized = false;
 
+
+function getTimeUntilNextDay() {
+    const now = new Date();
+
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
+    return tomorrow - now;
+}
+
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+
+    return `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+
 function createGapSentence(sentenceObj) {
     const { sentence, answer } = sentenceObj;
 
@@ -77,9 +98,65 @@ export function render() {
     const translationEl = document.getElementById('translation');
     const progressEl = document.getElementById('progress');
     const current = state.sentences[state.currentIndex];
-    
-    if (!current) return;
-    progressEl.innerText = `${state.sessionCount} / ${state.sentences.length}`;
+
+    // No words to study
+    if (!current) {
+
+        const sentenceEl = document.getElementById('sentence');
+        const translationEl = document.getElementById('translation');
+        const progressEl = document.getElementById('progress');
+
+        if (state.studyMode === 'review') {
+
+            sentenceEl.innerHTML = `
+                <div class="empty-state">
+                    🎉 <strong>Review complete!</strong><br><br>
+                    There are no words to review.
+                </div>
+            `;
+
+        } else {
+
+            const total = state.sessionCorrect + state.sessionWrong;
+
+            sentenceEl.innerHTML = `
+                <div class="empty-state">
+                    🎉 <strong>You're done for today!</strong><br><br>
+
+                    You studied <strong>${total}</strong> words<br>
+                    ✅ Correct: <strong>${state.sessionCorrect}</strong><br>
+                    ❌ Mistakes: <strong>${state.sessionWrong}</strong><br><br>
+
+                    Next session in: <span id="countdown"></span>
+                </div>
+            `;
+
+            setInterval(() => {
+                const el = document.getElementById('countdown');
+                if (el) {
+                    el.innerText = formatTime(getTimeUntilNextDay());
+                }
+            }, 1000);
+        }
+
+        translationEl.innerText = '';
+        progressEl.innerText = '';
+
+        return;
+    }
+
+    progressEl.innerText = `${state.sessionCount} / ${state.sessionLimit}`;
+
+    const progressFill = document.getElementById('progress-fill');
+    const percent = Math.min(
+        (state.sessionCount / state.sessionLimit) * 100,
+        100
+    );
+
+    if (progressFill) {
+        progressFill.style.width = `${percent}%`;
+    }
+
 
     if (!sentenceInitialized) {
         sentenceEl.innerHTML = createGapSentence(current);
