@@ -10,23 +10,62 @@ async function init() {
         const modal = document.getElementById('options-modal');
         const saveBtn = document.getElementById('save-options');
         const select = document.getElementById('session-select');
+        const soundSelect = document.getElementById('sound-toggle');
 
         // Open modal
         optionsBtn.onclick = () => {
-            // show current value in dropdown
+
+            // show current values
             select.value = state.sessionLimit;
+
+            const soundEnabled =
+                localStorage.getItem('soundEnabled') ?? 'true';
+
+            soundSelect.value = soundEnabled;
 
             modal.style.display = 'flex';
         };
 
         // Save
         saveBtn.onclick = () => {
-            state.sessionLimit = Number(select.value);
 
-            modal.style.display = 'none';
+            const newLimit = Number(select.value);
+            const message = document.getElementById('settings-message');
 
-            // restart session with new limit
-            setStudyMode(state.studyMode);
+            // Apply sound immediately
+            localStorage.setItem(
+                'soundEnabled',
+                soundSelect.value
+            );
+
+            // Session length didn't change
+            if (newLimit === state.sessionLimit) {
+                modal.style.display = 'none';
+                return;
+            }
+
+            // Session hasn't started yet
+            if (state.sessionCount === 0) {
+
+                state.sessionLimit = newLimit;
+
+                modal.style.display = 'none';
+
+                setStudyMode(state.studyMode);
+
+                return;
+            }
+
+            // Session already in progress
+            state.sessionLimit = newLimit;
+
+            message.innerText =
+                'New session length will be used next session.';
+
+            setTimeout(() => {
+                message.innerText = '';
+                modal.style.display = 'none';
+            }, 1800);
         };
         // ✅ CLOSE when clicking outside
         modal.onclick = (e) => {
@@ -46,6 +85,9 @@ async function init() {
 
         state.userInput = '';
         state.status = 'waiting';
+        if (localStorage.getItem('soundEnabled') === null) {
+            localStorage.setItem('soundEnabled', 'true');
+        }
 
 
         const sessionData = JSON.parse(localStorage.getItem('sessionData'));

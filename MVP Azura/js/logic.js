@@ -1,6 +1,7 @@
 import { state } from './state.js';
 import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
+import { playCorrect, playWrong } from './sound.js';
 import { updateWord } from './api.js';
 import { refreshStudyMode } from './studyMode.js';
 
@@ -111,6 +112,7 @@ function finishWord(immediateCorrect) {
     state.status = 'correct';
     render();
 
+    playCorrect();
     speak(current.sentence);
 
     setTimeout(() => {
@@ -139,7 +141,21 @@ export function submitAnswer() {
 
     const current = state.sentences[state.currentIndex];
 
-    if (!state.userInput.trim()) return;
+    // User doesn't know the word → show hint immediately
+    if (!state.userInput.trim() && !state.answeredWithHint) {
+
+        state.answeredWithHint = true;
+        state.status = 'wrong';
+        state.userInput = '';
+
+        render();
+        return;
+    }
+
+    // Ignore Enter when already in hint mode and nothing typed yet
+    if (!state.userInput.trim()) {
+        return;
+    }
 
     const isCorrect =
         normalize(state.userInput) ===
@@ -172,6 +188,7 @@ export function submitAnswer() {
 
     state.answeredWithHint = true;
 
+    playWrong();
     state.status = 'wrongFlash';
     state.flashWrong = true;
 

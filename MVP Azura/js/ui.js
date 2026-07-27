@@ -164,6 +164,17 @@ export function render() {
     }
 
     translationEl.innerText = current.translation;
+    const helperEl = document.getElementById('helper');
+
+    if (helperEl) {
+
+        if (!state.answeredWithHint && state.userInput === '') {
+            helperEl.innerText = 'Press Enter if you don’t know the word.';
+        } else {
+            helperEl.innerText = '';
+        }
+
+    }
 
     const input = document.getElementById('gap-input');
     if (!input) return;
