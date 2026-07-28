@@ -11,6 +11,7 @@ export const state = {
     cursorInitialized: false,
     flashWrong: false,
     answeredWithHint: false,
+    layoutWarning: false,
 
     // Session control
     sessionCount: 0,

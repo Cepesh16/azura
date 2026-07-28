@@ -1,5 +1,6 @@
 import { state } from './state.js';
 import { submitAnswer } from './logic.js';
+import { isDifferentAlphabet } from './logic.js';
 
 let sentenceInitialized = false;
 
@@ -142,6 +143,11 @@ export function render() {
         translationEl.innerText = '';
         progressEl.innerText = '';
 
+        const helperEl = document.getElementById('helper');
+        if (helperEl) {
+            helperEl.innerText = '';
+        }
+
         return;
     }
 
@@ -168,13 +174,21 @@ export function render() {
 
     if (helperEl) {
 
-        if (!state.answeredWithHint && state.userInput === '') {
-            helperEl.innerText = 'Press Enter if you don’t know the word.';
-        } else {
+        if (state.layoutWarning) {
+            helperEl.innerText = '⚠ Switch your keyboard to English';
+        }
+        else if (!state.answeredWithHint && state.userInput === '') {
+            helperEl.innerText = 'Press Enter if unsure.';
+        }
+        else if (state.userInput !== '' && !state.answeredWithHint) {
+            helperEl.innerText = 'Press Enter to check.';
+        }
+        else {
             helperEl.innerText = '';
         }
 
     }
+
 
     const input = document.getElementById('gap-input');
     if (!input) return;
@@ -186,7 +200,43 @@ export function render() {
         input.innerText = state.userInput;
 
         input.oninput = () => {
-            state.userInput = input.innerText;
+
+            const text = input.innerText;
+            const cursorPos = text.length;
+
+            state.userInput = text;
+
+            const current = state.sentences[state.currentIndex];
+
+            state.layoutWarning = isDifferentAlphabet(
+                state.userInput,
+                current.answer
+            );
+
+            render();
+
+            const newInput = document.getElementById('gap-input');
+
+            if (!newInput) return;
+
+            newInput.focus();
+
+            // ✅ SPECIAL CASE: empty input
+            if (cursorPos === 0) {
+                const range = document.createRange();
+                const sel = window.getSelection();
+
+                range.selectNodeContents(newInput);
+                range.collapse(true);
+
+                sel.removeAllRanges();
+                sel.addRange(range);
+
+                return;
+            }
+
+            // ✅ normal case
+            placeCursorAtPosition(newInput, cursorPos);
         };
 
         input.onkeydown = (e) => {

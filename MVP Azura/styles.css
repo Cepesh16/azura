@@ -1,10 +1,40 @@
+/* =========================
+   Global
+========================= */
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     margin-top: 100px;
-    background-color: #F5F5DC;
+    background: #f8f7f3;
 }
+
+
+button {
+    font-size: 14px;
+    font-weight: 500;
+
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: white;
+
+    padding: 6px 12px;
+
+    cursor: pointer;
+
+    transition: all 0.15s ease;
+}
+
+button:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   Loading
+========================= */
 
 #loading {
     display: flex;
@@ -32,33 +62,94 @@ body {
 }
 
 
-#app {
-    width: 400px;
-    text-align: center;
-}
+/* =========================
+   Main App
+========================= */
 
 #app {
+    width: min(400px, 90vw);
+    text-align: center;
+
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transform: translateY(8px);
+
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
 }
 
 #app.visible {
     opacity: 1;
+    transform: translateY(0);
 }
 
+
+/* =========================
+   Top Navigation
+========================= */
 
 #top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
+
+#top-bar button {
+    line-height: 1;
+}
+
+
+/* Study / Review switch */
 
 #study-mode {
     display: flex;
-    gap: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+#study-mode button {
+    border: none;
+    border-radius: 0px;
+    background: transparent;
+    color: #555;
+}
+
+#study-mode button:hover {
+    transform: none;
+    background: #f5f5f5;
+}
+
+
+#study-mode button:not(:last-child) {
+    border-right: 1px solid #ddd;
+}
+
+#study-mode button.active {
+    background: #111;
+    color: white;
+}
+#study-mode button.active:hover {
+    background: #111;
+}
+
+/* Options button */
+
+#options-btn {
+    border: 1px solid #ddd;
+    background: white;
+    color: #555;
+}
+
+#options-btn:hover {
+    background: #f5f5f5;
+}
+
+
+/* =========================
+   Progress
+========================= */
 
 #progress-row {
     display: flex;
@@ -68,41 +159,38 @@ body {
 }
 
 #progress {
-    min-width: 40px;
-    text-align: right;
     font-size: 14px;
     color: #666;
+    font-weight: 500;
 }
+
 #progress-bar {
     flex: 1;
-    width: 100%;
-    height: 6px;
+    height: 8px;
     background: #eee;
-    border-radius: 4px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
 #progress-fill {
     height: 100%;
     width: 0%;
+
     background: #4caf50;
+    border-radius: 10px;
+
     transition: width 0.3s ease;
 }
 
 
-#options-btn {
-
-}
+/* =========================
+   Settings Modal
+========================= */
 
 #options-modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
+    inset: 0;
+    background: rgba(0,0,0,0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +203,10 @@ body {
     padding: 20px;
     border-radius: 10px;
     text-align: right;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
+
 .modal-content h3 {
     text-align: center;
 }
@@ -129,82 +220,95 @@ body {
     line-height: 18px;
 }
 
-.limit-btn {
-    margin: 5px;
-}
 
+/* =========================
+   Learning Area
+========================= */
 
-#study-mode{
-    text-align: left;
+#sentence,
+#translation {
+    background: white;
+    padding-left: 28px;
+    padding-right: 28px;
 }
-
-button.active {
-    background-color: black;
-    color: white;
-}
-button:hover {
-    cursor: pointer;
-    opacity: 0.8;
-}
-
 
 #sentence {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 28px;
+    line-height: 1.5;
+    font-weight: 500;
     text-align: left;
+
+    padding-top: 34px;
+    padding-bottom: 12px;
+
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
 }
 
 .gap {
     display: inline-block;
-    /*min-width: 100px;*/
     min-width: 6ch;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: 500;
     outline: none;
     text-align: center;
-    /*background-color: rgba(0, 0, 0, 0.1);*/
-    border-bottom: 1px solid gray;
-}
-
-.gap.correct {
-    border-bottom-color: #03C03C;
-    color: rgba(50, 200, 50, 1.0);
-}
-
-/* temporary wrong flash */
-.gap.flash-wrong {
-    color: rgba(255, 0, 0, 0.5);
-    border-bottom-color: rgba(255, 0, 0, 0.5);
-}
-
-/* hint (remaining letters) */
-.hint {
-    color: rgba(0, 0, 0, 0.3);
-}
-
-.correct {
-    color: black;
-    /*color: #03C03C;*/
+    border-bottom: 1px solid #aaa;
 }
 
 #translation {
-    margin-top: 20px;
+    margin-top: 0;
+    padding-top: 8px;
+    padding-bottom: 28px;
+
+    font-size: 16px;
+    color: #777;
     text-align: left;
-    color: gray;
+
+    border-radius: 0 0 12px 12px;
 }
+
 #helper {
-    margin-top: 40px;
-    font-size: 14px;
+    margin-top: 28px;
+    font-size: 13px;
     color: #888;
     text-align: center;
     min-height: 18px;
 }
 
 
+/* =========================
+   Answer States
+========================= */
+
+.gap.correct {
+    border-bottom-color: #03C03C;
+    color: rgba(50, 200, 50, 1);
+}
+
+
+.gap.flash-wrong {
+    color: rgba(255, 0, 0, 0.5);
+    border-bottom-color: rgba(255, 0, 0, 0.5);
+}
+
+
+/* Hint letters */
+
+.hint {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.correct {
+    color: black;
+}
+
+
+/* =========================
+   Empty / Finished State
+========================= */
 
 .empty-state {
-    text-align: left;
-    font-size: 24px;
-    /*line-height: 1.6;*/
-    padding: 40px 20px;
+    font-size: 20px;
+    line-height: 1.6;
 }
 

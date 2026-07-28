@@ -9,6 +9,13 @@ function normalize(str) {
     return str.trim().toLowerCase();
 }
 
+export function isDifferentAlphabet(input, answer) {
+    const hasCyrillic = /[а-яіїє]/i.test(input);
+    const hasLatin = /[a-z]/i.test(answer);
+
+    return hasCyrillic && hasLatin;
+}
+
 // Keep history of last shown words
 const recentHistory = [];
 const HISTORY_LIMIT = 5;
@@ -113,11 +120,9 @@ function finishWord(immediateCorrect) {
     render();
 
     playCorrect();
-    speak(current.sentence);
+    speak(current.sentence, () => {
 
-    setTimeout(() => {
-
-        // ✅ STOP BEFORE going to next word
+        // STOP BEFORE going to next word
         if (state.sessionCount >= state.sessionLimit) {
 
             localStorage.setItem('sessionData', JSON.stringify({
@@ -134,7 +139,7 @@ function finishWord(immediateCorrect) {
 
         nextSentence();
 
-    }, 800);
+    });
 }
 
 export function submitAnswer() {
