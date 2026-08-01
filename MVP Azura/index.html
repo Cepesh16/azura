@@ -31,37 +31,38 @@
             <div id="progress-fill"></div>
         </div>
 
-        <div id="progress"></div>
+        <div id="progress-counter"></div>
     </div>
     
+    <div id="level-indicator"></div>
     <div id="sentence"></div>
     <div id="translation"></div>
     <div id="helper"></div>
 </div>
 
 <div id="options-modal" style="display:none;">
-    <div class="modal-content">
+    <div class="options-card">
 
-        <h3>Settings</h3>
+        <h3 class="options-title">Settings</h3>
 
-        <label for="session-select">Words per session</label>
+        <div class="setting-row">
+            <label for="session-select">Words per session</label>
+            <select id="session-select">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+            </select>
+        </div>
 
-        <select id="session-select">
-            <option value="5" selected>5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-        </select>
+        <div class="setting-row">
+            <label for="sound-toggle">Sound</label>
+            <label class="switch">
+                <input type="checkbox" id="sound-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
 
-        <br><br>
 
-        <label for="sound-toggle">Sound effects</label>
-
-        <select id="sound-toggle">
-            <option value="true">On</option>
-            <option value="false">Off</option>
-        </select>
-        <br><br>
-        
         <div id="settings-message"></div>
         <button id="save-options">Save</button>
 

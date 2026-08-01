@@ -18,6 +18,11 @@ function isDue(word) {
 // Rebuild active list
 export function refreshStudyMode() {
 
+    // 🚫 DO NOT mutate during session
+    if (state.sessionCount > 0) {
+        return;
+    }
+
     if (state.studyMode === 'all') {
 
         state.sentences = state.allSentences.filter(word => {
@@ -47,17 +52,21 @@ export function refreshStudyMode() {
 
 // User intentionally changed study mode
 export function setStudyMode(mode) {
+    // 🚫 DO NOT reset during active session
+    if (state.sessionCount > 0) {
+        return;
+    }
 
     const sessionData = JSON.parse(localStorage.getItem('sessionData'));
     const today = new Date().toDateString();
 
 // TO TEST WORDS CLEAR LOCAL STORAGE - COMMENT THESE IF BLOCK
     // 🔒 lock if session completed today
-    if (sessionData && sessionData.date === today && sessionData.completed) {
+/*    if (sessionData && sessionData.date === today && sessionData.completed) {
         state.sentences = [];
         render();
         return;
-    }
+    }*/
 
     state.studyMode = mode;
 
@@ -67,11 +76,6 @@ export function setStudyMode(mode) {
     state.sessionWrong = 0;
 
     refreshStudyMode();
-
-    // build session list
-    const shuffled = [...state.sentences].sort(() => Math.random() - 0.5);
-    state.sessionWords = shuffled.slice(0, state.sessionLimit);
-    state.sentences = state.sessionWords;
 
     // highlight buttons
     const allBtn = document.getElementById('mode-all');
@@ -86,14 +90,7 @@ export function setStudyMode(mode) {
         reviewBtn.classList.add('active');
     }
 
-    // random start
-    if (state.sentences.length > 0) {
-        state.currentIndex = Math.floor(
-            Math.random() * state.sentences.length
-        );
-    } else {
-        state.currentIndex = 0;
-    }
+    state.currentIndex = 0;
 
     state.userInput = '';
     state.status = 'waiting';

@@ -3,20 +3,17 @@ import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong } from './sound.js';
 import { updateWord } from './api.js';
-import { refreshStudyMode } from './studyMode.js';
 
 function normalize(str) {
-    return str.trim().toLowerCase();
+    return str
+    .replace(/\u00A0/g, ' ')
+    .trim()
+    .toLowerCase();
 }
 
-export function isDifferentAlphabet(input, answer) {
-    const hasCyrillic = /[а-яіїє]/i.test(input);
-    const hasLatin = /[a-z]/i.test(answer);
-
-    return hasCyrillic && hasLatin;
-}
-
-// Keep history of last shown words
+// =========================
+// SESSION QUEUE (unchanged)
+// =========================
 const recentHistory = [];
 const HISTORY_LIMIT = 5;
 
@@ -26,87 +23,82 @@ function getWeight(memoryLevel) {
     return weights[Math.min(level, 5)];
 }
 
-function chooseNextSentence() {
+export function buildSessionQueue() {
+    const pool = [];
 
-    const currentIndex = state.currentIndex;
-    const candidates = [];
 
     state.sentences.forEach((sentence, index) => {
-
-        if (index === currentIndex) return;
-        if (recentHistory.includes(index)) return;
-
         const weight = getWeight(sentence.memoryLevel);
-
         for (let i = 0; i < weight; i++) {
-            candidates.push(index);
+            pool.push(index);
         }
     });
 
-    if (candidates.length === 0) {
-        state.sentences.forEach((_, index) => {
-            if (index !== currentIndex) {
-                candidates.push(index);
-            }
-        });
+    const selected = [];
+
+    while (
+        selected.length < state.sessionLimit &&
+        pool.length > 0
+        ) {
+        const random = Math.floor(Math.random() * pool.length);
+    const index = pool[random];
+
+    if (!selected.includes(index)) {
+        selected.push(index);
     }
 
-    if (candidates.length === 0) return 0;
-
-    const random = Math.floor(Math.random() * candidates.length);
-    const nextIndex = candidates[random];
-
-    recentHistory.push(nextIndex);
-
-    if (recentHistory.length > HISTORY_LIMIT) {
-        recentHistory.shift();
+    for (let i = pool.length - 1; i >= 0; i--) {
+        if (pool[i] === index) {
+            pool.splice(i, 1);
+        }
     }
-
-    return nextIndex;
 }
 
+return selected;
+
+
+}
+
+// =========================
+// NEXT SENTENCE
+// =========================
 function nextSentence() {
+    state.currentQueueIndex++;
 
 
-    refreshStudyMode();
-
-    if (state.sentences.length === 0) {
-
-        state.currentIndex = 0;
-        state.userInput = '';
-        state.status = 'waiting';
-
-        resetSentence();
-        render();
+    if (state.currentQueueIndex >= state.sessionQueue.length) {
         return;
     }
 
-    state.currentIndex = chooseNextSentence();
+    state.currentIndex = state.sessionQueue[state.currentQueueIndex];
 
     state.userInput = '';
     state.status = 'waiting';
     state.answeredWithHint = false;
+    state.layoutWarning = false;
+    state.isSubmitting = false;
 
     resetSentence();
     render();
+
+
 }
 
-function finishWord(immediateCorrect) {
+// =========================
+// FINISH WORD
+// =========================
+function finishWord(current, immediateCorrect) {
     state.sessionCount++;
     render();
-    
-    const current = state.sentences[state.currentIndex];
+
 
     if (immediateCorrect) {
-
         current.memoryLevel = Math.min(
             (Number(current.memoryLevel) || 0) + 1,
             5
-        );
+            );
 
         current.correct = (Number(current.correct) || 0) + 1;
-
-        // ✅ only real correct counts
         state.sessionCorrect++;
     }
 
@@ -120,73 +112,81 @@ function finishWord(immediateCorrect) {
     render();
 
     playCorrect();
-    speak(current.sentence, () => {
 
-        // STOP BEFORE going to next word
-        if (state.sessionCount >= state.sessionLimit) {
+    const delay = immediateCorrect ? 0 : 600;
 
-            localStorage.setItem('sessionData', JSON.stringify({
-                date: new Date().toDateString(),
-                completed: true,
-                correct: state.sessionCorrect,
-                wrong: state.sessionWrong
-            }));
+    setTimeout(() => {
+        speak(current.sentence, () => {
+            nextSentence();
+        });
+    }, delay);
 
-            state.sentences = [];
-            render();
-            return;
-        }
 
-        nextSentence();
-
-    });
 }
 
+// =========================
+// 🚨 FINAL FIXED SUBMIT
+// =========================
 export function submitAnswer() {
+    console.log('SUBMIT CALLED');
+    console.log('STATE INPUT:', JSON.stringify(state.userInput));
+
+
+    if (state.isSubmitting) return;
+    state.isSubmitting = true;
 
     const current = state.sentences[state.currentIndex];
 
-    // User doesn't know the word → show hint immediately
-    if (!state.userInput.trim() && !state.answeredWithHint) {
+// 🔥 ONLY TRUST STATE (NOT DOM)
+    const input = state.userInput.trim();
 
-        state.answeredWithHint = true;
-        state.status = 'wrong';
-        state.userInput = '';
+    console.log('STATE INPUT:', JSON.stringify(input));
 
-        render();
+// =========================
+// ❗ EMPTY INPUT
+// =========================
+    if (input === '') {
+
+    // First Enter → show hint
+        if (!state.answeredWithHint) {
+            state.answeredWithHint = true;
+            state.status = 'wrong';
+            render();
+        }
+
+    // Second Enter → DO NOTHING
+        state.isSubmitting = false;
         return;
     }
 
-    // Ignore Enter when already in hint mode and nothing typed yet
-    if (!state.userInput.trim()) {
-        return;
-    }
-
+// =========================
+// ✅ CORRECT (ONLY if user typed)
+// =========================
     const isCorrect =
-        normalize(state.userInput) ===
-        normalize(current.answer);
-
-    if (isCorrect && state.answeredWithHint) {
-        finishWord(false);
-        return;
-    }
+    input.length === current.answer.length &&
+    normalize(input) === normalize(current.answer);
 
     if (isCorrect) {
-        finishWord(true);
+
+        resetSentence();
+
+    // if user used hint → not immediate correct
+        finishWord(current, !state.answeredWithHint);
+
         return;
     }
 
-    // ❌ WRONG
-
+// =========================
+// ❌ WRONG
+// =========================
     state.sessionWrong++;
 
     current.memoryLevel = Math.max(
         (Number(current.memoryLevel) || 0) - 1,
         0
-    );
+        );
 
     current.wrong = (Number(current.wrong) || 0) + 1;
-
     current.lastSeen = new Date();
 
     updateWord(current.id, false);
@@ -194,6 +194,7 @@ export function submitAnswer() {
     state.answeredWithHint = true;
 
     playWrong();
+
     state.status = 'wrongFlash';
     state.flashWrong = true;
 
@@ -202,6 +203,9 @@ export function submitAnswer() {
     setTimeout(() => {
         state.status = 'wrong';
         state.userInput = '';
+        state.isSubmitting = false;
         render();
     }, 400);
+
+
 }

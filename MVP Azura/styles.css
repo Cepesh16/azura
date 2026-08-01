@@ -10,25 +10,22 @@ body {
     background: #f8f7f3;
 }
 
-
 button {
     font-size: 14px;
     font-weight: 500;
-
     border-radius: 8px;
     border: 1px solid #ddd;
     background: white;
-
     padding: 6px 12px;
-
-    cursor: pointer;
-
     transition: all 0.15s ease;
 }
 
 button:hover {
-    opacity: 1;
     transform: translateY(-1px);
+}
+
+button, select {
+    cursor: pointer;
 }
 
 
@@ -69,10 +66,8 @@ button:hover {
 #app {
     width: min(400px, 90vw);
     text-align: center;
-
     opacity: 0;
     transform: translateY(8px);
-
     transition:
         opacity 0.5s ease,
         transform 0.5s ease;
@@ -94,11 +89,6 @@ button:hover {
     align-items: center;
     margin-bottom: 16px;
 }
-
-#top-bar button {
-    line-height: 1;
-}
-
 
 /* Study / Review switch */
 
@@ -158,7 +148,7 @@ button:hover {
     margin-bottom: 10px;
 }
 
-#progress {
+#progress-counter {
     font-size: 14px;
     color: #666;
     font-weight: 500;
@@ -175,50 +165,156 @@ button:hover {
 #progress-fill {
     height: 100%;
     width: 0%;
-
     background: #4caf50;
     border-radius: 10px;
-
     transition: width 0.3s ease;
 }
 
 
+
 /* =========================
-   Settings Modal
+Options Modal (FINAL)
 ========================= */
 
 #options-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.35);
-    display: flex;
+    background: rgba(0, 0, 0, 0.25);
+
+    display: none;
     align-items: center;
     justify-content: center;
+
+    z-index: 1000;
 }
 
-.modal-content {
-    width: 320px;
-    box-sizing: border-box;
+/* card */
+
+.options-card {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: right;
+    border-radius: 12px;
+    padding: 20px 22px;
+    width: 280px;
 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+    transform: translateY(10px);
+    opacity: 0;
+    animation: modalFadeIn 0.2s ease forwards;
 }
 
-.modal-content h3 {
-    text-align: center;
+@keyframes modalFadeIn {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
+
+/* title */
+
+.options-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+/* rows */
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 14px;
+}
+
+/* select */
+
+#session-select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+/* toggle switch */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    top: 2px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+    background-color: #111;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(16px);
+}
+
+/* save button */
+
+#save-options {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* =========================
+Save Message
+========================= */
 
 #settings-message {
-    min-height: 36px;
-    margin: 10px 0;
     font-size: 13px;
     color: #666;
     text-align: center;
-    line-height: 18px;
+
+    margin-top: 10px;
+    min-height: 16px;
+
+    opacity: 0;
+    transform: translateY(4px);
 }
+
+/* animated */
+
+#settings-message.show {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+
+
+
 
 
 /* =========================
@@ -255,6 +351,42 @@ button:hover {
     border-bottom: 1px solid #aaa;
 }
 
+#level-indicator {
+    margin-bottom: 8px;
+    padding-left: 28px;
+}
+
+.memory-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.memory-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ddd; /* empty dots */
+}
+
+/* 🔴 weak */
+.memory-dot.level-0,
+.memory-dot.level-1 {
+    background: #e57373; /* soft red */
+}
+
+/* 🟡 medium */
+.memory-dot.level-2,
+.memory-dot.level-3 {
+    background: #ffb74d; /* soft orange */
+}
+
+/* 🟢 strong */
+.memory-dot.level-4,
+.memory-dot.level-5 {
+    background: #81c784; /* soft green */
+}
+
+
 #translation {
     margin-top: 0;
     padding-top: 8px;
@@ -273,8 +405,10 @@ button:hover {
     color: #888;
     text-align: center;
     min-height: 18px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
-
 
 /* =========================
    Answer States
@@ -283,12 +417,34 @@ button:hover {
 .gap.correct {
     border-bottom-color: #03C03C;
     color: rgba(50, 200, 50, 1);
+    caret-color: transparent;
 }
 
 
 .gap.flash-wrong {
     color: rgba(255, 0, 0, 0.5);
     border-bottom-color: rgba(255, 0, 0, 0.5);
+    animation: wrongShake 0.25s ease;
+}
+
+/* correct pop */
+.gap.correct-pop {
+    animation: correctPop 0.22s ease;
+}
+
+@keyframes correctPop {
+    50% { transform: scale(1.08); }
+}
+
+/* wrong shake */
+/*.gap.shake {
+    animation: wrongShake 0.25s ease;
+}
+*/
+@keyframes wrongShake {
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-3px); }
 }
 
 

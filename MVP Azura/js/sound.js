@@ -5,7 +5,6 @@ correctSound.preload = 'auto';
 wrongSound.preload = 'auto';
 
 export function playCorrect() {
-
     if (localStorage.getItem('soundEnabled') === 'false') return;
 
     correctSound.currentTime = 0;
