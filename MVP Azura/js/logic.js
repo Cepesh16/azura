@@ -67,6 +67,8 @@ function nextSentence() {
 
 
     if (state.currentQueueIndex >= state.sessionQueue.length) {
+        state.status = 'finished';
+        render();
         return;
     }
 
@@ -208,4 +210,27 @@ export function submitAnswer() {
     }, 400);
 
 
+}
+
+
+export function startNewSession() {
+
+    state.sessionCount = 0;
+    state.sessionCorrect = 0;
+    state.sessionWrong = 0;
+
+    state.sessionQueue = buildSessionQueue();
+    state.currentQueueIndex = 0;
+
+    if (state.sessionQueue.length > 0) {
+        state.currentIndex = state.sessionQueue[0];
+    }
+
+    state.userInput = '';
+    state.status = 'waiting';
+    state.answeredWithHint = false;
+    state.isSubmitting = false;
+
+    resetSentence();
+    render();
 }

@@ -22,6 +22,7 @@ button {
 
 button:hover {
     transform: translateY(-1px);
+    background: #f5f5f5 !important;
 }
 
 button, select {
@@ -69,8 +70,8 @@ button, select {
     opacity: 0;
     transform: translateY(8px);
     transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 #app.visible {
@@ -82,78 +83,19 @@ button, select {
 /* =========================
    Top Navigation
 ========================= */
-
-#top-bar {
+#top-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 12px;
     margin-bottom: 16px;
 }
 
-/* Study / Review switch */
-
-#study-mode {
-    display: flex;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-#study-mode button {
-    border: none;
-    border-radius: 0px;
-    background: transparent;
-    color: #555;
-}
-
-#study-mode button:hover {
-    transform: none;
-    background: #f5f5f5;
-}
-
-
-#study-mode button:not(:last-child) {
-    border-right: 1px solid #ddd;
-}
-
-#study-mode button.active {
-    background: #111;
-    color: white;
-}
-#study-mode button.active:hover {
-    background: #111;
-}
-
-/* Options button */
-
+/* options button stays natural size */
 #options-btn {
-    border: 1px solid #ddd;
-    background: white;
-    color: #555;
+    flex-shrink: 0;
 }
 
-#options-btn:hover {
-    background: #f5f5f5;
-}
-
-
-/* =========================
-   Progress
-========================= */
-
-#progress-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-#progress-counter {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-}
-
+/* progress bar takes available space */
 #progress-bar {
     flex: 1;
     height: 8px;
@@ -162,6 +104,7 @@ button, select {
     overflow: hidden;
 }
 
+/* fill */
 #progress-fill {
     height: 100%;
     width: 0%;
@@ -170,6 +113,22 @@ button, select {
     transition: width 0.3s ease;
 }
 
+/* counter stays tight */
+#progress-counter {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+
+/* Options button */
+
+#options-btn {
+    border: 1px solid #ddd;
+    background: white;
+    color: #555;
+}
 
 
 /* =========================
@@ -318,28 +277,31 @@ Save Message
 
 
 /* =========================
-   Learning Area
+Learning Area
 ========================= */
 
-#sentence,
-#translation {
+#card {
     background: white;
-    padding-left: 28px;
-    padding-right: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    overflow: hidden;
 }
+
+/* =========================
+Sentence
+========================= */
 
 #sentence {
     font-size: 28px;
     line-height: 1.5;
     font-weight: 500;
     text-align: left;
-
-    padding-top: 34px;
-    padding-bottom: 12px;
-
-    border-radius: 12px 12px 0 0;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+    padding: 34px 28px 12px;
 }
+
+/* =========================
+Gap (input)
+========================= */
 
 .gap {
     display: inline-block;
@@ -351,53 +313,64 @@ Save Message
     border-bottom: 1px solid #aaa;
 }
 
-#level-indicator {
-    margin-bottom: 8px;
-    padding-left: 28px;
+/* =========================
+Translation + Level Row
+========================= */
+
+#translation-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 28px 28px;
 }
 
-.memory-dots {
+#translation {
+    font-size: 16px;
+    color: #777;
+    text-align: left;
+}
+
+/* =========================
+Level Indicator
+========================= */
+
+#level-indicator {
+    display: flex;
+}
+
+.level-dots {
     display: flex;
     gap: 4px;
 }
 
-.memory-dot {
+.level-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #ddd; /* empty dots */
+    background: #ddd; /* default (empty) */
 }
 
 /* 🔴 weak */
-.memory-dot.level-0,
-.memory-dot.level-1 {
-    background: #e57373; /* soft red */
+.level-dot.level-0,
+.level-dot.level-1 {
+    background: #e57373;
 }
 
 /* 🟡 medium */
-.memory-dot.level-2,
-.memory-dot.level-3 {
-    background: #ffb74d; /* soft orange */
+.level-dot.level-2,
+.level-dot.level-3 {
+    background: #ffb74d;
 }
 
 /* 🟢 strong */
-.memory-dot.level-4,
-.memory-dot.level-5 {
-    background: #81c784; /* soft green */
+.level-dot.level-4,
+.level-dot.level-5 {
+    background: #81c784;
 }
 
-
-#translation {
-    margin-top: 0;
-    padding-top: 8px;
-    padding-bottom: 28px;
-
-    font-size: 16px;
-    color: #777;
-    text-align: left;
-
-    border-radius: 0 0 12px 12px;
-}
+/* =========================
+Helper Text
+========================= */
 
 #helper {
     margin-top: 28px;
@@ -405,9 +378,18 @@ Save Message
     color: #888;
     text-align: center;
     min-height: 18px;
+
+    ```
     opacity: 0;
     transform: translateY(4px);
     transition: opacity 0.25s ease, transform 0.25s ease;
+    ```
+
+}
+
+#helper.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* =========================

@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { submitAnswer } from './logic.js';
+import { submitAnswer, startNewSession } from './logic.js';
 
 let sentenceInitialized = false;
 let lastRenderedIndex = null;
@@ -50,11 +50,35 @@ export function render() {
 
     const current = state.sentences[state.currentIndex];
 
+    if (state.status === 'finished') {
+        sentenceEl.innerHTML = `
+            <div class="empty-state">
+                <div style="margin-bottom: 12px;">Session complete</div>
+                <div style="font-size:16px; color:#666; margin-bottom:16px;">
+                    Correct: ${state.sessionCorrect} / ${state.sessionCount}<br>
+                    Wrong: ${state.sessionWrong}<br>
+                    Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%
+                </div>
+                <button id="restart-btn">Start new session</button>
+            </div>
+        `;
+
+        translationEl.innerText = '';
+
+        const btn = document.getElementById('restart-btn');
+        if (btn) {
+            btn.onclick = () => startNewSession();
+        }
+
+        return;
+    }
+
     if (!current) {
         sentenceEl.innerHTML = `<div>Done</div>`;
         translationEl.innerText = '';
         return;
     }
+
 
     // =========================
     // LEVEL INDICATOR
@@ -68,13 +92,13 @@ export function render() {
 
         for (let i = 0; i < 5; i++) {
             if (i < level) {
-                dots += `<div class="memory-dot level-${level}"></div>`;
+                dots += `<div class="level-dot level-${level}"></div>`;
             } else {
-                dots += `<div class="memory-dot"></div>`;
+                dots += `<div class="level-dot"></div>`;
             }
         }
 
-        levelEl.innerHTML = `<div class="memory-dots">${dots}</div>`;
+        levelEl.innerHTML = `<div class="level-dots">${dots}</div>`;
     }
 
 
@@ -134,6 +158,36 @@ export function render() {
     input.contentEditable = "true";
 
     input.focus();
+
+    // =========================
+    // 🧠 HELPER (ALWAYS LAST)
+    // =========================
+    const helperEl = document.getElementById('helper');
+
+    if (helperEl) {
+        // helperEl.classList.remove('show');
+
+        if (state.sessionCount < 1) {
+            helperEl.innerText = 'Type the missing word and press Enter';
+            helperEl.classList.add('show');
+        }
+        else if (state.status === 'waiting' && state.userInput === '') {
+            helperEl.innerText = 'Press Enter to reveal hint';
+            helperEl.classList.add('show');
+        }
+        else if (state.status === 'wrong') {
+            helperEl.innerText = 'Type the correct word';
+            helperEl.classList.add('show');
+        }
+        else if (state.status === 'correct') {
+            helperEl.innerText = 'Good';
+            helperEl.classList.add('show');
+        }
+        else {
+            helperEl.innerText = '';
+        }
+    }
+
 
     // 🔥 CLEAN HANDLERS EVERY RENDER
     input.oninput = null;

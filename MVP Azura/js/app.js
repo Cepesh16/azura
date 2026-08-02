@@ -1,6 +1,5 @@
 import { fetchSentences } from './api.js';
 import { state } from './state.js';
-import { setStudyMode } from './studyMode.js';
 import { buildSessionQueue } from './logic.js';
 import { render } from './ui.js';
 import { initOptions } from './options.js';
@@ -22,7 +21,7 @@ try {
     localStorage.removeItem('sessionData'); // dev mode
 
     // 🔹 Build session
-    setStudyMode('all');
+    state.sentences = state.allSentences;
 
     state.sessionQueue = buildSessionQueue();
     console.log('QUEUE:', state.sessionQueue);

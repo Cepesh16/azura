@@ -36,5 +36,4 @@ export const state = {
     sessionCorrect: 0,
     sessionWrong: 0,
 
-    studyMode: 'all'
 };
