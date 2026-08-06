@@ -4,6 +4,19 @@ import { buildSessionQueue } from './logic.js';
 import { render } from './ui.js';
 import { initOptions } from './options.js';
 
+const CURRENT_VERSION = document
+  .querySelector('meta[name="app-version"]')
+  .content;
+
+const savedVersion = localStorage.getItem('appVersion');
+
+if (savedVersion && savedVersion !== CURRENT_VERSION) {
+    localStorage.setItem('appVersion', CURRENT_VERSION);
+    location.reload();
+} else {
+    localStorage.setItem('appVersion', CURRENT_VERSION);
+}
+
 
 async function init() {
 try {
