@@ -245,16 +245,18 @@ export function render() {
             sel.addRange(range);
         };
 
-        input.onkeydown = (e) => {
-            if (e.key !== 'Enter') return;
+input.onkeydown = (e) => {
+    console.log('KEY:', e.key); // 🔍 DEBUG LINE
 
-            e.preventDefault();
-            e.stopPropagation();
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
 
-            if (state.isSubmitting) return;
+        if (state.isSubmitting) return;
 
-            submitAnswer();
-        };
+        submitAnswer();
+    }
+};
 
         return;
     }
@@ -298,16 +300,18 @@ export function render() {
     input.contentEditable = "true";
     input.focus();
 
-    input.onkeydown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
+input.onkeydown = (e) => {
+    console.log('KEY:', e.key); // 🔍 DEBUG
 
-            if (state.isSubmitting) return;
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        e.stopPropagation();
 
-            submitAnswer();
-            return;
-        }
+        if (state.isSubmitting) return;
+
+        submitAnswer();
+        return;
+    }
 
         e.preventDefault();
 
