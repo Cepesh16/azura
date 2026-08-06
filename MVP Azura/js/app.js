@@ -7,7 +7,7 @@ import { initOptions } from './options.js';
 
 async function init() {
 try {
-
+    console.log('VERSION:', document.querySelector('meta[name="app-version"]').content);
 
     // 🔹 Load data
     const data = await fetchSentences();
