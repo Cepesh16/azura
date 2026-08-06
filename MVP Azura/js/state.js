@@ -24,6 +24,8 @@ export const state = {
     layoutWarning: false,
     isSubmitting: false,
 
+    soundEnabled: true,
+
     // Session control
     sessionCount: 0,
     sessionLimit: 5,

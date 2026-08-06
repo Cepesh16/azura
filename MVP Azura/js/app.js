@@ -16,7 +16,7 @@ try {
     state.allSentences = data;
 
     state.userInput = '';
-    state.status = 'waiting';
+    state.status = 'idle';
 
     localStorage.removeItem('sessionData'); // dev mode
 

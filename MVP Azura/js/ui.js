@@ -8,7 +8,6 @@ function setCaret(el, position) {
     const range = document.createRange();
     const sel = window.getSelection();
 
-
     const typedNode = el.querySelector('.typed');
     if (!typedNode || !typedNode.firstChild) return;
 
@@ -20,15 +19,10 @@ function setCaret(el, position) {
 
     sel.removeAllRanges();
     sel.addRange(range);
-
-
 }
-
-
 
 function createGapSentence(sentenceObj) {
     const { sentence, answer } = sentenceObj;
-
 
     const regex = new RegExp(`\\b${answer}\\b`, 'i');
 
@@ -36,8 +30,6 @@ function createGapSentence(sentenceObj) {
         regex,
     `<span id="gap-input" contenteditable="true" class="gap"></span>`
     );
-
-
 }
 
 export function resetSentence() {
@@ -48,8 +40,61 @@ export function render() {
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
 
+    const levelEl = document.getElementById('level-indicator');
+    const progressBar = document.getElementById('progress-bar');
+    const progressCounter = document.getElementById('progress-counter');
+    const optionsBtn = document.getElementById('options-btn');
+
+    // 🔥 GLOBAL VISIBILITY
+    const isFinished = state.status === 'finished' || state.status === 'idle';
+
+    if (levelEl) levelEl.classList.toggle('hidden', isFinished);
+    if (progressBar) progressBar.classList.toggle('hidden', isFinished);
+    if (progressCounter) progressCounter.classList.toggle('hidden', isFinished);
+    if (optionsBtn) optionsBtn.classList.toggle('hidden', isFinished);
+    
+
+    const helperEl = document.getElementById('helper');
+
     const current = state.sentences[state.currentIndex];
 
+
+    if (state.status === 'idle') {
+        sentenceEl.innerHTML = `
+            <div class="empty-state">
+                <div style="margin-bottom: 16px;">Ready to learn?</div>
+                <button id="start-btn">Start session</button>
+            </div>
+        `;
+
+        translationEl.innerText = '';
+
+        const btn = document.getElementById('start-btn');
+        if (btn) {
+            btn.onclick = () => {
+                state.status = 'waiting';
+                render();
+            };
+        }
+
+        return;
+    }
+
+
+    // =========================
+    // 👁️ GLOBAL VISIBILITY
+    // =========================
+    if (levelEl) {
+        levelEl.classList.toggle('hidden', state.status === 'finished');
+    }
+
+    if (helperEl) {
+        helperEl.classList.toggle('hidden', state.status === 'finished');
+    }
+
+    // =========================
+    // 🏁 FINISHED
+    // =========================
     if (state.status === 'finished') {
         sentenceEl.innerHTML = `
             <div class="empty-state">
@@ -73,18 +118,18 @@ export function render() {
         return;
     }
 
+    // =========================
+    // EMPTY
+    // =========================
     if (!current) {
         sentenceEl.innerHTML = `<div>Done</div>`;
         translationEl.innerText = '';
         return;
     }
 
-
     // =========================
     // LEVEL INDICATOR
     // =========================
-    const levelEl = document.getElementById('level-indicator');
-
     if (levelEl) {
         const level = Math.min(current.memoryLevel || 0, 5);
 
@@ -101,11 +146,10 @@ export function render() {
         levelEl.innerHTML = `<div class="level-dots">${dots}</div>`;
     }
 
-
     // =========================
     // 📊 PROGRESS
     // =========================
-    const counterEl = document.getElementById('progress-counter'); // or 'progress'
+    const counterEl = document.getElementById('progress-counter');
 
     if (counterEl && state.sessionQueue.length > 0) {
         const currentNum = state.currentQueueIndex + 1;
@@ -132,15 +176,6 @@ export function render() {
     }
 
     // =========================
-    // EMPTY
-    // =========================
-    if (!current) {
-        sentenceEl.innerHTML = `<div>Done</div>`;
-        translationEl.innerText = '';
-        return;
-    }
-
-    // =========================
     // SENTENCE
     // =========================
     if (!sentenceInitialized) {
@@ -153,20 +188,14 @@ export function render() {
     const input = document.getElementById('gap-input');
     if (!input) return;
 
-    // 🔥 ALWAYS RESET STATE CLEANLY
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
-
     input.focus();
 
     // =========================
-    // 🧠 HELPER (ALWAYS LAST)
+    // 🧠 HELPER
     // =========================
-    const helperEl = document.getElementById('helper');
-
     if (helperEl) {
-        // helperEl.classList.remove('show');
-
         if (state.sessionCount < 1) {
             helperEl.innerText = 'Type the missing word and press Enter';
             helperEl.classList.add('show');
@@ -188,8 +217,6 @@ export function render() {
         }
     }
 
-
-    // 🔥 CLEAN HANDLERS EVERY RENDER
     input.oninput = null;
     input.onkeydown = null;
 
@@ -208,7 +235,6 @@ export function render() {
                 input.innerText = text;
             }
 
-            // keep cursor at end
             const range = document.createRange();
             const sel = window.getSelection();
 
@@ -247,13 +273,12 @@ export function render() {
     }
 
     // =========================
-    // 🔴 WRONG FLASH (LOCKED)
+    // 🔴 WRONG FLASH
     // =========================
     if (state.status === 'wrongFlash') {
         input.innerText = state.userInput;
         input.classList.add('flash-wrong');
 
-        // 🔒 CRITICAL: LOCK INPUT DURING FLASH
         input.contentEditable = "false";
         input.blur();
 
@@ -268,10 +293,8 @@ export function render() {
 
     input.innerHTML = `<span class="typed">${typed}</span><span class="hint">${hint}</span>`;
 
-    // 🔥 place caret after typed
     setCaret(input, state.userInput.length);
 
-    // 🔓 ensure input is editable again AFTER flash
     input.contentEditable = "true";
     input.focus();
 
@@ -304,6 +327,4 @@ export function render() {
             render();
         }
     };
-
-
 }
