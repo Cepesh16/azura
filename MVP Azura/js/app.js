@@ -31,11 +31,12 @@ async function startApp() {
         state.allSentences = data;
 
         state.userInput = '';
-        state.status = 'idle';
+        state.status = 'waiting';
 
 state.sessionCount = 0;
 state.sessionCorrect = 0;
-state.sessionWrong = 0;        
+state.sessionWrong = 0;
+state.currentQueueIndex = 0;      
 
         localStorage.removeItem('sessionData'); // dev mode
 
@@ -44,6 +45,10 @@ state.sessionWrong = 0;
 
         state.sessionQueue = buildSessionQueue();
         console.log('QUEUE:', state.sessionQueue);
+        if (!state.sessionQueue || state.sessionQueue.length === 0) {
+            console.error('❌ EMPTY QUEUE');
+            return;
+        }
 
         state.currentQueueIndex = 0;
 
