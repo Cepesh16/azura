@@ -5,7 +5,7 @@ const version = '1.3';
 import { state } from './state.js';
 import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
-import { playCorrect, playWrong } from './sound.js';
+import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
 
 function normalize(str) {
@@ -109,13 +109,21 @@ function finishWord(current, immediateCorrect) {
 
     playCorrect();
 
-    const delay = immediateCorrect ? 0 : 600;
+const delay = immediateCorrect ? 0 : 600;
+
+setTimeout(() => {
+    
+    console.log('🔊 AUDIO URL:', current.audioUrl);
+        
+    const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
+
+    playWordAudio(url);
 
     setTimeout(() => {
-        speak(current.sentence, () => {
-            nextSentence();
-        });
-    }, delay);
+        nextSentence();
+    }, 600);
+
+}, delay);
 
 
 }

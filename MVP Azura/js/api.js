@@ -4,7 +4,15 @@ const API_URL = "https://script.google.com/macros/s/AKfycbw4tHvovXCybGpA92kxgcuw
 
 export async function fetchSentences() {
     const res = await fetch(API_URL);
-    return await res.json();
+    const data = await res.json();
+
+    return data.map(row => ({
+        id: row.id,
+        sentence: row.sentence,
+        answer: row.answer,
+        translation: row.translation,
+        audioUrl: row.audioUrl // 👈 important
+    }));
 }
 
 export async function updateWord(id, correct) {
