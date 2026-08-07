@@ -187,6 +187,8 @@ export function render() {
 
     const input = document.getElementById('gap-input');
     if (!input) return;
+    
+    input.setAttribute('enterkeyhint', 'done');
 
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
@@ -246,9 +248,9 @@ export function render() {
         };
 
 input.onkeydown = (e) => {
-    console.log('KEY:', e.key); // 🔍 DEBUG LINE
+    console.log('KEY:', e.key);
 
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === 'Go' || e.key === 'Done') {
         e.preventDefault();
         e.stopPropagation();
 
@@ -301,9 +303,9 @@ input.onkeydown = (e) => {
     input.focus();
 
 input.onkeydown = (e) => {
-    console.log('KEY:', e.key); // 🔍 DEBUG
+    console.log('KEY:', e.key);
 
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === 'Go' || e.key === 'Done') {
         e.preventDefault();
         e.stopPropagation();
 
@@ -313,22 +315,22 @@ input.onkeydown = (e) => {
         return;
     }
 
-        e.preventDefault();
+    e.preventDefault();
 
-        if (e.key === 'Backspace') {
-            state.userInput = state.userInput.slice(0, -1);
-            render();
-            return;
-        }
+    if (e.key === 'Backspace') {
+        state.userInput = state.userInput.slice(0, -1);
+        render();
+        return;
+    }
 
-        if (e.key.length !== 1) return;
+    if (e.key.length !== 1) return;
 
-        const nextIndex = state.userInput.length;
-        const expected = current.answer[nextIndex];
+    const nextIndex = state.userInput.length;
+    const expected = current.answer[nextIndex];
 
-        if (e.key.toLowerCase() === expected.toLowerCase()) {
-            state.userInput += e.key;
-            render();
-        }
-    };
+    if (e.key.toLowerCase() === expected.toLowerCase()) {
+        state.userInput += e.key;
+        render();
+    }
+};
 }
