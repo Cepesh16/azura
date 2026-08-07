@@ -1,3 +1,7 @@
+console.log('🚨 LOGIC.JS LOADED');
+
+const version = '1.3';
+
 import { state } from './state.js';
 import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
@@ -24,39 +28,29 @@ function getWeight(memoryLevel) {
 }
 
 export function buildSessionQueue() {
-    const pool = [];
+    const total = state.sentences.length;
 
+    if (!total) return [];
 
-    state.sentences.forEach((sentence, index) => {
-        const weight = getWeight(sentence.memoryLevel);
-        for (let i = 0; i < weight; i++) {
-            pool.push(index);
-        }
-    });
+    const limit = Math.max(1, Number(state.sessionLimit) || 5);
 
-    const selected = [];
+    console.log('SESSION LIMIT:', limit);
+    console.log('TOTAL SENTENCES:', total);
 
-    while (
-        selected.length < state.sessionLimit &&
-        pool.length > 0
-        ) {
-        const random = Math.floor(Math.random() * pool.length);
-    const index = pool[random];
+    // 🔹 create array of all indices
+    const indices = [...Array(total).keys()];
 
-    if (!selected.includes(index)) {
-        selected.push(index);
+    // 🔹 shuffle (Fisher-Yates)
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
     }
 
-    for (let i = pool.length - 1; i >= 0; i--) {
-        if (pool[i] === index) {
-            pool.splice(i, 1);
-        }
-    }
-}
+    const result = indices.slice(0, limit);
 
-return selected;
+    console.log('✅ QUEUE BUILT:', result);
 
-
+    return result;
 }
 
 // =========================

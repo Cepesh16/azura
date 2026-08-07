@@ -1,17 +1,14 @@
+import { fetchSentences } from './api.js';
+import { state } from './state.js';
+import { buildSessionQueue } from './logic.js';
+import { render } from './ui.js';
+import { initOptions } from './options.js';
+
+const version = '1.3';
+console.log('VERSION:', version);
+
 async function startApp() {
     try {
-        const version = document
-            .querySelector('meta[name="app-version"]')
-            .content;
-
-        console.log('VERSION:', version);
-
-        // 🔥 LOAD MODULES WITH VERSION
-        const { fetchSentences } = await import(`./api.js?v=${version}`);
-        const { state } = await import(`./state.js?v=${version}`);
-        const { buildSessionQueue } = await import(`./logic.js?v=${version}`);
-        const { render } = await import(`./ui.js?v=${version}`);
-        const { initOptions } = await import(`./options.js?v=${version}`);
 
         // 🔥 VERSION CHECK (after modules loaded)
         const savedVersion = localStorage.getItem('appVersion');
