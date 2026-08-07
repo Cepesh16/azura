@@ -187,12 +187,11 @@ export function render() {
 
     const input = document.getElementById('gap-input');
     if (!input) return;
-    
     input.setAttribute('enterkeyhint', 'done');
 
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
-    input.focus();
+    setTimeout(() => input.focus(), 0);
 
     // =========================
     // 🧠 HELPER
@@ -222,6 +221,9 @@ export function render() {
     input.oninput = null;
     input.onkeydown = null;
 
+
+
+
     // =========================
     // 🟢 WAITING
     // =========================
@@ -229,28 +231,28 @@ export function render() {
 
         input.innerText = state.userInput;
 
-        input.oninput = () => {
-            const text = input.innerText.replace(/\n/g, '');
-            state.userInput = text;
+input.oninput = () => {
+    let text = input.innerText.replace(/\n/g, '');
 
-            if (input.innerText !== text) {
-                input.innerText = text;
-            }
+    state.userInput = text;
 
-            const range = document.createRange();
-            const sel = window.getSelection();
+    // keep cursor at end
+    const range = document.createRange();
+    const sel = window.getSelection();
 
-            range.selectNodeContents(input);
-            range.collapse(false);
+    range.selectNodeContents(input);
+    range.collapse(false);
 
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
+    sel.removeAllRanges();
+    sel.addRange(range);
+};
+
+
 
 input.onkeydown = (e) => {
     console.log('KEY:', e.key);
 
-    if (e.key === 'Enter' || e.key === 'Go' || e.key === 'Done') {
+    if (e.key === 'Enter') {
         e.preventDefault();
         e.stopPropagation();
 
@@ -295,16 +297,29 @@ input.onkeydown = (e) => {
     const typed = state.userInput;
     const hint = current.answer.slice(typed.length);
 
+    input.oninput = () => {
+    const typedEl = input.querySelector('.typed');
+
+    if (typedEl) {
+        state.userInput = typedEl.innerText;
+    } else {
+        state.userInput = input.innerText;
+    }
+
+    render();
+};
+
     input.innerHTML = `<span class="typed">${typed}</span><span class="hint">${hint}</span>`;
 
     setCaret(input, state.userInput.length);
 
     input.contentEditable = "true";
-    input.focus();
+    setTimeout(() => input.focus(), 0);
 
 input.onkeydown = (e) => {
     console.log('KEY:', e.key);
 
+    // ✅ ENTER
     if (e.key === 'Enter' || e.key === 'Go' || e.key === 'Done') {
         e.preventDefault();
         e.stopPropagation();
@@ -315,20 +330,23 @@ input.onkeydown = (e) => {
         return;
     }
 
+    // ❗ IMPORTANT: block browser mutation
     e.preventDefault();
 
+    // ⌫ BACKSPACE
     if (e.key === 'Backspace') {
         state.userInput = state.userInput.slice(0, -1);
         render();
         return;
     }
 
+    // ignore non letters
     if (e.key.length !== 1) return;
 
     const nextIndex = state.userInput.length;
     const expected = current.answer[nextIndex];
 
-    if (e.key.toLowerCase() === expected.toLowerCase()) {
+    if (expected && e.key.toLowerCase() === expected.toLowerCase()) {
         state.userInput += e.key;
         render();
     }

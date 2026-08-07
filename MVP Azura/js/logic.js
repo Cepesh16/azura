@@ -125,35 +125,56 @@ function finishWord(current, immediateCorrect) {
 // =========================
 export function submitAnswer() {
     console.log('SUBMIT CALLED');
-    console.log('STATE INPUT:', JSON.stringify(state.userInput));
 
+    // 🔒 HARD LOCK (fix for mobile double fire)
+    if (state.isSubmitting) {
+        console.log('⛔ BLOCKED DOUBLE SUBMIT');
+        return;
+    }
 
-    if (state.isSubmitting) return;
     state.isSubmitting = true;
 
+    console.log('STATE INPUT:', JSON.stringify(state.userInput));
+
     const current = state.sentences[state.currentIndex];
+let input = '';
 
-// 🔥 ONLY TRUST STATE (NOT DOM)
-    const input = state.userInput.trim();
+const el = document.getElementById('gap-input');
 
-    console.log('STATE INPUT:', JSON.stringify(input));
+if (el) {
+    // 🔥 clone node so we don’t touch real DOM
+    const clone = el.cloneNode(true);
+
+    // 🔥 remove hint completely
+    const hint = clone.querySelector('.hint');
+    if (hint) hint.remove();
+
+    // 🔥 now only user text remains
+    input = clone.innerText.trim();
+}
+
+state.userInput = input;
+
+console.log('📥 FINAL INPUT:', input);
+
+
 
 // =========================
 // ❗ EMPTY INPUT
 // =========================
-    if (input === '') {
+if (input === '') {
 
     // First Enter → show hint
-        if (!state.answeredWithHint) {
-            state.answeredWithHint = true;
-            state.status = 'wrong';
-            render();
-        }
-
-    // Second Enter → DO NOTHING
-        state.isSubmitting = false;
-        return;
+    if (!state.answeredWithHint) {
+        state.answeredWithHint = true;
+        state.status = 'wrong';
+        render();
     }
+
+    // 🚫 Second Enter → HARD BLOCK
+    state.isSubmitting = false;
+    return;
+}
 
 // =========================
 // ✅ CORRECT (ONLY if user typed)
@@ -163,9 +184,9 @@ export function submitAnswer() {
     normalize(input) === normalize(current.answer);
 
     if (isCorrect) {
-
         resetSentence();
 
+        state.isSubmitting = false;
     // if user used hint → not immediate correct
         finishWord(current, !state.answeredWithHint);
 
