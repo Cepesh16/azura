@@ -236,7 +236,12 @@ input.oninput = () => {
 
     state.userInput = text;
 
-    // keep cursor at end
+    // force clean text (no weird mobile stuff)
+    if (input.innerText !== text) {
+        input.innerText = text;
+    }
+
+    // move cursor to end
     const range = document.createRange();
     const sel = window.getSelection();
 
@@ -297,15 +302,23 @@ input.onkeydown = (e) => {
     const typed = state.userInput;
     const hint = current.answer.slice(typed.length);
 
-    input.oninput = () => {
-    const typedEl = input.querySelector('.typed');
+input.oninput = () => {
+    let text = input.innerText.replace(/\n/g, '');
 
-    if (typedEl) {
-        state.userInput = typedEl.innerText;
-    } else {
-        state.userInput = input.innerText;
+    // enforce correct typing only
+    let valid = '';
+
+    for (let i = 0; i < text.length; i++) {
+        const expected = current.answer[i];
+
+        if (text[i]?.toLowerCase() === expected?.toLowerCase()) {
+            valid += text[i];
+        } else {
+            break;
+        }
     }
 
+    state.userInput = valid;
     render();
 };
 
@@ -319,36 +332,13 @@ input.onkeydown = (e) => {
 input.onkeydown = (e) => {
     console.log('KEY:', e.key);
 
-    // ✅ ENTER
-    if (e.key === 'Enter' || e.key === 'Go' || e.key === 'Done') {
+    if (e.key === 'Enter') {
         e.preventDefault();
         e.stopPropagation();
 
         if (state.isSubmitting) return;
 
         submitAnswer();
-        return;
-    }
-
-    // ❗ IMPORTANT: block browser mutation
-    e.preventDefault();
-
-    // ⌫ BACKSPACE
-    if (e.key === 'Backspace') {
-        state.userInput = state.userInput.slice(0, -1);
-        render();
-        return;
-    }
-
-    // ignore non letters
-    if (e.key.length !== 1) return;
-
-    const nextIndex = state.userInput.length;
-    const expected = current.answer[nextIndex];
-
-    if (expected && e.key.toLowerCase() === expected.toLowerCase()) {
-        state.userInput += e.key;
-        render();
     }
 };
 }
