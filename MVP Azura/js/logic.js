@@ -114,8 +114,10 @@ const delay = immediateCorrect ? 0 : 600;
 setTimeout(() => {
     
     console.log('🔊 AUDIO URL:', current.audioUrl);
-        
+
+// American or British pronunciation        
     const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
+    // const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_gb_1.mp3`;
 
     playWordAudio(url);
 

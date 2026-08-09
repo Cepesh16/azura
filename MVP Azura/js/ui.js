@@ -104,7 +104,7 @@ export function render() {
                     Wrong: ${state.sessionWrong}<br>
                     Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%
                 </div>
-                <button id="restart-btn">Start new session</button>
+                <button id="restart-btn">New session</button>
             </div>
         `;
 
