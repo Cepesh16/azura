@@ -98,6 +98,10 @@ button:hover,
     background: var(--button-hover);
 }
 
+button:active {
+    transform: scale(0.96);
+}
+
 select {
     cursor: pointer;
 }
