@@ -318,42 +318,45 @@ export function render() {
 
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
-
+    
+    // ✅ mobile fix
     input.onbeforeinput = (e) => {
-        // 🚫 block ONLY text insertion (mobile keyboards)
+        const current = state.sentences[state.currentIndex];
+
+        // =========================
+        // ✍️ TEXT INPUT (mobile typing)
+        // =========================
         if (e.inputType === 'insertText') {
             e.preventDefault();
-        }
-    };
 
-    input.onkeydown = (e) => {
-        console.log('KEY:', e.key);
+            const char = e.data;
 
-    // 🔴 block ALL native typing
-        if (e.key.length === 1 || e.key === 'Backspace') {
-            e.preventDefault();
-        }
-
-    // ⌨️ typing logic (manual control)
-        if (e.key.length === 1) {
             const expected = current.answer[state.userInput.length];
 
-            if (e.key.toLowerCase() === expected?.toLowerCase()) {
-                state.userInput += e.key;
+            if (char?.toLowerCase() === expected?.toLowerCase()) {
+                state.userInput += char;
                 updateHintUI(input, current);
             }
 
             return;
         }
 
-    // ⬅️ backspace
-        if (e.key === 'Backspace') {
+        // =========================
+        // ⬅️ BACKSPACE
+        // =========================
+        if (e.inputType === 'deleteContentBackward') {
+            e.preventDefault();
+
             state.userInput = state.userInput.slice(0, -1);
             updateHintUI(input, current);
+
             return;
         }
+    };
 
-    // ✅ submit
+    input.onkeydown = (e) => {
+        console.log('KEY:', e.key);
+
         if (e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
