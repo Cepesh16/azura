@@ -21,16 +21,13 @@ function setCaret(el, position) {
 }
 
 function updateHintUI(input, current) {
-    const typedEl = input.querySelector('.typed');
-    const hintEl = input.querySelector('.hint');
-
-    if (!typedEl || !hintEl) return;
-
-    const typed = state.userInput;
+    const typed = state.userInput.toLowerCase();
     const hint = current.answer.slice(typed.length);
 
-    typedEl.textContent = typed;
-    hintEl.textContent = hint;
+    input.innerHTML = `
+        <span class="typed">${typed}</span>
+        <span class="hint">${hint}</span>
+    `;
 
     setCaret(input, typed.length);
 }
@@ -236,7 +233,7 @@ export function render() {
         input.innerText = state.userInput;
 
         input.oninput = () => {
-            let text = input.innerText.replace(/\n/g, '');
+            let text = input.innerText.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
 
@@ -329,7 +326,7 @@ export function render() {
         if (e.inputType === 'insertText') {
             e.preventDefault();
 
-            const char = e.data;
+            const char = e.data?.toLowerCase();
 
             const expected = current.answer[state.userInput.length];
 
