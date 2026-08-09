@@ -57,27 +57,50 @@ export function buildSessionQueue() {
 // NEXT SENTENCE
 // =========================
 function nextSentence() {
-    state.currentQueueIndex++;
+    const sentenceEl = document.getElementById('sentence');
 
-
-    if (state.currentQueueIndex >= state.sessionQueue.length) {
-        state.status = 'finished';
-        render();
-        return;
+    // 🔥 fade out FIRST
+    if (sentenceEl) {
+        sentenceEl.classList.remove('fade-in');
+        sentenceEl.classList.add('fade-out');
     }
 
-    state.currentIndex = state.sessionQueue[state.currentQueueIndex];
+    setTimeout(() => {
+        state.currentQueueIndex++;
 
-    state.userInput = '';
-    state.status = 'waiting';
-    state.answeredWithHint = false;
-    state.layoutWarning = false;
-    state.isSubmitting = false;
+        if (state.currentQueueIndex >= state.sessionQueue.length) {
+            const sentenceEl = document.getElementById('sentence');
 
-    resetSentence();
-    render();
+            if (sentenceEl) {
+                sentenceEl.classList.remove('fade-in');
+                sentenceEl.classList.remove('fade-out');
+            }
 
+            state.status = 'finished';
+            render();
+            return;
+        }
 
+        state.currentIndex = state.sessionQueue[state.currentQueueIndex];
+
+        state.userInput = '';
+        state.status = 'waiting';
+        state.answeredWithHint = false;
+        state.layoutWarning = false;
+        state.isSubmitting = false;
+
+        render();
+
+        // 🔥 fade in AFTER render
+        requestAnimationFrame(() => {
+            const el = document.getElementById('sentence');
+            if (!el) return;
+
+            el.classList.remove('fade-out');
+            el.classList.add('fade-in');
+        });
+
+    }, 120);
 }
 
 // =========================
@@ -122,6 +145,7 @@ setTimeout(() => {
     playWordAudio(url);
 
     setTimeout(() => {
+        document.getElementById('sentence')?.classList.remove('fade-in');
         nextSentence();
     }, 600);
 
@@ -257,5 +281,10 @@ export function startNewSession() {
     state.isSubmitting = false;
 
     resetSentence();
+    const sentenceEl = document.getElementById('sentence');
+    if (sentenceEl) {
+        // sentenceEl.classList.remove('fade-out');
+        sentenceEl.classList.remove('fade-in');
+    }
     render();
 }

@@ -2,7 +2,6 @@ import { state } from './state.js';
 import { submitAnswer, startNewSession } from './logic.js';
 
 let sentenceInitialized = false;
-let lastRenderedIndex = null;
 
 function setCaret(el, position) {
     const range = document.createRange();
@@ -19,6 +18,21 @@ function setCaret(el, position) {
 
     sel.removeAllRanges();
     sel.addRange(range);
+}
+
+function updateHintUI(input, current) {
+    const typedEl = input.querySelector('.typed');
+    const hintEl = input.querySelector('.hint');
+
+    if (!typedEl || !hintEl) return;
+
+    const typed = state.userInput;
+    const hint = current.answer.slice(typed.length);
+
+    typedEl.textContent = typed;
+    hintEl.textContent = hint;
+
+    setCaret(input, typed.length);
 }
 
 function createGapSentence(sentenceObj) {
@@ -168,20 +182,10 @@ export function render() {
     }
 
     // =========================
-    // SENTENCE INIT
-    // =========================
-    if (state.currentIndex !== lastRenderedIndex) {
-        sentenceInitialized = false;
-        lastRenderedIndex = state.currentIndex;
-    }
-
-    // =========================
     // SENTENCE
     // =========================
-    if (!sentenceInitialized) {
-        sentenceEl.innerHTML = createGapSentence(current);
-        sentenceInitialized = true;
-    }
+    sentenceEl.innerHTML = createGapSentence(current);
+
 
     translationEl.innerText = current.translation;
 
@@ -231,41 +235,41 @@ export function render() {
 
         input.innerText = state.userInput;
 
-input.oninput = () => {
-    let text = input.innerText.replace(/\n/g, '');
+        input.oninput = () => {
+            let text = input.innerText.replace(/\n/g, '');
 
-    state.userInput = text;
+            state.userInput = text;
 
     // force clean text (no weird mobile stuff)
-    if (input.innerText !== text) {
-        input.innerText = text;
-    }
+            if (input.innerText !== text) {
+                input.innerText = text;
+            }
 
     // move cursor to end
-    const range = document.createRange();
-    const sel = window.getSelection();
+            const range = document.createRange();
+            const sel = window.getSelection();
 
-    range.selectNodeContents(input);
-    range.collapse(false);
+            range.selectNodeContents(input);
+            range.collapse(false);
 
-    sel.removeAllRanges();
-    sel.addRange(range);
-};
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
 
 
 
-input.onkeydown = (e) => {
-    console.log('KEY:', e.key);
+        input.onkeydown = (e) => {
+            console.log('KEY:', e.key);
 
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        e.stopPropagation();
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
 
-        if (state.isSubmitting) return;
+                if (state.isSubmitting) return;
 
-        submitAnswer();
-    }
-};
+                submitAnswer();
+            }
+        };
 
         return;
     }
@@ -302,43 +306,54 @@ input.onkeydown = (e) => {
     const typed = state.userInput;
     const hint = current.answer.slice(typed.length);
 
-input.oninput = () => {
-    let text = input.innerText.replace(/\n/g, '');
-
-    // enforce correct typing only
-    let valid = '';
-
-    for (let i = 0; i < text.length; i++) {
-        const expected = current.answer[i];
-
-        if (text[i]?.toLowerCase() === expected?.toLowerCase()) {
-            valid += text[i];
-        } else {
-            break;
-        }
-    }
-
-    state.userInput = valid;
-    render();
-};
 
     input.innerHTML = `<span class="typed">${typed}</span><span class="hint">${hint}</span>`;
+
+    setTimeout(() => {
+        const hintEl = input.querySelector('.hint');
+        if (hintEl) hintEl.classList.add('show');
+    }, 50);
 
     setCaret(input, state.userInput.length);
 
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
-input.onkeydown = (e) => {
-    console.log('KEY:', e.key);
+    input.onkeydown = (e) => {
+        console.log('KEY:', e.key);
 
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        e.stopPropagation();
+    // 🔴 block ALL native typing
+        if (e.key.length === 1 || e.key === 'Backspace') {
+            e.preventDefault();
+        }
 
-        if (state.isSubmitting) return;
+    // ⌨️ typing logic (manual control)
+        if (e.key.length === 1) {
+            const expected = current.answer[state.userInput.length];
 
-        submitAnswer();
-    }
-};
+            if (e.key.toLowerCase() === expected?.toLowerCase()) {
+                state.userInput += e.key;
+                updateHintUI(input, current);
+            }
+
+            return;
+        }
+
+    // ⬅️ backspace
+        if (e.key === 'Backspace') {
+            state.userInput = state.userInput.slice(0, -1);
+            updateHintUI(input, current);
+            return;
+        }
+
+    // ✅ submit
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (state.isSubmitting) return;
+
+            submitAnswer();
+        }
+    };
 }

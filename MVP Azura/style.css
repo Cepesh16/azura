@@ -417,6 +417,29 @@ States
 
 .hint {
     color: var(--hint);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.hint.show {
+    opacity: 1;
+}
+
+
+#sentence {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+#sentence.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#sentence.fade-out {
+    opacity: 0;
+    transform: translateY(6px);
 }
 
 /* =========================
