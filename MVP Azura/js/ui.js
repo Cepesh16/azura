@@ -319,6 +319,11 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
+input.onbeforeinput = (e) => {
+    // 🚫 completely block native typing on mobile
+    e.preventDefault();
+};
+
     input.onkeydown = (e) => {
         console.log('KEY:', e.key);
 
