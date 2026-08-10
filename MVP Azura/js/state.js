@@ -20,6 +20,7 @@ export const state = {
     hasTypedAfterWrong: false,
     cursorInitialized: false,
     flashWrong: false,
+    lastTypedCorrect: true,
     answeredWithHint: false,
     layoutWarning: false,
     isSubmitting: false,

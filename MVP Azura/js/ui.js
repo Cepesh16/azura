@@ -24,10 +24,9 @@ function updateHintUI(input, current) {
     const typed = state.userInput.toLowerCase();
     const hint = current.answer.slice(typed.length);
 
-    input.innerHTML = `
-        <span class="typed">${typed}</span>
-        <span class="hint">${hint}</span>
-    `;
+    const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
+
+    input.innerHTML = `<span class="typed ${typedClass}">${typed}</span><span class="hint">${hint}</span>`;
 
     setCaret(input, typed.length);
 }
@@ -300,53 +299,52 @@ export function render() {
     // =========================
     // 🔵 HINT
     // =========================
-    const typed = state.userInput;
-    const hint = current.answer.slice(typed.length);
-
-
-    input.innerHTML = `<span class="typed">${typed}</span><span class="hint">${hint}</span>`;
-
-    setTimeout(() => {
-        const hintEl = input.querySelector('.hint');
-        if (hintEl) hintEl.classList.add('show');
-    }, 50);
-
-    setCaret(input, state.userInput.length);
+    updateHintUI(input, current);
 
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
+
+    input.onselectstart = (e) => e.preventDefault();
     
     // ✅ mobile fix
     input.onbeforeinput = (e) => {
         const current = state.sentences[state.currentIndex];
 
-        // =========================
-        // ✍️ TEXT INPUT (mobile typing)
-        // =========================
-        if (e.inputType === 'insertText') {
-            e.preventDefault();
-
-            const char = e.data?.toLowerCase();
-
-            const expected = current.answer[state.userInput.length];
-
-            if (char?.toLowerCase() === expected?.toLowerCase()) {
-                state.userInput += char;
-                updateHintUI(input, current);
-            }
-
-            return;
-        }
+        // 🚫 ALWAYS block native DOM changes
+        e.preventDefault();
 
         // =========================
-        // ⬅️ BACKSPACE
+        // ✍️ typing
+        // =========================
+if (e.inputType === 'insertText') {
+    e.preventDefault();
+
+    const char = e.data?.toLowerCase();
+    const expected = current.answer[state.userInput.length];
+
+    if (char === expected?.toLowerCase()) {
+        state.userInput += char;
+        state.lastTypedCorrect = true;
+        updateHintUI(input, current);
+    } else {
+        // ❌ wrong letter → flash red
+        state.lastTypedCorrect = false;
+
+        input.classList.add('flash-wrong-letter');
+        setTimeout(() => {
+            input.classList.remove('flash-wrong-letter');
+        }, 200);
+    }
+
+    return;
+}
+
+        // =========================
+        // ⬅️ backspace
         // =========================
         if (e.inputType === 'deleteContentBackward') {
-            e.preventDefault();
-
             state.userInput = state.userInput.slice(0, -1);
             updateHintUI(input, current);
-
             return;
         }
     };

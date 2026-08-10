@@ -30,6 +30,7 @@
     /* STATES */
     --correct: #03C03C;
     --wrong: rgba(255, 0, 0, 0.5);
+    --check: rgba(0, 0, 0, 0.7);
 
     /* HINT */
     --hint: rgba(0, 0, 0, 0.3);
@@ -315,13 +316,24 @@ Gap
 ========================= */
 
 .gap {
-    display: inline-block;
+    display: inline-block; 
     min-width: 6ch;
+
     font-size: var(--font-lg);
     font-weight: 500;
+
+    text-align: center; 
+    line-height: 1.1;  
+
+    padding-bottom: 2px;  
+
     outline: none;
-    text-align: center;
     border-bottom: 1px solid var(--border-default);
+}
+
+
+.gap span {
+    white-space: pre;
 }
 
 /* =========================
@@ -417,19 +429,36 @@ States
 
 .hint {
     color: var(--hint);
-    opacity: 0;
-    transition: opacity 0.25s ease;
-}
-
-.hint.show {
     opacity: 1;
 }
+
+.typed {
+    color: var(--text-main);
+}
+
+.typed.correct {
+    color: var(--check); /* green */
+}
+
+.typed.wrong {
+    color: var(--wrong); /* red */
+}
+
+.flash-wrong-letter {
+    animation: wrongFlash 0.2s;
+}
+
+@keyframes wrongFlash {
+    0% { background: rgba(231, 76, 60, 0.2); }
+    100% { background: transparent; }
+}
+
 
 
 #sentence {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
 #sentence.fade-in {
