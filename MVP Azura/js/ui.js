@@ -361,6 +361,14 @@ export function render() {
         if (added) {
             state.lastTypedCorrect = true;
             updateHintUI(input, current);
+
+            // ✅ AUTOSUBMIT (ADD THIS)
+            if (state.userInput.length === current.answer.length) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
         } else {
             state.lastTypedCorrect = false;
 
