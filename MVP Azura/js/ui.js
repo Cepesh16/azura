@@ -320,6 +320,12 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
+    input.onclick = () => {
+        setTimeout(() => {
+            setCaret(input, state.userInput.length);
+        }, 0);
+    };
+
     input.onselectstart = (e) => e.preventDefault();
     
     // ✅ mobile fix
