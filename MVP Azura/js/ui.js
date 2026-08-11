@@ -16,7 +16,14 @@ function setCaret(el, position) {
     if (!typedNode || !typedNode.firstChild) return;
 
     const textNode = typedNode.firstChild;
-    const safePos = Math.min(position, textNode.length);
+    let length = textNode.length;
+
+    // ignore zero-width char
+    if (textNode.textContent === '\u200B') {
+        length = 0;
+    }
+
+    const safePos = Math.min(position, length);
 
     range.setStart(textNode, safePos);
     range.collapse(true);
@@ -31,7 +38,11 @@ function updateHintUI(input, current) {
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    input.innerHTML = `<span class="typed ${typedClass}">${typed}</span><span class="hint">${hint}</span>`;
+    const safeTyped = typed || '\u200B'; // zero-width char
+
+    input.innerHTML =
+        `<span class="typed ${typedClass}">${safeTyped}</span>` +
+        `<span class="hint">${hint}</span>`;
 
     setCaret(input, typed.length);
 }
@@ -389,7 +400,8 @@ export function render() {
             // 🔥 FULL RESET (state + DOM + IME)
             state.userInput = '';
 
-            input.innerHTML = '<span class="typed"></span><span class="hint">' + current.answer + '</span>';
+            input.innerHTML =
+                '<span class="typed">\u200B</span><span class="hint">' + current.answer + '</span>';
 
             // 🔥 force blur → kills mobile composition
             input.blur();
