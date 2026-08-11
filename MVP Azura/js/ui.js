@@ -329,11 +329,16 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
-    input.onclick = () => {
+    function forceCaret() {
         setTimeout(() => {
             setCaret(input, state.userInput.length);
         }, 0);
-    };
+    }
+
+    input.onclick = forceCaret;
+    input.onfocus = forceCaret;
+    input.onkeyup = forceCaret;
+    input.ontouchend = forceCaret;
 
     input.onselectstart = (e) => e.preventDefault();
     
