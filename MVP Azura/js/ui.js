@@ -332,28 +332,40 @@ export function render() {
         // =========================
         // ✍️ typing
         // =========================
-if (e.inputType === 'insertText') {
-    e.preventDefault();
+    if (e.inputType === 'insertText') {
+        e.preventDefault();
 
-    const char = e.data?.toLowerCase();
-    const expected = current.answer[state.userInput.length];
+        const text = (e.data || '').toLowerCase();
 
-    if (char === expected?.toLowerCase()) {
-        state.userInput += char;
-        state.lastTypedCorrect = true;
-        updateHintUI(input, current);
-    } else {
-        // ❌ wrong letter → flash red
-        state.lastTypedCorrect = false;
+        let added = false;
 
-        input.classList.add('flash-wrong-letter');
-        setTimeout(() => {
-            input.classList.remove('flash-wrong-letter');
-        }, 200);
+        for (let i = 0; i < text.length; i++) {
+            const nextIndex = state.userInput.length;
+            const expected = current.answer[nextIndex];
+
+            if (text[i] === expected?.toLowerCase()) {
+                state.userInput += text[i];
+                added = true;
+            } else {
+                // stop at first wrong letter
+                break;
+            }
+        }
+
+        if (added) {
+            state.lastTypedCorrect = true;
+            updateHintUI(input, current);
+        } else {
+            state.lastTypedCorrect = false;
+
+            input.classList.add('flash-wrong-letter');
+            setTimeout(() => {
+                input.classList.remove('flash-wrong-letter');
+            }, 200);
+        }
+
+        return;
     }
-
-    return;
-}
 
         // =========================
         // ⬅️ backspace
