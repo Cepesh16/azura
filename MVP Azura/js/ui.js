@@ -252,6 +252,15 @@ export function render() {
 
             state.userInput = text;
 
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
     // force clean text (no weird mobile stuff)
             if (input.innerText !== text) {
                 input.innerText = text;
