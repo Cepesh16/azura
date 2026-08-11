@@ -358,6 +358,10 @@ export function render() {
         } else {
             state.lastTypedCorrect = false;
 
+            // 🔥 CRITICAL FIX: reset IME / composition state
+            state.userInput = '';
+            updateHintUI(input, current);
+
             input.classList.add('flash-wrong-letter');
             setTimeout(() => {
                 input.classList.remove('flash-wrong-letter');
