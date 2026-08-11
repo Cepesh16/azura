@@ -358,9 +358,18 @@ export function render() {
         } else {
             state.lastTypedCorrect = false;
 
-            // 🔥 CRITICAL FIX: reset IME / composition state
+            // 🔥 FULL RESET (state + DOM + IME)
             state.userInput = '';
-            updateHintUI(input, current);
+
+            input.innerHTML = '<span class="typed"></span><span class="hint">' + current.answer + '</span>';
+
+            // 🔥 force blur → kills mobile composition
+            input.blur();
+
+            setTimeout(() => {
+                input.focus();
+                setCaret(input, 0);
+            }, 0);
 
             input.classList.add('flash-wrong-letter');
             setTimeout(() => {
