@@ -3,6 +3,11 @@ import { submitAnswer, startNewSession } from './logic.js';
 
 let sentenceInitialized = false;
 
+const isMobile =
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+let initialFocusPending = isMobile;
+
 function setCaret(el, position) {
     const range = document.createRange();
     const sel = window.getSelection();
@@ -191,13 +196,24 @@ export function render() {
 
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
-    setTimeout(() => input.focus(), 0);
+
+    if (initialFocusPending) {
+        input.onfocus = () => {
+            initialFocusPending = false;
+        };
+    } else {
+        setTimeout(() => input.focus(), 0);
+    }
 
     // =========================
     // 🧠 HELPER
     // =========================
     if (helperEl) {
-        if (state.sessionCount < 1) {
+        if (initialFocusPending) {
+            helperEl.innerText = 'Tap to start';
+            helperEl.classList.add('show');
+        }
+        else if (state.sessionCount < 1) {
             helperEl.innerText = 'Type the missing word and press Enter';
             helperEl.classList.add('show');
         }
