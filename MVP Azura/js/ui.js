@@ -337,8 +337,12 @@ export function render() {
         }, 0);
     }
 
-    input.onclick = forceFocusAndCaret;
-    input.ontouchend = forceFocusAndCaret; // ✅ mobile critical
+    input.onmousedown = (e) => {
+        e.preventDefault(); // ✅ prevents weird selection issues
+        forceFocusAndCaret(); // ✅ mobile critical
+    };
+
+    input.ontouchend = forceFocusAndCaret;
 
     input.onselectstart = (e) => e.preventDefault();
     
