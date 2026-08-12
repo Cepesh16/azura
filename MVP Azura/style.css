@@ -304,13 +304,16 @@ Learning Area
 }
 
 #sentence {
-    display: flex;
-    flex-wrap: wrap;
+    display: block;
     font-size: var(--font-lg);
     line-height: 1.5;
     font-weight: 500;
-    /*text-align: left;*/
+    text-align: left;
     padding: 34px 28px 12px;
+}
+
+.text {
+    display: inline;
 }
 
 /* =========================
@@ -318,7 +321,9 @@ Gap
 ========================= */
 
 .gap {
-    align-items: center;
+    display: inline-flex;
+    align-items: baseline;
+
     min-width: 6ch;
     font-size: var(--font-lg);
     font-weight: 500;
@@ -327,8 +332,14 @@ Gap
     border-bottom: 1px solid var(--border-default);
 }
 
+.gap:empty::before {
+    content: "\00a0";           /* fake character */
+    visibility: hidden;     /* invisible */
+}
+
 
 .gap span {
+    line-height: inherit;
     white-space: pre;
 }
 
