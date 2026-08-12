@@ -23,6 +23,8 @@ async function startApp() {
 
         // 🔹 Load data
         const data = await fetchSentences();
+        if (!data) return; // stop app init completely
+        
         console.log('AFTER FETCH:', data.length);
 
         state.allSentences = data;
