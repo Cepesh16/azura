@@ -16,14 +16,7 @@ function setCaret(el, position) {
     if (!typedNode || !typedNode.firstChild) return;
 
     const textNode = typedNode.firstChild;
-    let length = textNode.length;
-
-    // ignore zero-width char
-    if (textNode.textContent === '\u200B') {
-        length = 0;
-    }
-
-    const safePos = Math.min(position, length);
+    const safePos = Math.min(position, textNode.length);
 
     range.setStart(textNode, safePos);
     range.collapse(true);
@@ -38,11 +31,7 @@ function updateHintUI(input, current) {
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    const safeTyped = typed || '\u200B'; // zero-width char
-
-    input.innerHTML =
-        `<span class="typed ${typedClass}">${safeTyped}</span>` +
-        `<span class="hint">${hint}</span>`;
+    input.innerHTML = `<span class="typed ${typedClass}">${typed}</span><span class="hint">${hint}</span>`;
 
     setCaret(input, typed.length);
 }
@@ -340,16 +329,11 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
-    function forceCaret() {
+    input.onclick = () => {
         setTimeout(() => {
             setCaret(input, state.userInput.length);
         }, 0);
-    }
-
-    input.onclick = forceCaret;
-    input.onfocus = forceCaret;
-    input.onkeyup = forceCaret;
-    input.ontouchend = forceCaret;
+    };
 
     input.onselectstart = (e) => e.preventDefault();
     
@@ -400,8 +384,7 @@ export function render() {
             // 🔥 FULL RESET (state + DOM + IME)
             state.userInput = '';
 
-            input.innerHTML =
-                '<span class="typed">\u200B</span><span class="hint">' + current.answer + '</span>';
+            input.innerHTML = '<span class="typed"></span><span class="hint">' + current.answer + '</span>';
 
             // 🔥 force blur → kills mobile composition
             input.blur();
