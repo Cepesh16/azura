@@ -323,6 +323,7 @@ Gap
 .gap {
     display: inline-flex;
     align-items: baseline;
+    justify-content: center;
 
     min-width: 6ch;
     font-size: var(--font-lg);
