@@ -319,11 +319,11 @@ Learning Area
 /* =========================
 Gap
 ========================= */
-
-.gap {
+.gap-wrapper {
     display: inline-flex;
-    align-items: baseline;
-    justify-content: center;
+}
+.gap {
+    text-align: center;
 
     min-width: 6ch;
     font-size: var(--font-lg);

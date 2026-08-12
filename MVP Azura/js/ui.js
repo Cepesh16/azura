@@ -43,7 +43,7 @@ function createGapSentence(sentenceObj) {
 
     return sentence.replace(
         regex,
-    `<span id="gap-input" contenteditable="true" class="gap"></span>`
+    `<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>`
     );
 }
 
