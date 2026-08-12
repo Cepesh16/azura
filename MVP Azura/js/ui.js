@@ -329,11 +329,16 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
-    input.onclick = () => {
+    function forceFocusAndCaret() {
+        input.focus(); // ✅ force focus FIRST
+
         setTimeout(() => {
             setCaret(input, state.userInput.length);
         }, 0);
-    };
+    }
+
+    input.onclick = forceFocusAndCaret;
+    input.ontouchend = forceFocusAndCaret; // ✅ mobile critical
 
     input.onselectstart = (e) => e.preventDefault();
     
