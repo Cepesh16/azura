@@ -186,22 +186,24 @@ export function render() {
     // =========================
     // 📊 PROGRESS
     // =========================
-    const counterEl = document.getElementById('progress-counter');
+    const bar = document.getElementById('progress-bar');
 
-    if (counterEl && state.sessionQueue.length > 0) {
-        const currentNum = state.currentQueueIndex + 1;
+    if (bar && state.sessionQueue.length > 0) {
         const total = state.sessionQueue.length;
+        const current = state.currentQueueIndex;
 
-        counterEl.innerText = `${currentNum} / ${total}`;
-    }
+        let html = '';
 
-    const fillEl = document.getElementById('progress-fill');
+        for (let i = 0; i < total; i++) {
+            let cls = 'progress-segment';
 
-    if (fillEl && state.sessionQueue.length > 0) {
-        const progress =
-        ((state.currentQueueIndex + 1) / state.sessionQueue.length) * 100;
+            if (i < current) cls += ' filled';
+            else if (i === current) cls += ' active';
 
-        fillEl.style.width = `${progress}%`;
+            html += `<div class="${cls}"></div>`;
+        }
+
+        bar.innerHTML = html;
     }
 
     // =========================
