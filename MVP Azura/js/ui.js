@@ -54,6 +54,9 @@ export function resetSentence() {
 export function render() {
     const sessionStateEl = document.getElementById('session-state');
     const sentenceAreaEl = document.getElementById('sentence-area');
+
+    if (!sentenceAreaEl || !sessionStateEl) return;
+
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
 
@@ -142,7 +145,9 @@ export function render() {
         `;
 
         sessionStateEl.classList.remove('hidden');
-        sentenceAreaEl.classList.add('hidden');
+        if (sentenceAreaEl) {
+            sentenceAreaEl.classList.add('hidden');
+        }
 
 
         const btn = document.getElementById('restart-btn');
@@ -155,7 +160,9 @@ export function render() {
 
     // ✅ 🔹 NORMAL LEARNING STATE (PUT IT HERE)
     sessionStateEl.classList.add('hidden');
-    sentenceAreaEl.classList.remove('hidden');
+    if (sentenceAreaEl) {
+        sentenceAreaEl.classList.remove('hidden');
+    }
 
     // =========================
     // EMPTY
