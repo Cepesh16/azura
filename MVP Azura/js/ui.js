@@ -190,20 +190,40 @@ export function render() {
 
     if (bar && state.sessionQueue.length > 0) {
         const total = state.sessionQueue.length;
-        const current = state.currentQueueIndex;
 
         let html = '';
 
         for (let i = 0; i < total; i++) {
             let cls = 'progress-segment';
 
-            if (i < current) cls += ' filled';
-            else if (i === current) cls += ' active';
+            if (i < state.completedCount) cls += ' filled';
+            else if (i === state.completedCount) cls += ' active';
 
             html += `<div class="${cls}"></div>`;
         }
 
-        bar.innerHTML = html;
+        if (!bar.dataset.initialized) {
+            let html = '';
+
+            for (let i = 0; i < total; i++) {
+                html += `<div class="progress-segment"></div>`;
+            }
+
+            bar.innerHTML = html;
+            bar.dataset.initialized = 'true';
+        }
+
+        const segments = bar.children;
+
+        for (let i = 0; i < segments.length; i++) {
+            segments[i].classList.remove('filled', 'active');
+
+            if (i < state.completedCount) {
+                segments[i].classList.add('filled');
+            } else if (i === state.completedCount) {
+                segments[i].classList.add('active');
+            }
+        }
     }
 
     // =========================

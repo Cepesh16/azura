@@ -29,6 +29,7 @@ export const state = {
 
     // Session control
     sessionCount: 0,
+    completedCount: 0,
     sessionLimit: 5,
     nextSessionLimit: null,
     sessionWords: [],

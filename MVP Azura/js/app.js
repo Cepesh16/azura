@@ -32,10 +32,11 @@ async function startApp() {
         state.userInput = '';
         state.status = 'waiting';
 
-state.sessionCount = 0;
-state.sessionCorrect = 0;
-state.sessionWrong = 0;
-state.currentQueueIndex = 0;      
+        state.sessionCount = 0;
+        state.sessionCorrect = 0;
+        state.sessionWrong = 0;
+        state.currentQueueIndex = 0;      
+        state.completedCount = 0;
 
         localStorage.removeItem('sessionData'); // dev mode
 

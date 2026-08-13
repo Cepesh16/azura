@@ -19,7 +19,7 @@
     --border-default: #aaa;
 
     /* UI COLORS */
-    --accent: #4caf50;
+    --accent: #00b4d8;
     --progress-bg: #eee;
     --button-hover: #f5f5f5;
 
@@ -78,7 +78,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    margin-top: clamp(40px, 10vh, 100px);
+    margin-top: clamp(100px, 10vh, 100px);
     background: var(--bg-main);
 }
 

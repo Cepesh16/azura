@@ -108,6 +108,7 @@ function nextSentence() {
 // =========================
 function finishWord(current, immediateCorrect) {
     state.sessionCount++;
+    state.completedCount++;
     render();
 
 
@@ -267,9 +268,17 @@ export function startNewSession() {
     state.sessionCount = 0;
     state.sessionCorrect = 0;
     state.sessionWrong = 0;
+    state.completedCount = 0;
 
     state.sessionQueue = buildSessionQueue();
     state.currentQueueIndex = 0;
+
+    // 🔥 RESET PROGRESS BAR (ADD THIS HERE)
+    const bar = document.getElementById('progress-bar');
+    if (bar) {
+        bar.dataset.initialized = '';
+        bar.innerHTML = '';
+    }
 
     if (state.sessionQueue.length > 0) {
         state.currentIndex = state.sessionQueue[0];
