@@ -167,20 +167,36 @@ Top Navigation
 }
 
 #progress-bar {
+    display: flex;
+    gap: 6px;
     flex: 1;
-    height: 8px;
-    background: var(--progress-bg);
-    border-radius: 10px;
-    overflow: hidden;
 }
 
-#progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    border-radius: 10px;
-    transition: width var(--transition-normal);
-}
+    .progress-segment {
+        height: 10px;
+        flex: 1;
+        border-radius: 6px;
+        background: var(--progress-bg);
+        transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+        /* completed */
+        .progress-segment.filled {
+            background: var(--accent);
+        }
+
+        /* optional: current step highlight */
+        .progress-segment.active {
+            transform: scale(1.05);
+        }
+
+        .progress-segment.filled {
+            animation: fillPop 0.2s ease;
+        }
+
+        @keyframes fillPop {
+            50% { transform: scale(1.2); }
+        }
 
 #progress-counter {
     font-size: var(--font-sm);
