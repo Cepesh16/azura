@@ -159,10 +159,17 @@ Main App
 Top Navigation
 ========================= */
 
-#top-row {
+.option-row {
+    text-align: right;
+}
+
+
+
+#progress-row {
     display: flex;
     align-items: center;
     gap: var(--space-md);
+    margin-top: var(--space-md);
     margin-bottom: var(--space-md);
 }
 
@@ -173,7 +180,7 @@ Top Navigation
 }
 
     .progress-segment {
-        height: 10px;
+        height: 8px;
         flex: 1;
         background: var(--progress-bg);
         border-radius: 4px;
@@ -181,28 +188,18 @@ Top Navigation
         position: relative;
     }
 
-        /* inner fill layer */
         .progress-segment::after {
             content: "";
             position: absolute;
             inset: 0;
             background: var(--accent);
-
             transform: scaleX(0);
             transform-origin: left;
-
             transition: transform 0.35s ease;
         }
 
-        /* FILLED → animate */
         .progress-segment.filled::after {
             transform: scaleX(1);
-        }
-
-        /* ACTIVE (your current “alive” state) */
-        .progress-segment.active {
-            background: var(--progress-bg);
-            opacity: 0.6;
         }
 
 #progress-counter {
