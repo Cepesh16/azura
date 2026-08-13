@@ -67,7 +67,7 @@ export function render() {
     if (levelEl) levelEl.classList.toggle('hidden', isFinished);
     if (progressBar) progressBar.classList.toggle('hidden', isFinished);
     if (progressCounter) progressCounter.classList.toggle('hidden', isFinished);
-    if (optionsBtn) optionsBtn.classList.toggle('hidden', isFinished);
+    // if (optionsBtn) optionsBtn.classList.toggle('hidden', isFinished);
     
 
     const helperEl = document.getElementById('helper');
