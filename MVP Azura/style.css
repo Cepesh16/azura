@@ -333,11 +333,6 @@ Gap
     border-bottom: 1px solid var(--border-default);
 }
 
-.gap:empty::before {
-    content: "\00a0";           /* fake character */
-    visibility: hidden;     /* invisible */
-}
-
 
 .gap span {
     line-height: inherit;
@@ -483,23 +478,29 @@ States
 Session summary
 ========================= */
 
-.session-summary {
-    font-size: 20px;
-    line-height: 1.6;
+.session-state {
+    padding: 32px 24px;
     text-align: center;
 }
 
-    .session-summary__title {
-
+    .session-state__title {
+        font-size: 20px;
+        margin-bottom: 16px;
     }
 
-    .session-summary__stats {
-
+    .session-state__stats {
+        margin-bottom: 16px;
     }
 
-        .stats__item {
-            
-        }
+    .session-state__stat {
+        font-size: 15px;
+        color: var(--text-secondary);
+        margin-bottom: 4px;
+    }
+
+    .session-state__actions {
+        margin-top: 12px;
+    }
 
 /*Mobile*/
 

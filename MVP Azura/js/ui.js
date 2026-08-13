@@ -52,6 +52,7 @@ export function resetSentence() {
 }
 
 export function render() {
+    const sessionStateEl = document.getElementById('session-state');
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
 
@@ -75,13 +76,18 @@ export function render() {
 
 
     if (state.status === 'idle') {
-        sentenceEl.innerHTML = `
-            <div class="session-summary">
-                <div style="margin-bottom: 16px;">Ready to learn?</div>
-                <button id="start-btn">Start session</button>
+
+        sessionStateEl.innerHTML = `
+            <div class="session-state session-state--start">
+                <div class="session-state__title">Ready to learn?</div>
+                <div class="session-state__actions">
+                    <button id="start-btn">Start session</button>
+                </div>
             </div>
         `;
 
+        sessionStateEl.classList.remove('hidden');
+        sentenceEl.innerHTML = '';
         translationEl.innerText = '';
 
         const btn = document.getElementById('start-btn');
@@ -111,18 +117,31 @@ export function render() {
     // 🏁 FINISHED
     // =========================
     if (state.status === 'finished') {
-        sentenceEl.innerHTML = `
-            <div class="session-summary">
-                <div class="session-summary__title">Session complete</div>
-                <div class="session-summary__stats">
-                    <div class="stats__item">Correct: ${state.sessionCorrect} / ${state.sessionCount}</div>
-                    <div class="stats__item">Wrong: ${state.sessionWrong}</div>
-                    <div class="stats__item">Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%</div>
+
+        sessionStateEl.innerHTML = `
+            <div class="session-state session-state--end">
+                <div class="session-state__title">Session complete</div>
+
+                <div class="session-state__stats">
+                    <div class="session-state__stat">
+                        Correct: ${state.sessionCorrect} / ${state.sessionCount}
+                    </div>
+                    <div class="session-state__stat">
+                        Wrong: ${state.sessionWrong}
+                    </div>
+                    <div class="session-state__stat">
+                        Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%
+                    </div>
                 </div>
-                <button id="restart-btn">New session</button>
+
+                <div class="session-state__actions">
+                    <button id="restart-btn">New session</button>
+                </div>
             </div>
         `;
 
+        sessionStateEl.classList.remove('hidden');
+        sentenceEl.innerHTML = '';
         translationEl.innerText = '';
 
         const btn = document.getElementById('restart-btn');
@@ -132,6 +151,9 @@ export function render() {
 
         return;
     }
+
+    // ✅ 🔹 NORMAL LEARNING STATE (PUT IT HERE)
+    sessionStateEl.classList.add('hidden');
 
     // =========================
     // EMPTY
