@@ -53,6 +53,7 @@ export function resetSentence() {
 
 export function render() {
     const sessionStateEl = document.getElementById('session-state');
+    const sentenceAreaEl = document.getElementById('sentence-area');
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
 
@@ -141,8 +142,8 @@ export function render() {
         `;
 
         sessionStateEl.classList.remove('hidden');
-        sentenceEl.innerHTML = '';
-        translationEl.innerText = '';
+        sentenceAreaEl.classList.add('hidden');
+
 
         const btn = document.getElementById('restart-btn');
         if (btn) {
@@ -154,6 +155,7 @@ export function render() {
 
     // ✅ 🔹 NORMAL LEARNING STATE (PUT IT HERE)
     sessionStateEl.classList.add('hidden');
+    sentenceAreaEl.classList.remove('hidden');
 
     // =========================
     // EMPTY
