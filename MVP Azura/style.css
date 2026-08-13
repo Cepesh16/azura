@@ -175,27 +175,34 @@ Top Navigation
     .progress-segment {
         height: 10px;
         flex: 1;
-        border-radius: 6px;
         background: var(--progress-bg);
-        transition: background var(--transition-fast), transform var(--transition-fast);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
     }
 
-        /* completed */
-        .progress-segment.filled {
+        /* inner fill layer */
+        .progress-segment::after {
+            content: "";
+            position: absolute;
+            inset: 0;
             background: var(--accent);
+
+            transform: scaleX(0);
+            transform-origin: left;
+
+            transition: transform 0.35s ease;
         }
 
-        /* optional: current step highlight */
+        /* FILLED → animate */
+        .progress-segment.filled::after {
+            transform: scaleX(1);
+        }
+
+        /* ACTIVE (your current “alive” state) */
         .progress-segment.active {
-            transform: scale(1.05);
-        }
-
-        .progress-segment.filled {
-            animation: fillPop 0.2s ease;
-        }
-
-        @keyframes fillPop {
-            50% { transform: scale(1.2); }
+            background: var(--progress-bg);
+            opacity: 0.6;
         }
 
 #progress-counter {
