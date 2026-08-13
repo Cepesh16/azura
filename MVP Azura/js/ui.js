@@ -76,7 +76,7 @@ export function render() {
 
     if (state.status === 'idle') {
         sentenceEl.innerHTML = `
-            <div class="empty-state">
+            <div class="session-summary">
                 <div style="margin-bottom: 16px;">Ready to learn?</div>
                 <button id="start-btn">Start session</button>
             </div>
@@ -112,12 +112,12 @@ export function render() {
     // =========================
     if (state.status === 'finished') {
         sentenceEl.innerHTML = `
-            <div class="empty-state">
-                <div style="margin-bottom: 12px;">Session complete</div>
-                <div style="font-size:16px; color:#666; margin-bottom:16px;">
-                    Correct: ${state.sessionCorrect} / ${state.sessionCount}<br>
-                    Wrong: ${state.sessionWrong}<br>
-                    Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%
+            <div class="session-summary">
+                <div class="session-summary__title">Session complete</div>
+                <div class="session-summary__stats">
+                    <div class="stats__item">Correct: ${state.sessionCorrect} / ${state.sessionCount}</div>
+                    <div class="stats__item">Wrong: ${state.sessionWrong}</div>
+                    <div class="stats__item">Accuracy: ${Math.round((state.sessionCorrect / state.sessionCount) * 100)}%</div>
                 </div>
                 <button id="restart-btn">New session</button>
             </div>
