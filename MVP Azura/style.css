@@ -335,9 +335,6 @@ Learning Area
     border-radius: var(--radius);
 }
 
-    #card__content-wrapper {
-        position: relative;
-    }
 
 #sentence-area,
 #session-state {
@@ -545,12 +542,6 @@ Session summary
     transition: opacity var(--transition-long), transform var(--transition-long);
 }
 
-.fade-hidden,
-.fade-visible {
-    position: absolute;
-    inset: 0;
-}
-
 .fade-hidden {
     opacity: 0;
     transform: translateY(6px);
@@ -560,7 +551,6 @@ Session summary
 .fade-visible {
     opacity: 1;
     transform: translateY(0);
-    position: relative;
 }
 
 .fade-gone {

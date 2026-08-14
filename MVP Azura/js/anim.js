@@ -1,70 +1,60 @@
 // =========================
 // 🎬 ANIMATION HELPERS
 // =========================
+function waitTransition(el) {
+    return new Promise((resolve) => {
+        if (!el) return resolve();
 
-// 🔹 wait for transition end (safe)
-export function onFadeEnd(el, callback) {
-    const handler = (e) => {
-        if (e.target !== el) return;
-        el.removeEventListener('transitionend', handler);
-        callback();
-    };
-    el.addEventListener('transitionend', handler);
+        const handler = (e) => {
+            if (e.target !== el) return;
+            if (e.propertyName !== 'opacity') return;
+
+            el.removeEventListener('transitionend', handler);
+            resolve();
+        };
+
+        el.addEventListener('transitionend', handler);
+    });
 }
+
 
 // =========================
 // 🟢 FADE IN
 // =========================
-export function fadeIn(el) {
+export async function fadeIn(el) {
     if (!el) return;
 
-    // bring into layout
+    // 🔴 ALWAYS clean state first
     el.classList.remove('fade-gone');
-
-    // set start state
-    el.classList.add('fade-hidden');
     el.classList.remove('fade-visible');
+    el.classList.add('fade-hidden');
 
-    // force layout
+    // 🔥 force layout
     el.getBoundingClientRect();
 
-    // animate
+    // 🟢 animate IN
     requestAnimationFrame(() => {
         el.classList.remove('fade-hidden');
         el.classList.add('fade-visible');
     });
+
+    await waitTransition(el);
 }
 
 // =========================
 // 🔴 FADE OUT
 // =========================
-export function fadeOut(el, { remove = true } = {}) {
+export async function fadeOut(el) {
     if (!el) return;
+
+    el.classList.remove('fade-gone');
+
+    el.getBoundingClientRect();
 
     el.classList.add('fade-hidden');
     el.classList.remove('fade-visible');
 
-    if (remove) {
-        onFadeEnd(el, () => {
-            el.classList.add('fade-gone');
-        });
-    }
-}
+    await waitTransition(el);
 
-// =========================
-// 🔁 SWAP (OUT → IN)
-// =========================
-export function swapFade(outEl, inEl) {
-    if (!outEl || !inEl) return;
-
-    // fade OUT first
-    outEl.classList.add('fade-hidden');
-    outEl.classList.remove('fade-visible');
-
-    onFadeEnd(outEl, () => {
-        outEl.classList.add('fade-gone');
-
-        // then fade IN
-        fadeIn(inEl);
-    });
+    el.classList.add('fade-gone');
 }

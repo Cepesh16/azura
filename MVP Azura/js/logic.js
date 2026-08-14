@@ -7,20 +7,8 @@ import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
-import { fadeIn, fadeOut, swapFade } from './anim.js';
+import { fadeIn, fadeOut } from './anim.js';
 
-
-function onFadeEnd(el, callback) {
-    if (!el) return;
-
-    const handler = (e) => {
-        if (e.target !== el) return;
-        el.removeEventListener('transitionend', handler);
-        callback();
-    };
-
-    el.addEventListener('transitionend', handler);
-}
 
 function normalize(str) {
     return str
@@ -70,67 +58,38 @@ export function buildSessionQueue() {
 // =========================
 // NEXT SENTENCE
 // =========================
-function nextSentence() {
+async function nextSentence() {
     const sentenceArea = document.getElementById('sentence-area');
     if (!sentenceArea) return;
 
-    // 🔴 STEP 1 — fade OUT
-    sentenceArea.classList.remove('fade-gone');
-    sentenceArea.classList.add('fade-hidden');
-    sentenceArea.classList.remove('fade-visible');
+    await fadeOut(sentenceArea);
 
-    onFadeEnd(sentenceArea, () => {
+    state.currentQueueIndex++;
 
-        state.currentQueueIndex++;
-
-        // =========================
-        // 🏁 FINISHED
-        // =========================
-        if (state.currentQueueIndex >= state.sessionQueue.length) {
-
-            const sentenceArea = document.getElementById('sentence-area');
-            const summary = document.getElementById('session-state');
-
-            fadeOut(sentenceArea);
-
-            onFadeEnd(sentenceArea, () => {
-                state.status = 'finished';
-                render();
-
-                const summary = document.getElementById('session-state');
-                fadeIn(summary);
-            });
-
-            return;
-        }
-
-        // =========================
-        // NEXT SENTENCE
-        // =========================
-        state.currentIndex = state.sessionQueue[state.currentQueueIndex];
-
-        state.userInput = '';
-        state.status = 'waiting';
-        state.answeredWithHint = false;
-        state.isSubmitting = false;
-
+    // 🏁 FINISHED
+    if (state.currentQueueIndex >= state.sessionQueue.length) {
+        state.status = 'finished';
         render();
 
-        const newSentenceArea = document.getElementById('sentence-area');
+        const summary = document.getElementById('session-state');
+        await fadeIn(summary);
 
-        if (newSentenceArea) {
-            newSentenceArea.classList.remove('fade-gone');
-            newSentenceArea.classList.add('fade-hidden');
-            newSentenceArea.classList.remove('fade-visible');
-        }
+        return;
+    }
 
-        requestAnimationFrame(() => {
-            if (newSentenceArea) {
-                newSentenceArea.classList.remove('fade-hidden');
-                newSentenceArea.classList.add('fade-visible');
-            }
-        });
-    });
+    // NEXT
+    state.currentIndex = state.sessionQueue[state.currentQueueIndex];
+
+    state.userInput = '';
+    state.status = 'waiting';
+    state.answeredWithHint = false;
+    state.isSubmitting = false;
+
+    render();
+
+    const newSentenceArea = document.getElementById('sentence-area');
+
+    await fadeIn(newSentenceArea);
 }
 
 // =========================
@@ -163,23 +122,21 @@ function finishWord(current, immediateCorrect) {
 
     playCorrect();
 
-const delay = immediateCorrect ? 0 : 600;
-
-setTimeout(() => {
-    
-    console.log('🔊 AUDIO URL:', current.audioUrl);
-
-// American or British pronunciation        
+    // American or British pronunciation        
     const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
-    // const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_gb_1.mp3`;
 
-    playWordAudio(url);
+    (async () => {
 
-    setTimeout(() => {
+        // optional delay only if NOT immediate
+        if (!immediateCorrect) {
+            await new Promise(r => setTimeout(r, 600));
+        }
+
+        await playWordAudio(url);
+
         nextSentence();
-    }, 600);
 
-}, delay);
+    })();
 
 
 }
@@ -281,18 +238,25 @@ if (input === '') {
 
     render();
 
-    setTimeout(() => {
-        state.status = 'wrong';
-        state.userInput = '';
-        state.isSubmitting = false;
-        render();
-    }, 400);
+    const gap = document.querySelector('.gap');
 
+    if (gap) {
+        const handler = () => {
+            gap.removeEventListener('animationend', handler);
+
+            state.status = 'wrong';
+            state.userInput = '';
+            state.isSubmitting = false;
+            render();
+        };
+
+        gap.addEventListener('animationend', handler);
+    }
 
 }
 
 
-export function startNewSession() {
+export async function startNewSession() {
 
     state.sessionCount = 0;
     state.sessionCorrect = 0;
@@ -322,12 +286,10 @@ export function startNewSession() {
 
     const summary = document.getElementById('session-state');
 
-    fadeOut(summary);
+    await fadeOut(summary);
 
-    onFadeEnd(summary, () => {
-        render();
+    render();
 
-        const sentenceArea = document.getElementById('sentence-area');
-        fadeIn(sentenceArea);
-    });
+    const sentenceArea = document.getElementById('sentence-area');
+    await fadeIn(sentenceArea);
 }

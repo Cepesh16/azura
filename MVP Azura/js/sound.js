@@ -8,25 +8,16 @@ wrongSound.preload = 'auto';
 
 let currentAudio = null;
 
-// ✅ WORD AUDIO (NEW)
+// ✅ WORD AUDIO
 export function playWordAudio(url) {
-    if (!state.soundEnabled) return;
-    if (!url) return;
+    return new Promise((resolve) => {
+        const audio = new Audio(url);
 
-    try {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio = null;
-        }
+        audio.onended = resolve;
+        audio.onerror = resolve; // fallback
 
-        currentAudio = new Audio(url);
-        currentAudio.play().catch(() => {
-            console.warn('🔇 Word audio blocked');
-        });
-
-    } catch (e) {
-        console.warn('🔇 Audio error', e);
-    }
+        audio.play();
+    });
 }
 
 // ✅ EXISTING
