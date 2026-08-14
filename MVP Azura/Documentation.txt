@@ -1,0 +1,2 @@
+CSS → visual only (opacity/transform)
+JS → structural (display on/off)
