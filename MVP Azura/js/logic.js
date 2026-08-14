@@ -7,6 +7,7 @@ import { render, resetSentence } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
+import { fadeIn, fadeOut, swapFade } from './anim.js';
 
 
 function onFadeEnd(el, callback) {
@@ -87,30 +88,18 @@ function nextSentence() {
         // =========================
         if (state.currentQueueIndex >= state.sessionQueue.length) {
 
-            sentenceArea.classList.add('fade-gone');
-
-            state.status = 'finished';
-            render();
-
+            const sentenceArea = document.getElementById('sentence-area');
             const summary = document.getElementById('session-state');
 
-            if (summary) {
-                // 🟢 STEP 1 — bring into layout
-                summary.classList.remove('fade-gone');
+            fadeOut(sentenceArea);
 
-                // 🔴 STEP 2 — set hidden state FIRST
-                summary.classList.add('fade-hidden');
-                summary.classList.remove('fade-visible');
+            onFadeEnd(sentenceArea, () => {
+                state.status = 'finished';
+                render();
 
-                // 🔥 STEP 3 — force browser to apply it
-                summary.getBoundingClientRect();
-
-                // 🟢 STEP 4 — animate IN
-                requestAnimationFrame(() => {
-                    summary.classList.remove('fade-hidden');
-                    summary.classList.add('fade-visible');
-                });
-            }
+                const summary = document.getElementById('session-state');
+                fadeIn(summary);
+            });
 
             return;
         }
@@ -332,40 +321,13 @@ export function startNewSession() {
     resetSentence();
 
     const summary = document.getElementById('session-state');
-    // 🔴 FADE OUT SUMMARY
-    if (summary) {
-        // 🔴 STEP 1 — fade OUT (DO NOT touch fade-gone here)
-        summary.classList.add('fade-hidden');
-        summary.classList.remove('fade-visible');
 
-        onFadeEnd(summary, () => {
+    fadeOut(summary);
 
-            // 🔴 STEP 2 — NOW remove from layout
-            summary.classList.add('fade-gone');
+    onFadeEnd(summary, () => {
+        render();
 
-            // 🟢 STEP 3 — render new sentence
-            render();
-
-            const sentenceArea = document.getElementById('sentence-area');
-
-            if (sentenceArea) {
-                // 🟢 bring into layout
-                sentenceArea.classList.remove('fade-gone');
-
-                // 🔥 force browser layout (critical)
-                sentenceArea.getBoundingClientRect();
-
-                // 🟢 prepare hidden
-                sentenceArea.classList.add('fade-hidden');
-                sentenceArea.classList.remove('fade-visible');
-
-                // 🟢 animate IN
-                requestAnimationFrame(() => {
-                    sentenceArea.classList.remove('fade-hidden');
-                    sentenceArea.classList.add('fade-visible');
-                });
-            }
-
-        });
-    }
+        const sentenceArea = document.getElementById('sentence-area');
+        fadeIn(sentenceArea);
+    });
 }
