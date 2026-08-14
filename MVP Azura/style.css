@@ -70,8 +70,8 @@
     /* TRANSITIONS */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
-    --transition-long: 0.6s ease;
-    --transition-test: 4s ease;
+    --transition-long: 0.5s ease;
+    --transition-test: 2s ease;
 }
 
 /* =========================
@@ -542,7 +542,7 @@ Session summary
 #sentence-area,
 #session-state,
 #progress-row {
-    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    transition: opacity var(--transition-long), transform var(--transition-long);
 }
 
 .fade-hidden,
@@ -565,22 +565,6 @@ Session summary
 
 .fade-gone {
     display: none !important;
-}
-
-
-/*UNIVERSAL FADE SYSTEM*/
-.fade {
-    transition: opacity var(--transition-test), transform var(--transition-test);
-}
-
-.fade-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.fade-out {
-    opacity: 0;
-    transform: translateY(6px);
 }
 
 

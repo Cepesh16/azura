@@ -8,6 +8,19 @@ import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
 
+
+function onFadeEnd(el, callback) {
+    if (!el) return;
+
+    const handler = (e) => {
+        if (e.target !== el) return;
+        el.removeEventListener('transitionend', handler);
+        callback();
+    };
+
+    el.addEventListener('transitionend', handler);
+}
+
 function normalize(str) {
     return str
     .replace(/\u00A0/g, ' ')
@@ -65,8 +78,7 @@ function nextSentence() {
     sentenceArea.classList.add('fade-hidden');
     sentenceArea.classList.remove('fade-visible');
 
-    // ⏱ WAIT for fade OUT (MATCH CSS duration!)
-    setTimeout(() => {
+    onFadeEnd(sentenceArea, () => {
 
         state.currentQueueIndex++;
 
@@ -83,10 +95,17 @@ function nextSentence() {
             const summary = document.getElementById('session-state');
 
             if (summary) {
+                // 🟢 STEP 1 — bring into layout
                 summary.classList.remove('fade-gone');
+
+                // 🔴 STEP 2 — set hidden state FIRST
                 summary.classList.add('fade-hidden');
                 summary.classList.remove('fade-visible');
 
+                // 🔥 STEP 3 — force browser to apply it
+                summary.getBoundingClientRect();
+
+                // 🟢 STEP 4 — animate IN
                 requestAnimationFrame(() => {
                     summary.classList.remove('fade-hidden');
                     summary.classList.add('fade-visible');
@@ -106,27 +125,23 @@ function nextSentence() {
         state.answeredWithHint = false;
         state.isSubmitting = false;
 
-        // 🟢 STEP 2 — update DOM
         render();
 
         const newSentenceArea = document.getElementById('sentence-area');
 
-        // 🟢 prepare hidden
         if (newSentenceArea) {
             newSentenceArea.classList.remove('fade-gone');
             newSentenceArea.classList.add('fade-hidden');
             newSentenceArea.classList.remove('fade-visible');
         }
 
-        // 🟢 STEP 3 — fade IN
         requestAnimationFrame(() => {
             if (newSentenceArea) {
                 newSentenceArea.classList.remove('fade-hidden');
                 newSentenceArea.classList.add('fade-visible');
             }
         });
-
-    }, 600); // ← MUST match CSS
+    });
 }
 
 // =========================
@@ -317,40 +332,40 @@ export function startNewSession() {
     resetSentence();
 
     const summary = document.getElementById('session-state');
-
-    // 🔴 STEP 1 — fade OUT summary FIRST
+    // 🔴 FADE OUT SUMMARY
     if (summary) {
-        summary.classList.remove('fade-gone');
+        // 🔴 STEP 1 — fade OUT (DO NOT touch fade-gone here)
         summary.classList.add('fade-hidden');
         summary.classList.remove('fade-visible');
-    }
 
-    // ⏱ WAIT animation
-    setTimeout(() => {
+        onFadeEnd(summary, () => {
 
-        if (summary) {
+            // 🔴 STEP 2 — NOW remove from layout
             summary.classList.add('fade-gone');
-        }
 
-        // 🟢 NOW render sentence
-        render();
+            // 🟢 STEP 3 — render new sentence
+            render();
 
-        const sentenceArea = document.getElementById('sentence-area');
+            const sentenceArea = document.getElementById('sentence-area');
 
-        // 🟢 prepare hidden
-        if (sentenceArea) {
-            sentenceArea.classList.remove('fade-gone');
-            sentenceArea.classList.add('fade-hidden');
-            sentenceArea.classList.remove('fade-visible');
-        }
-
-        // 🟢 fade IN
-        requestAnimationFrame(() => {
             if (sentenceArea) {
-                sentenceArea.classList.remove('fade-hidden');
-                sentenceArea.classList.add('fade-visible');
-            }
-        });
+                // 🟢 bring into layout
+                sentenceArea.classList.remove('fade-gone');
 
-    }, 600); // MATCH CSS!
+                // 🔥 force browser layout (critical)
+                sentenceArea.getBoundingClientRect();
+
+                // 🟢 prepare hidden
+                sentenceArea.classList.add('fade-hidden');
+                sentenceArea.classList.remove('fade-visible');
+
+                // 🟢 animate IN
+                requestAnimationFrame(() => {
+                    sentenceArea.classList.remove('fade-hidden');
+                    sentenceArea.classList.add('fade-visible');
+                });
+            }
+
+        });
+    }
 }
