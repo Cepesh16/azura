@@ -70,6 +70,8 @@
     /* TRANSITIONS */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
+    --transition-long: 0.6s ease;
+    --transition-test: 4s ease;
 }
 
 /* =========================
@@ -110,7 +112,8 @@ select {
 }
 
 .hidden {
-    display: none !important;
+    opacity: 0;
+    pointer-events: none;
 }
 
 
@@ -200,7 +203,7 @@ Top Navigation
             background: var(--accent);
             transform: scaleX(0);
             transform-origin: left;
-            transition: transform 0.35s ease;
+            transition: transform var(--transition-long);
         }
 
         .progress-segment.filled::after {
@@ -322,12 +325,22 @@ Learning Area
 ========================= */
 
 #card {
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-soft);
+    position: relative;
     overflow: hidden;
     padding: var(--space-xl) var(--space-lg) var(--space-xl);
     margin-top: 16px;
+    box-shadow: var(--shadow-soft);
+    background: var(--bg-card);
+    border-radius: var(--radius);
+}
+
+    #card__content-wrapper {
+        position: relative;
+    }
+
+#sentence-area,
+#session-state {
+    position: relative;
 }
 
 #sentence {
@@ -420,7 +433,7 @@ Helper
     min-height: 18px;
     opacity: 0;
     transform: translateY(4px);
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    transition: opacity var(--transition-test), transform var(--transition-test);
 }
 
 #helper.show {
@@ -489,18 +502,8 @@ States
 #sentence {
     opacity: 1;
     transform: translateY(0);
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
-#sentence.fade-in {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-#sentence.fade-out {
-    opacity: 0;
-    transform: translateY(6px);
-}
 
 /* =========================
 Session summary
@@ -529,6 +532,58 @@ Session summary
     .session-state__actions {
         margin-top: 12px;
     }
+
+
+
+/* =========================
+ ANIMATION 
+========================= */
+#sentence-area,
+#session-state,
+#progress-row {
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.fade-hidden,
+.fade-visible {
+    position: absolute;
+    inset: 0;
+}
+
+.fade-hidden {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+}
+
+.fade-visible {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+}
+
+.fade-gone {
+    display: none !important;
+}
+
+
+/*UNIVERSAL FADE SYSTEM*/
+.fade {
+    transition: opacity var(--transition-test), transform var(--transition-test);
+}
+
+.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(6px);
+}
+
+
+
 
 /*Mobile*/
 

@@ -145,9 +145,6 @@ export function render() {
         `;
 
         sessionStateEl.classList.remove('hidden');
-        if (sentenceAreaEl) {
-            sentenceAreaEl.classList.add('hidden');
-        }
 
 
         const btn = document.getElementById('restart-btn');
@@ -158,11 +155,6 @@ export function render() {
         return;
     }
 
-    // ✅ 🔹 NORMAL LEARNING STATE (PUT IT HERE)
-    sessionStateEl.classList.add('hidden');
-    if (sentenceAreaEl) {
-        sentenceAreaEl.classList.remove('hidden');
-    }
 
     // =========================
     // EMPTY

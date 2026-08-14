@@ -57,50 +57,76 @@ export function buildSessionQueue() {
 // NEXT SENTENCE
 // =========================
 function nextSentence() {
-    const sentenceEl = document.getElementById('sentence');
+    const sentenceArea = document.getElementById('sentence-area');
+    if (!sentenceArea) return;
 
-    // 🔥 fade out FIRST
-    if (sentenceEl) {
-        sentenceEl.classList.remove('fade-in');
-        sentenceEl.classList.add('fade-out');
-    }
+    // 🔴 STEP 1 — fade OUT
+    sentenceArea.classList.remove('fade-gone');
+    sentenceArea.classList.add('fade-hidden');
+    sentenceArea.classList.remove('fade-visible');
 
+    // ⏱ WAIT for fade OUT (MATCH CSS duration!)
     setTimeout(() => {
+
         state.currentQueueIndex++;
 
+        // =========================
+        // 🏁 FINISHED
+        // =========================
         if (state.currentQueueIndex >= state.sessionQueue.length) {
-            const sentenceEl = document.getElementById('sentence');
 
-            if (sentenceEl) {
-                sentenceEl.classList.remove('fade-in');
-                sentenceEl.classList.remove('fade-out');
-            }
+            sentenceArea.classList.add('fade-gone');
 
             state.status = 'finished';
             render();
+
+            const summary = document.getElementById('session-state');
+
+            if (summary) {
+                summary.classList.remove('fade-gone');
+                summary.classList.add('fade-hidden');
+                summary.classList.remove('fade-visible');
+
+                requestAnimationFrame(() => {
+                    summary.classList.remove('fade-hidden');
+                    summary.classList.add('fade-visible');
+                });
+            }
+
             return;
         }
 
+        // =========================
+        // NEXT SENTENCE
+        // =========================
         state.currentIndex = state.sessionQueue[state.currentQueueIndex];
 
         state.userInput = '';
         state.status = 'waiting';
         state.answeredWithHint = false;
-        state.layoutWarning = false;
         state.isSubmitting = false;
 
+        // 🟢 STEP 2 — update DOM
         render();
 
-        // 🔥 fade in AFTER render
-        requestAnimationFrame(() => {
-            const el = document.getElementById('sentence');
-            if (!el) return;
+        const newSentenceArea = document.getElementById('sentence-area');
 
-            el.classList.remove('fade-out');
-            el.classList.add('fade-in');
+        // 🟢 prepare hidden
+        if (newSentenceArea) {
+            newSentenceArea.classList.remove('fade-gone');
+            newSentenceArea.classList.add('fade-hidden');
+            newSentenceArea.classList.remove('fade-visible');
+        }
+
+        // 🟢 STEP 3 — fade IN
+        requestAnimationFrame(() => {
+            if (newSentenceArea) {
+                newSentenceArea.classList.remove('fade-hidden');
+                newSentenceArea.classList.add('fade-visible');
+            }
         });
 
-    }, 120);
+    }, 600); // ← MUST match CSS
 }
 
 // =========================
@@ -146,7 +172,6 @@ setTimeout(() => {
     playWordAudio(url);
 
     setTimeout(() => {
-        document.getElementById('sentence')?.classList.remove('fade-in');
         nextSentence();
     }, 600);
 
@@ -290,10 +315,42 @@ export function startNewSession() {
     state.isSubmitting = false;
 
     resetSentence();
-    const sentenceEl = document.getElementById('sentence');
-    if (sentenceEl) {
-        // sentenceEl.classList.remove('fade-out');
-        sentenceEl.classList.remove('fade-in');
+
+    const summary = document.getElementById('session-state');
+
+    // 🔴 STEP 1 — fade OUT summary FIRST
+    if (summary) {
+        summary.classList.remove('fade-gone');
+        summary.classList.add('fade-hidden');
+        summary.classList.remove('fade-visible');
     }
-    render();
+
+    // ⏱ WAIT animation
+    setTimeout(() => {
+
+        if (summary) {
+            summary.classList.add('fade-gone');
+        }
+
+        // 🟢 NOW render sentence
+        render();
+
+        const sentenceArea = document.getElementById('sentence-area');
+
+        // 🟢 prepare hidden
+        if (sentenceArea) {
+            sentenceArea.classList.remove('fade-gone');
+            sentenceArea.classList.add('fade-hidden');
+            sentenceArea.classList.remove('fade-visible');
+        }
+
+        // 🟢 fade IN
+        requestAnimationFrame(() => {
+            if (sentenceArea) {
+                sentenceArea.classList.remove('fade-hidden');
+                sentenceArea.classList.add('fade-visible');
+            }
+        });
+
+    }, 600); // MATCH CSS!
 }
