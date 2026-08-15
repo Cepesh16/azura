@@ -65,7 +65,7 @@ export function render() {
 
     const totalCompletedEl = document.getElementById('total-completed-counter');
     if (totalCompletedEl) {
-        totalCompletedEl.innerText = `Cards completed: ${state.totalCompleted}`;
+        totalCompletedEl.innerText = `🗐 ${state.totalCompleted}`;
     }
 
     const progressCounter = document.getElementById('progress-counter');

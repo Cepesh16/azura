@@ -98,15 +98,15 @@ button {
     cursor: pointer;
 }
 
-button:hover,
-#options-btn:hover {
-    transform: translateY(-1px);
-    background: var(--button-hover);
-}
+    button:hover,
+    #options-btn:hover {
+        transform: translateY(-1px);
+        background: var(--button-hover);
+    }
 
-button:active {
-    transform: scale(0.96);
-}
+    button:active {
+        transform: scale(0.96);
+    }
 
 select {
     cursor: pointer;
@@ -211,9 +211,18 @@ Top Navigation
             transform: scaleX(1);
         }
 
-#total-completed-counter {
+
+#counter-row {
+    padding: 0 var(--space-lg);
+    text-align: left;
     
+    font-size: var(--font-md);
+    color: var(--text-secondary);
 }
+    #total-completed-counter {
+
+    }
+
 
 #progress-counter {
     font-size: var(--font-sm);
@@ -330,7 +339,6 @@ Learning Area
 ========================= */
 
 #card {
-    position: relative;
     overflow: hidden;
     padding: var(--space-xl) var(--space-lg) var(--space-xl);
     margin-top: 16px;
@@ -339,19 +347,12 @@ Learning Area
     border-radius: var(--radius);
 }
 
-
-#sentence-area,
-#session-state {
-    position: relative;
-}
-
 #sentence {
     display: block;
     font-size: var(--font-lg);
     line-height: 1.5;
     font-weight: 500;
     text-align: left;
-    /*padding: 34px 28px 12px;*/
     padding-bottom: var(--space-md);
 }
 
@@ -393,10 +394,10 @@ Translation Row
     /*padding: 8px 28px 28px;*/
 }
 
-#translation {
-    font-size: var(--font-md);
-    color: var(--text-secondary);
-}
+    #translation {
+        font-size: var(--font-md);
+        color: var(--text-secondary);
+    }
 
 /* =========================
 Level Indicator
