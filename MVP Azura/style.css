@@ -539,12 +539,12 @@ Session summary
 #sentence-area,
 #session-state,
 #progress-row {
-    transition: opacity var(--transition-long), transform var(--transition-long);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
 }
 
 .fade-hidden {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(4px);
     pointer-events: none;
 }
 

@@ -145,7 +145,6 @@ export function render() {
         `;
 
         sessionStateEl.classList.remove('hidden');
-        sessionStateEl.classList.remove('fade-gone'); // important
         sessionStateEl.classList.add('fade-hidden');  // start from hidden state
         sessionStateEl.classList.remove('fade-visible');
 

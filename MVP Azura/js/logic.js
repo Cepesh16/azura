@@ -62,13 +62,21 @@ async function nextSentence() {
     const sentenceArea = document.getElementById('sentence-area');
     if (!sentenceArea) return;
 
-    await fadeOut(sentenceArea);
-
     state.currentQueueIndex++;
 
     // 🏁 FINISHED
     if (state.currentQueueIndex >= state.sessionQueue.length) {
+        const progressRow = document.getElementById('progress-row');
+
         state.status = 'finished';
+
+        await Promise.all([
+            fadeOut(sentenceArea),
+            fadeOut(progressRow)
+        ]);
+
+        progressRow.style.display = '';
+
         render();
 
         const summary = document.getElementById('session-state');
@@ -76,6 +84,8 @@ async function nextSentence() {
 
         return;
     }
+
+    await fadeOut(sentenceArea);
 
     // NEXT
     state.currentIndex = state.sessionQueue[state.currentQueueIndex];
@@ -285,11 +295,16 @@ export async function startNewSession() {
     resetSentence();
 
     const summary = document.getElementById('session-state');
+    const progressRow = document.getElementById('progress-row');
 
     await fadeOut(summary);
 
     render();
 
     const sentenceArea = document.getElementById('sentence-area');
-    await fadeIn(sentenceArea);
+
+    await Promise.all([
+        fadeIn(sentenceArea),
+        fadeIn(progressRow)
+    ]);
 }

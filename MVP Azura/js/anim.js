@@ -22,6 +22,14 @@ function waitTransition(el) {
 // 🟢 FADE IN
 // =========================
 export async function fadeIn(el) {
+    console.log(
+        'FADE IN:',
+        el.id,
+        'classes:',
+        el.className,
+        'opacity:',
+        getComputedStyle(el).opacity
+    );
     if (!el) return;
 
     // 👇 restore layout FIRST
@@ -46,11 +54,15 @@ export async function fadeIn(el) {
 export async function fadeOut(el) {
     if (!el) return;
 
+    if (el.classList.contains('fade-hidden')) {
+        el.style.display = 'none';
+        return;
+    }
+
     el.classList.add('fade-hidden');
     el.classList.remove('fade-visible');
 
     await waitTransition(el);
 
-    // 👇 remove from layout AFTER animation
     el.style.display = 'none';
 }
