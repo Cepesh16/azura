@@ -28,9 +28,10 @@ export const state = {
     soundEnabled: true,
 
     // Session control
-    sessionCount: 0,
-    completedCount: 0,
     sessionLimit: 3,
+    sessionCount: 0,
+    completedCount: 0, // current session
+    totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0, // lifetime total
     nextSessionLimit: null,
     sessionWords: [],
     sessionQueue: [],

@@ -108,6 +108,8 @@ async function nextSentence() {
 function finishWord(current, immediateCorrect) {
     state.sessionCount++;
     state.completedCount++;
+    state.totalCompleted++;
+    localStorage.setItem('totalCompleted', state.totalCompleted);
     render();
 
 

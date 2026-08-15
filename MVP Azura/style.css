@@ -211,6 +211,10 @@ Top Navigation
             transform: scaleX(1);
         }
 
+#total-completed-counter {
+    
+}
+
 #progress-counter {
     font-size: var(--font-sm);
     color: var(--text-secondary);

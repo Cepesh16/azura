@@ -62,6 +62,12 @@ export function render() {
 
     const levelEl = document.getElementById('level-indicator');
     const progressBar = document.getElementById('progress-bar');
+
+    const totalCompletedEl = document.getElementById('total-completed-counter');
+    if (totalCompletedEl) {
+        totalCompletedEl.innerText = `Cards completed: ${state.totalCompleted}`;
+    }
+
     const progressCounter = document.getElementById('progress-counter');
     const optionsBtn = document.getElementById('options-btn');
 
