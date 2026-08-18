@@ -53,8 +53,9 @@
     --radius-sm: 8px;
 
     /* FONT */
-    --font-lg: 24px;
-    --font-md: 18px;
+    --font-xl: 24px;
+    --font-lg: 20px;
+    --font-md: 16px;
     --font-sm: 14px;
     --font-xs: 12px;
 
@@ -85,6 +86,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
+    margin: 0;
     margin-top: clamp(100px, 10vh, 100px);
     background: var(--bg-main);
     color: var(--text-main);
@@ -130,6 +132,7 @@ Loading
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-top: var(--space-lg);
     height: 60vh;
     font-size: var(--font-md);
 }
@@ -153,7 +156,8 @@ Main App
 ========================= */
 
 #app {
-    width: min(500px, 90vw);
+    /*width: min(500px, 90vw);*/
+    width: min(500px, 95%);
     text-align: left;
     opacity: 0;
     transform: translateY(8px);
@@ -352,7 +356,7 @@ Learning Area
 }
 
     #sentence {
-        font-size: var(--font-lg);
+        font-size: var(--font-xl);
         line-height: 1.5;
         padding-bottom: var(--space-lg);
     }
@@ -372,8 +376,6 @@ Gap
         text-align: center;
 
         min-width: 6ch;
-        font-size: var(--font-lg);
-        font-weight: 500;
 
         color: var(--text-secondary);
         border-bottom: 1px solid var(--text-secondary);
@@ -592,7 +594,7 @@ Session summary
     }
 
     #card {
-    padding: var(--space-lg) var(--space-md) var(--space-lg);
+        padding: var(--space-lg) var(--space-md) var(--space-lg);
     }
 
     #sentence {
@@ -610,7 +612,6 @@ Session summary
 
     #helper {
         margin-top: var(--space-lg);
-        font-size: var(--font-xs);
     }
 
     button {
