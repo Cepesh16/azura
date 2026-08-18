@@ -22,6 +22,7 @@
 
     /* UI COLORS */
     --accent: #00b4d8;
+    --accent: #49796B;
     --progress-bg: #efe;
     --button-hover: #f5f5f5;
 
@@ -52,15 +53,15 @@
     --radius-sm: 8px;
 
     /* FONT */
-    --font-lg: 26px;
+    --font-lg: 24px;
     --font-md: 18px;
     --font-sm: 14px;
     --font-xs: 12px;
 
     /* SPACING */
     --space-xs: 6px;
-    --space-sm: 8px;
-    --space-md: 12px;
+    --space-sm: 10px;
+    --space-md: 16px;
     --space-lg: 28px;
     --space-xl: 42px;
 
@@ -344,14 +345,13 @@ Learning Area
 #card {
     overflow: hidden;
     padding: var(--space-xl) var(--space-lg) var(--space-xl);
-    margin-top: 16px;
+    margin-top: var(--space-md);
     box-shadow: var(--shadow-soft);
     background: var(--bg-card);
     border-radius: var(--radius);
 }
 
     #sentence {
-        display: block;
         font-size: var(--font-lg);
         line-height: 1.5;
         padding-bottom: var(--space-lg);
@@ -398,7 +398,7 @@ Translation Row
     #translation-group {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-md);
     }
 
         #translation {
@@ -408,8 +408,6 @@ Translation Row
 
 
         #part-of-speech {
-            display: inline-block;
-            margin-left: 10px;
             font-size: var(--font-xs);
             color: var(--text-muted);
             letter-spacing: 0.5px;
@@ -418,6 +416,10 @@ Translation Row
             #part-of-speech::before {
                 content: '#';
             }
+
+    .level-indicator {
+
+    }
 
 
 /* =========================
@@ -586,28 +588,32 @@ Session summary
 
 @media (max-width: 480px) {
     body {
-        margin-top: 40px;
+        margin-top: var(--space-lg);
+    }
+
+    #card {
+    padding: var(--space-lg) var(--space-md) var(--space-lg);
     }
 
     #sentence {
-        font-size: 24px;
-        padding: 24px 18px 10px;
+        padding-bottom: var(--space-md);
+        font-size: var(--font-lg);
     }
 
     .gap {
-        font-size: 24px;
+
     }
 
     #translation-row {
-        padding: 6px 18px 20px;
+
     }
 
     #helper {
-        margin-top: 20px;
-        font-size: 12px;
+        margin-top: var(--space-lg);
+        font-size: var(--font-xs);
     }
 
     button {
-        padding: 8px 14px;
+        padding: var(--space-sm) var(--space-lg);
     }
 }
