@@ -23,6 +23,7 @@ export async function fetchSentences() {
             sentence: row.sentence,
             answer: row.answer,
             translation: row.translation,
+            partOfSpeech: row.partOfSpeech,
             audioUrl: row.audioUrl
         }));
 

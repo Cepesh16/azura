@@ -59,6 +59,7 @@ export function render() {
 
     const sentenceEl = document.getElementById('sentence');
     const translationEl = document.getElementById('translation');
+    const posEl = document.getElementById('part-of-speech');
 
     const levelEl = document.getElementById('level-indicator');
     const progressBar = document.getElementById('progress-bar');
@@ -83,7 +84,7 @@ export function render() {
     const helperEl = document.getElementById('helper');
 
     const current = state.sentences[state.currentIndex];
-
+    console.log(current);
 
     if (state.status === 'idle') {
 
@@ -242,6 +243,12 @@ export function render() {
 
 
     translationEl.innerText = current.translation;
+
+    if (posEl) {
+        posEl.innerText = current.partOfSpeech
+            ? current.partOfSpeech.toLowerCase()
+            : '';
+    }
 
     const input = document.getElementById('gap-input');
     if (!input) return;
