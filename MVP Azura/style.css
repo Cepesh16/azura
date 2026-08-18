@@ -136,6 +136,9 @@ Loading
     height: 60vh;
     font-size: var(--font-md);
 }
+    #loading-text {
+        color: var(--accent);
+    }
 
 .spinner {
     width: 40px;
@@ -461,7 +464,7 @@ Helper
     min-height: 18px;
     opacity: 0;
     transform: translateY(4px);
-    transition: opacity var(--transition-test), transform var(--transition-test);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
 }
 
 #helper.show {
