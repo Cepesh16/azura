@@ -8,6 +8,30 @@ const isMobile =
 
 let initialFocusPending = isMobile;
 
+
+function renderOverlay(input, { hintHTML, typed, typedClass }) {
+
+    // clear safely
+    input.innerHTML = '';
+
+    const overlay = document.createElement('span');
+    overlay.className = 'overlay';
+
+    const hint = document.createElement('span');
+    hint.className = 'hint';
+    hint.innerHTML = hintHTML; // safe because controlled
+
+    const typedEl = document.createElement('span');
+    typedEl.className = `typed ${typedClass}`;
+    typedEl.textContent = typed;
+
+    overlay.appendChild(hint);
+    overlay.appendChild(typedEl);
+
+    input.appendChild(overlay);
+}
+
+
 function setCaret(el, position) {
     const range = document.createRange();
     const sel = window.getSelection();
@@ -47,7 +71,11 @@ function updateHintUI(input, current) {
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    input.innerHTML = `<span class="overlay"><span class="hint">${hintHTML}</span><span class="typed ${typedClass}">${typed}</span></span>`;
+    renderOverlay(input, {
+        hintHTML,
+        typed,
+        typedClass
+    });
 
     setCaret(input, rawTyped.length);
 }
