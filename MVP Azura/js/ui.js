@@ -29,27 +29,30 @@ function updateHintUI(input, current) {
 
     const rawTyped = state.userInput.toLowerCase();
 
-    const isFirstWord =
-        current.sentence.trim().toLowerCase().startsWith(current.answer.toLowerCase());
+    const match = current.sentence.match(new RegExp(`\\b${current.answer}\\b`, 'i'));
+    const isFirstWord = match && match.index === 0;
 
-    // ✅ typed (visual only)
+    // ✅ restore typed (visual only)
     const typed =
         isFirstWord && rawTyped.length > 0
             ? rawTyped.charAt(0).toUpperCase() + rawTyped.slice(1)
             : rawTyped;
 
-    // ✅ hint
-    let hintRaw = current.answer.slice(rawTyped.length);
+    const baseAnswer = current.answer.toLowerCase();
 
-    if (isFirstWord && rawTyped.length === 0 && hintRaw.length > 0) {
-        hintRaw = hintRaw.charAt(0).toUpperCase() + hintRaw.slice(1);
-    }
+    const fullAnswer = isFirstWord
+        ? baseAnswer.charAt(0).toUpperCase() + baseAnswer.slice(1)
+        : baseAnswer;
+
+    const hiddenPart = fullAnswer.slice(0, rawTyped.length);
+    const visiblePart = fullAnswer.slice(rawTyped.length);
+
+    const hintHTML = `<span style="visibility:hidden">${hiddenPart}</span>${visiblePart}`;
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    input.innerHTML = `
-        <span class="typed ${typedClass}">${typed}</span><span class="hint">${hintRaw}</span>
-    `;
+    // ✅ IMPORTANT: no spaces / no line breaks
+    input.innerHTML = `<span class="overlay"><span class="hint">${hintHTML}</span><span class="typed ${typedClass}">${typed}</span></span>`;
 
     setCaret(input, rawTyped.length);
 }
@@ -480,7 +483,7 @@ export function render() {
             // 🔥 FULL RESET (state + DOM + IME)
             state.userInput = '';
 
-            input.innerHTML = '<span class="typed"></span><span class="hint">' + current.answer + '</span>';
+            updateHintUI(input, current);
 
             // 🔥 force blur → kills mobile composition
             input.blur();

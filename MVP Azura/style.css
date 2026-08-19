@@ -528,6 +528,24 @@ States
 }
 
 
+.overlay {
+    position: relative;
+    display: inline-block;
+}
+
+.overlay .hint {
+    color: var(--hint);
+}
+
+.overlay .typed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+}
+
+
+
 
 #sentence {
     opacity: 1;
