@@ -22,19 +22,32 @@ export async function fetchSentences() {
 
             const sentence = row.sentence;
             const answer = row.answer;
+            const answerLength = answer.length;
 
             const match = sentence.match(new RegExp(`\\b${answer}\\b`, 'i'));
+            const gapIndex = match ? match.index : -1;
+
+            const isFirstWord = gapIndex === 0;
+
+            const base = answer.toLowerCase();
+
+            const formattedAnswer = isFirstWord
+                ? base.charAt(0).toUpperCase() + base.slice(1)
+                : base;
 
             return {
                 id: row.id,
                 sentence,
                 answer,
                 translation: row.translation,
-                partOfSpeech: row.partOfSpeech,
                 audioUrl: row.audioUrl,
+                partOfSpeech: row.partOfSpeech,
 
-                // 🔥 NEW
-                gapIndex: match ? match.index : -1
+                // 🔥 precomputed
+                gapIndex,
+                isFirstWord,
+                formattedAnswer,
+                answerLength
             };
         });
 

@@ -25,29 +25,23 @@ function setCaret(el, position) {
     sel.addRange(range);
 }
 
-function formatAnswer(answer, isFirstWord) {
-    const base = answer.toLowerCase();
-
-    return isFirstWord
-        ? base.charAt(0).toUpperCase() + base.slice(1)
-        : base;
-}
-
 
 function updateHintUI(input, current) {
 
     const rawTyped = state.userInput.toLowerCase();
-    const isFirstWord = current.gapIndex === 0;
-
-    const fullAnswer = formatAnswer(current.answer, isFirstWord);
+    
+    const isFirstWord = current.isFirstWord;
+    const fullAnswer = current.formattedAnswer;
 
     const typed =
         isFirstWord && rawTyped.length > 0
             ? rawTyped.charAt(0).toUpperCase() + rawTyped.slice(1)
             : rawTyped;
 
-    const hiddenPart = fullAnswer.slice(0, rawTyped.length);
-    const visiblePart = fullAnswer.slice(rawTyped.length);
+    const typedLen = rawTyped.length;
+
+    const hiddenPart = fullAnswer.slice(0, typedLen);
+    const visiblePart = fullAnswer.slice(typedLen);
 
     const hintHTML = `<span style="visibility:hidden">${hiddenPart}</span>${visiblePart}`;
 
@@ -68,7 +62,7 @@ function createGapSentence(sentenceObj) {
     }
 
     const before = sentence.slice(0, gapIndex);
-    const after = sentence.slice(gapIndex + answer.length);
+    const after = sentence.slice(gapIndex + sentenceObj.answerLength);
 
     return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
 }
@@ -386,11 +380,7 @@ export function render() {
     // =========================
     if (state.status === 'correct') {
 
-        const isFirstWord = current.gapIndex === 0;
-
-        const display = formatAnswer(current.answer, isFirstWord);
-
-        input.innerText = display;
+        input.innerText = current.formattedAnswer;
 
         input.classList.add('correct', 'correct-pop');
 
