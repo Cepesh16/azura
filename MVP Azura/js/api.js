@@ -18,14 +18,25 @@ export async function fetchSentences() {
             return null;
         }
 
-        return data.map(row => ({
-            id: row.id,
-            sentence: row.sentence,
-            answer: row.answer,
-            translation: row.translation,
-            partOfSpeech: row.partOfSpeech,
-            audioUrl: row.audioUrl
-        }));
+        return data.map(row => {
+
+            const sentence = row.sentence;
+            const answer = row.answer;
+
+            const match = sentence.match(new RegExp(`\\b${answer}\\b`, 'i'));
+
+            return {
+                id: row.id,
+                sentence,
+                answer,
+                translation: row.translation,
+                partOfSpeech: row.partOfSpeech,
+                audioUrl: row.audioUrl,
+
+                // 🔥 NEW
+                gapIndex: match ? match.index : -1
+            };
+        });
 
     } catch (err) {
         console.error('❌ Network error:', err);

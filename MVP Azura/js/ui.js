@@ -25,24 +25,26 @@ function setCaret(el, position) {
     sel.addRange(range);
 }
 
+function formatAnswer(answer, isFirstWord) {
+    const base = answer.toLowerCase();
+
+    return isFirstWord
+        ? base.charAt(0).toUpperCase() + base.slice(1)
+        : base;
+}
+
+
 function updateHintUI(input, current) {
 
     const rawTyped = state.userInput.toLowerCase();
+    const isFirstWord = current.gapIndex === 0;
 
-    const match = current.sentence.match(new RegExp(`\\b${current.answer}\\b`, 'i'));
-    const isFirstWord = match && match.index === 0;
+    const fullAnswer = formatAnswer(current.answer, isFirstWord);
 
-    // ✅ restore typed (visual only)
     const typed =
         isFirstWord && rawTyped.length > 0
             ? rawTyped.charAt(0).toUpperCase() + rawTyped.slice(1)
             : rawTyped;
-
-    const baseAnswer = current.answer.toLowerCase();
-
-    const fullAnswer = isFirstWord
-        ? baseAnswer.charAt(0).toUpperCase() + baseAnswer.slice(1)
-        : baseAnswer;
 
     const hiddenPart = fullAnswer.slice(0, rawTyped.length);
     const visiblePart = fullAnswer.slice(rawTyped.length);
@@ -51,21 +53,24 @@ function updateHintUI(input, current) {
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    // ✅ IMPORTANT: no spaces / no line breaks
     input.innerHTML = `<span class="overlay"><span class="hint">${hintHTML}</span><span class="typed ${typedClass}">${typed}</span></span>`;
 
     setCaret(input, rawTyped.length);
 }
 
 function createGapSentence(sentenceObj) {
-    const { sentence, answer } = sentenceObj;
 
-    const regex = new RegExp(`\\b${answer}\\b`, 'i');
+    const { sentence, answer, gapIndex } = sentenceObj;
 
-    return sentence.replace(
-        regex,
-    `<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>`
-    );
+    if (gapIndex === -1) {
+        console.warn('⚠️ gapIndex not found:', sentenceObj);
+        return sentence;
+    }
+
+    const before = sentence.slice(0, gapIndex);
+    const after = sentence.slice(gapIndex + answer.length);
+
+    return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
 }
 
 export function resetSentence() {
@@ -381,12 +386,9 @@ export function render() {
     // =========================
     if (state.status === 'correct') {
 
-        const isFirstWord =
-            current.sentence.trim().toLowerCase().startsWith(current.answer.toLowerCase());
+        const isFirstWord = current.gapIndex === 0;
 
-        const display = isFirstWord
-            ? current.answer.charAt(0).toUpperCase() + current.answer.slice(1)
-            : current.answer;
+        const display = formatAnswer(current.answer, isFirstWord);
 
         input.innerText = display;
 
