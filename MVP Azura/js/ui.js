@@ -26,14 +26,32 @@ function setCaret(el, position) {
 }
 
 function updateHintUI(input, current) {
-    const typed = state.userInput.toLowerCase();
-    const hint = current.answer.slice(typed.length);
+
+    const rawTyped = state.userInput.toLowerCase();
+
+    const isFirstWord =
+        current.sentence.trim().toLowerCase().startsWith(current.answer.toLowerCase());
+
+    // ✅ typed (visual only)
+    const typed =
+        isFirstWord && rawTyped.length > 0
+            ? rawTyped.charAt(0).toUpperCase() + rawTyped.slice(1)
+            : rawTyped;
+
+    // ✅ hint
+    let hintRaw = current.answer.slice(rawTyped.length);
+
+    if (isFirstWord && rawTyped.length === 0 && hintRaw.length > 0) {
+        hintRaw = hintRaw.charAt(0).toUpperCase() + hintRaw.slice(1);
+    }
 
     const typedClass = state.lastTypedCorrect ? 'correct' : 'wrong';
 
-    input.innerHTML = `<span class="typed ${typedClass}">${typed}</span><span class="hint">${hint}</span>`;
+    input.innerHTML = `
+        <span class="typed ${typedClass}">${typed}</span><span class="hint">${hintRaw}</span>
+    `;
 
-    setCaret(input, typed.length);
+    setCaret(input, rawTyped.length);
 }
 
 function createGapSentence(sentenceObj) {
@@ -359,7 +377,16 @@ export function render() {
     // 🟢 CORRECT
     // =========================
     if (state.status === 'correct') {
-        input.innerText = current.answer;
+
+        const isFirstWord =
+            current.sentence.trim().toLowerCase().startsWith(current.answer.toLowerCase());
+
+        const display = isFirstWord
+            ? current.answer.charAt(0).toUpperCase() + current.answer.slice(1)
+            : current.answer;
+
+        input.innerText = display;
+
         input.classList.add('correct', 'correct-pop');
 
         input.contentEditable = "false";

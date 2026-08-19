@@ -132,7 +132,6 @@ Loading
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: var(--space-lg);
     height: 60vh;
     font-size: var(--font-md);
 }

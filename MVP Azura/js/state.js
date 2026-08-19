@@ -28,7 +28,7 @@ export const state = {
     soundEnabled: true,
 
     // Session control
-    sessionLimit: 3,
+    sessionLimit: 13,
     sessionCount: 0,
     completedCount: 0, // current session
     totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0, // lifetime total
