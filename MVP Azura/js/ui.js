@@ -353,10 +353,10 @@ export function render() {
     // =========================
     if (state.status === 'waiting') {
 
-        input.innerText = state.userInput;
+        input.textContent = state.userInput;
 
         input.oninput = () => {
-            let text = input.innerText.replace(/\n/g, '').toLowerCase();
+            let text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
 
@@ -370,8 +370,8 @@ export function render() {
             }
 
     // force clean text (no weird mobile stuff)
-            if (input.innerText !== text) {
-                input.innerText = text;
+            if (input.textContent !== text) {
+                input.textContent = text;
             }
 
     // move cursor to end
@@ -408,7 +408,7 @@ export function render() {
     // =========================
     if (state.status === 'correct') {
 
-        input.innerText = current.formattedAnswer;
+        input.textContent = current.formattedAnswer;
 
         input.classList.add('correct', 'correct-pop');
 
@@ -422,7 +422,7 @@ export function render() {
     // 🔴 WRONG FLASH
     // =========================
     if (state.status === 'wrongFlash') {
-        input.innerText = state.userInput;
+        input.textContent = state.userInput;
         input.classList.add('flash-wrong');
 
         input.contentEditable = "false";
