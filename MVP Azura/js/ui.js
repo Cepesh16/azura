@@ -342,11 +342,18 @@ export function render() {
         }
     }
 
-    input.oninput = null;
-    input.onkeydown = null;
 
 
+    function handleEnter(e) {
+        if (e.key !== 'Enter') return;
 
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (state.isSubmitting) return;
+
+        submitAnswer();
+    }
 
     // =========================
     // 🟢 WAITING
@@ -355,51 +362,7 @@ export function render() {
 
         input.textContent = state.userInput;
 
-        input.oninput = () => {
-            let text = input.textContent.replace(/\n/g, '').toLowerCase();
-
-            state.userInput = text;
-
-            if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
-            }
-
-    // force clean text (no weird mobile stuff)
-            if (input.textContent !== text) {
-                input.textContent = text;
-            }
-
-    // move cursor to end
-            const range = document.createRange();
-            const sel = window.getSelection();
-
-            range.selectNodeContents(input);
-            range.collapse(false);
-
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
-
-
-
-        input.onkeydown = (e) => {
-            console.log('KEY:', e.key);
-
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (state.isSubmitting) return;
-
-                submitAnswer();
-            }
-        };
-
+        input.onkeydown = handleEnter;
         return;
     }
 
@@ -531,17 +494,7 @@ export function render() {
             return;
         }
     };
+    
+    input.onkeydown = handleEnter;
 
-    input.onkeydown = (e) => {
-        console.log('KEY:', e.key);
-
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (state.isSubmitting) return;
-
-            submitAnswer();
-        }
-    };
 }
