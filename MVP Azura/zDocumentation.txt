@@ -9,3 +9,17 @@ JS → structural (display on/off)
 🟨 state.js - “What user has typed”
 
 🟥 logic.js - “Is it correct or wrong?”
+
+
+
+🟦 STATE (truth)
+state.userInput
+state.current
+
+🟨 UI
+renders overlay (hint + typed)
+NEVER stores real input
+
+🟥 LOGIC
+reads ONLY state
+never reads DOM

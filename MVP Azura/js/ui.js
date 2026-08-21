@@ -353,13 +353,12 @@ export function render() {
     // =========================
     if (state.status === 'waiting') {
 
-        input.textContent = state.userInput;
-
         input.oninput = () => {
             let text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
 
+            // ✅ AUTOSUBMIT (ADD THIS)
             if (
                 state.userInput.length === current.answer.length &&
                 state.userInput.toLowerCase() === current.answer.toLowerCase()
@@ -422,7 +421,14 @@ export function render() {
     // 🔴 WRONG FLASH
     // =========================
     if (state.status === 'wrongFlash') {
-        input.textContent = state.userInput;
+
+        // 🔥 render typed text (same as hint mode but without hint)
+        renderOverlay(input, {
+            hintHTML: `<span style="visibility:hidden">${state.userInput}</span>`,
+            typed: state.userInput,
+            typedClass: 'wrong'
+        });
+
         input.classList.add('flash-wrong');
 
         input.contentEditable = "false";
@@ -490,13 +496,16 @@ export function render() {
             state.lastTypedCorrect = true;
             updateHintUI(input, current);
 
-            // ✅ AUTOSUBMIT (ADD THIS)
-            if (state.userInput.length === current.answer.length) {
+            // ✅ STRICT AUTOSUBMIT
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
                 setTimeout(() => {
                     submitAnswer();
                 }, 0);
             }
-
+            
         } else {
             state.lastTypedCorrect = false;
 
