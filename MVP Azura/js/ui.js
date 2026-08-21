@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { submitAnswer, startNewSession, handleTyping, handleEnterKey } from './logic.js';
+import { submitAnswer, startNewSession } from './logic.js';
 
 const isMobile =
     /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -93,16 +93,6 @@ function createGapSentence(sentenceObj) {
     return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
 }
 
-function handleEnter(e) {
-    if (e.key !== 'Enter') return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (state.isSubmitting) return;
-
-    submitAnswer();
-}
 
 export function render() {
     const sessionStateEl = document.getElementById('session-state');
@@ -307,16 +297,6 @@ export function render() {
     if (!input) return;
     input.setAttribute('enterkeyhint', 'done');
 
-    input.onbeforeinput = (e) => {
-        e.preventDefault();
-
-        handleTyping(e.inputType, e.data);
-
-        render();
-    };
-
-    input.onkeydown = handleEnterKey;
-
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
 
@@ -366,14 +346,50 @@ export function render() {
     if (state.status === 'waiting') {
 
         input.oninput = () => {
-            const text = input.textContent.replace(/\n/g, '').toLowerCase();
+            let text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
+
+            // ✅ AUTOSUBMIT (ADD THIS)
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
+    // force clean text (no weird mobile stuff)
+            if (input.textContent !== text) {
+                input.textContent = text;
+            }
+
+    // move cursor to end
+            const range = document.createRange();
+            const sel = window.getSelection();
+
+            range.selectNodeContents(input);
+            range.collapse(false);
+
+            sel.removeAllRanges();
+            sel.addRange(range);
         };
 
 
 
-        input.onkeydown = handleEnterKey;
+        input.onkeydown = (e) => {
+            console.log('KEY:', e.key);
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (state.isSubmitting) return;
+
+                submitAnswer();
+            }
+        };
 
         return;
     }
@@ -421,8 +437,112 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
+    function forceFocusAndCaret() {
+        input.focus(); // ✅ force focus FIRST
+
+        setTimeout(() => {
+            setCaret(input, state.userInput.length);
+        }, 0);
+    }
+
+    input.onmousedown = (e) => {
+        e.preventDefault(); // ✅ prevents weird selection issues
+        forceFocusAndCaret(); // ✅ mobile critical
+    };
+
+    input.ontouchend = forceFocusAndCaret;
+
+    input.onselectstart = (e) => e.preventDefault();
     
     // ✅ mobile fix
-    input.onkeydown = handleEnterKey;
+    input.onbeforeinput = (e) => {
+        const current = state.current;
 
+        // 🚫 ALWAYS block native DOM changes
+        e.preventDefault();
+
+        // =========================
+        // ✍️ typing
+        // =========================
+    if (e.inputType === 'insertText') {
+        e.preventDefault();
+
+        const text = (e.data || '').toLowerCase();
+
+        let added = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const nextIndex = state.userInput.length;
+            const expected = current.answer[nextIndex];
+
+            if (text[i] === expected?.toLowerCase()) {
+                state.userInput += text[i];
+                added = true;
+            } else {
+                // stop at first wrong letter
+                break;
+            }
+        }
+
+        if (added) {
+            state.lastTypedCorrect = true;
+            updateHintUI(input, current);
+
+            // ✅ STRICT AUTOSUBMIT
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
+        } else {
+            state.lastTypedCorrect = false;
+
+            // 🔥 FULL RESET (state + DOM + IME)
+            state.userInput = '';
+
+            updateHintUI(input, current);
+
+            // 🔥 force blur → kills mobile composition
+            input.blur();
+
+            setTimeout(() => {
+                input.focus();
+                setCaret(input, 0);
+            }, 0);
+
+            input.classList.add('flash-wrong-letter');
+            setTimeout(() => {
+                input.classList.remove('flash-wrong-letter');
+            }, 200);
+        }
+
+        return;
+    }
+
+        // =========================
+        // ⬅️ backspace
+        // =========================
+        if (e.inputType === 'deleteContentBackward') {
+            state.userInput = state.userInput.slice(0, -1);
+            updateHintUI(input, current);
+            return;
+        }
+    };
+
+    input.onkeydown = (e) => {
+        console.log('KEY:', e.key);
+
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (state.isSubmitting) return;
+
+            submitAnswer();
+        }
+    };
 }

@@ -11,10 +11,7 @@ export const state = {
 
     flashWrong: false,
     lastTypedCorrect: true,
-    attempt: {
-        usedHint: false,
-        attempts: 0
-    },
+    answeredWithHint: false,
     layoutWarning: false,
     isSubmitting: false,
 
