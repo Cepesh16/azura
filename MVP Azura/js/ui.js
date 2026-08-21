@@ -1,12 +1,10 @@
 import { state } from './state.js';
 import { submitAnswer, startNewSession } from './logic.js';
 
-let sentenceInitialized = false;
-
 const isMobile =
     /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
 
-let initialFocusPending = isMobile;
+let hasUserFocused = false; // change isMobile to false
 
 
 function renderOverlay(input, { hintHTML, typed, typedClass }) {
@@ -95,9 +93,6 @@ function createGapSentence(sentenceObj) {
     return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
 }
 
-export function resetSentence() {
-    sentenceInitialized = false;
-}
 
 export function render() {
     const sessionStateEl = document.getElementById('session-state');
@@ -305,19 +300,16 @@ export function render() {
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
 
-    if (initialFocusPending) {
-        input.onfocus = () => {
-            initialFocusPending = false;
-        };
-    } else {
-        setTimeout(() => input.focus(), 0);
-    }
+    setTimeout(() => input.focus(), 0);
+    input.onfocus = () => {
+        hasUserFocused = true;
+    };
 
     // =========================
     // 🧠 HELPER
     // =========================
     if (helperEl) {
-        if (initialFocusPending) {
+        if (!hasUserFocused) {
             helperEl.innerText = 'Tap to start';
             helperEl.classList.add('show');
         }
@@ -505,7 +497,7 @@ export function render() {
                     submitAnswer();
                 }, 0);
             }
-            
+
         } else {
             state.lastTypedCorrect = false;
 

@@ -3,7 +3,7 @@ console.log('🚨 LOGIC.JS LOADED');
 const version = '1.3';
 
 import { state } from './state.js';
-import { render, resetSentence } from './ui.js';
+import { render } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
@@ -200,7 +200,6 @@ if (input === '') {
     normalize(input) === normalize(current.answer);
 
     if (isCorrect) {
-        resetSentence();
 
         state.isSubmitting = false;
     // if user used hint → not immediate correct
@@ -277,7 +276,6 @@ export async function startNewSession() {
     state.answeredWithHint = false;
     state.isSubmitting = false;
 
-    resetSentence();
 
     const summary = document.getElementById('session-state');
     const progressRow = document.getElementById('progress-row');

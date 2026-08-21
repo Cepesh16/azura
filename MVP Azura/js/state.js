@@ -9,8 +9,6 @@ export const state = {
 
     status: 'loading',
 
-    hasTypedAfterWrong: false,
-    cursorInitialized: false,
     flashWrong: false,
     lastTypedCorrect: true,
     answeredWithHint: false,
