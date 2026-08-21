@@ -1,17 +1,9 @@
 export const state = {
-    sentences: [],
-    allSentences: [],
-    _currentIndex: 0,
+    sentences: [],   // active dataset from API
 
-    get currentIndex() {
-        return this._currentIndex;
-    },
-
-    set currentIndex(value) {
-        console.log('🔥 currentIndex →', value);
-        console.trace(); // 👈 THIS IS KEY
-        this._currentIndex = value;
-    },
+    queue: [],       // session order
+    queueIndex: 0,   // pointer in session
+    current: null,   // current word object
 
     userInput: '',
 
@@ -30,15 +22,12 @@ export const state = {
     // Session control
     sessionLimit: 3,
     sessionCount: 0,
-    completedCount: 0, // current session
-    totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0, // lifetime total
+    completedCount: 0,
+    totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0,
     nextSessionLimit: null,
     sessionWords: [],
-    sessionQueue: [],
-    currentQueueIndex: 0,
 
-    // ✅ Session stats (FIXED)
+    // Session stats
     sessionCorrect: 0,
     sessionWrong: 0,
-
 };

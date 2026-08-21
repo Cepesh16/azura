@@ -27,7 +27,8 @@ async function startApp() {
         
         console.log('AFTER FETCH:', data.length);
 
-        state.allSentences = data;
+        // SINGLE SOURCE OF TRUTH
+        state.sentences = data;
 
         state.userInput = '';
         state.status = 'waiting';
@@ -35,26 +36,25 @@ async function startApp() {
         state.sessionCount = 0;
         state.sessionCorrect = 0;
         state.sessionWrong = 0;
-        state.currentQueueIndex = 0;      
+        state.queueIndex = 0;     
         state.completedCount = 0;
 
         localStorage.removeItem('sessionData'); // dev mode
 
         // 🔹 Build session
-        state.sentences = state.allSentences;
+        state.queue = buildSessionQueue();
 
-        state.sessionQueue = buildSessionQueue();
-        console.log('QUEUE:', state.sessionQueue);
-        if (!state.sessionQueue || state.sessionQueue.length === 0) {
+        console.log('QUEUE:', state.queue);
+
+        if (!state.queue || state.queue.length === 0) {
             console.error('❌ EMPTY QUEUE');
             return;
         }
 
-        state.currentQueueIndex = 0;
+        state.queueIndex = 0;
 
-        if (state.sessionQueue.length > 0) {
-            state.currentIndex = state.sessionQueue[0];
-        }
+        // set first word
+        state.current = state.sentences[state.queue[0]] || null;
 
         // 🔹 Show UI
         const app = document.getElementById('app');

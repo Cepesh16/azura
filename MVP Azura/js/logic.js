@@ -62,10 +62,10 @@ async function nextSentence() {
     const sentenceArea = document.getElementById('sentence-area');
     if (!sentenceArea) return;
 
-    state.currentQueueIndex++;
+    state.queueIndex++;
 
     // 🏁 FINISHED
-    if (state.currentQueueIndex >= state.sessionQueue.length) {
+    if (state.queueIndex >= state.queue.length) {
         const progressRow = document.getElementById('progress-row');
 
         state.status = 'finished';
@@ -88,7 +88,7 @@ async function nextSentence() {
     await fadeOut(sentenceArea);
 
     // NEXT
-    state.currentIndex = state.sessionQueue[state.currentQueueIndex];
+    state.current = state.sentences[state.queue[state.queueIndex]];
 
     state.userInput = '';
     state.status = 'waiting';
@@ -169,7 +169,7 @@ export function submitAnswer() {
 
     console.log('STATE INPUT:', JSON.stringify(state.userInput));
 
-    const current = state.sentences[state.currentIndex];
+    const current = state.current;
 let input = '';
 
 const el = document.getElementById('gap-input');
@@ -275,19 +275,19 @@ export async function startNewSession() {
     state.sessionWrong = 0;
     state.completedCount = 0;
 
-    state.sessionQueue = buildSessionQueue();
-    state.currentQueueIndex = 0;
+    // 🔥 build new session queue
+    state.queue = buildSessionQueue();
+    state.queueIndex = 0;
 
-    // 🔥 RESET PROGRESS BAR (ADD THIS HERE)
+    // 🔥 RESET PROGRESS BAR
     const bar = document.getElementById('progress-bar');
     if (bar) {
         bar.dataset.initialized = '';
         bar.innerHTML = '';
     }
 
-    if (state.sessionQueue.length > 0) {
-        state.currentIndex = state.sessionQueue[0];
-    }
+    // set first word
+    state.current = state.sentences[state.queue[0]] || null;
 
     state.userInput = '';
     state.status = 'waiting';

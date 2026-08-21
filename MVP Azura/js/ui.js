@@ -131,7 +131,7 @@ export function render() {
 
     const helperEl = document.getElementById('helper');
 
-    const current = state.sentences[state.currentIndex];
+    const current = state.current;
     console.log(current);
 
     if (state.status === 'idle') {
@@ -246,8 +246,8 @@ export function render() {
     // =========================
     const bar = document.getElementById('progress-bar');
 
-    if (bar && state.sessionQueue.length > 0) {
-        const total = state.sessionQueue.length;
+    if (bar && state.queue.length > 0) {
+        const total = state.queue.length;
 
         let html = '';
 
@@ -342,18 +342,11 @@ export function render() {
         }
     }
 
+    input.oninput = null;
+    input.onkeydown = null;
 
 
-    function handleEnter(e) {
-        if (e.key !== 'Enter') return;
 
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (state.isSubmitting) return;
-
-        submitAnswer();
-    }
 
     // =========================
     // 🟢 WAITING
@@ -362,7 +355,51 @@ export function render() {
 
         input.textContent = state.userInput;
 
-        input.onkeydown = handleEnter;
+        input.oninput = () => {
+            let text = input.textContent.replace(/\n/g, '').toLowerCase();
+
+            state.userInput = text;
+
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
+    // force clean text (no weird mobile stuff)
+            if (input.textContent !== text) {
+                input.textContent = text;
+            }
+
+    // move cursor to end
+            const range = document.createRange();
+            const sel = window.getSelection();
+
+            range.selectNodeContents(input);
+            range.collapse(false);
+
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
+
+
+
+        input.onkeydown = (e) => {
+            console.log('KEY:', e.key);
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (state.isSubmitting) return;
+
+                submitAnswer();
+            }
+        };
+
         return;
     }
 
@@ -421,7 +458,7 @@ export function render() {
     
     // ✅ mobile fix
     input.onbeforeinput = (e) => {
-        const current = state.sentences[state.currentIndex];
+        const current = state.current;
 
         // 🚫 ALWAYS block native DOM changes
         e.preventDefault();
@@ -494,7 +531,17 @@ export function render() {
             return;
         }
     };
-    
-    input.onkeydown = handleEnter;
 
+    input.onkeydown = (e) => {
+        console.log('KEY:', e.key);
+
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (state.isSubmitting) return;
+
+            submitAnswer();
+        }
+    };
 }
