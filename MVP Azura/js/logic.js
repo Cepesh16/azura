@@ -36,21 +36,19 @@ export function buildSessionQueue() {
 
     const limit = Math.max(1, Number(state.sessionLimit) || 5);
 
-    console.log('SESSION LIMIT:', limit);
-    console.log('TOTAL SENTENCES:', total);
-
-    // 🔹 create array of all indices
-    const indices = [...Array(total).keys()];
+    // 🔹 clone array (important — no references issues)
+    const pool = [...state.sentences];
 
     // 🔹 shuffle (Fisher-Yates)
-    for (let i = indices.length - 1; i > 0; i--) {
+    for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [indices[i], indices[j]] = [indices[j], indices[i]];
+        [pool[i], pool[j]] = [pool[j], pool[i]];
     }
 
-    const result = indices.slice(0, limit);
+    // 🔹 take first N OBJECTS (not indices)
+    const result = pool.slice(0, limit);
 
-    console.log('✅ QUEUE BUILT:', result);
+    console.log('✅ QUEUE BUILT (OBJECTS):', result);
 
     return result;
 }
@@ -86,11 +84,15 @@ async function nextSentence() {
     await fadeOut(sentenceArea);
 
     // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
-    state.current = state.sentences[state.queue[state.queueIndex]];
+    state.current = state.queue[state.queueIndex];
 
     state.userInput = '';
     state.status = 'waiting';
-    state.answeredWithHint = false;
+    state.attempt = {
+        usedHint: false,
+        attempts: 0
+    };
+
     state.isSubmitting = false;
 
     render();
@@ -167,6 +169,7 @@ export function submitAnswer() {
     console.log('STATE INPUT:', JSON.stringify(state.userInput));
 
     const current = state.current;
+    state.attempt.attempts++;
 
     // ❗ DO NOT read DOM anymore
     const input = (state.userInput || '').trim().toLowerCase();
@@ -180,14 +183,13 @@ export function submitAnswer() {
 // =========================
 if (input === '') {
 
-    // First Enter → show hint
-    if (!state.answeredWithHint) {
-        state.answeredWithHint = true;
+    // first Enter → show hint
+    if (!state.attempt.usedHint) {
+        state.attempt.usedHint = true;
         state.status = 'wrong';
         render();
     }
 
-    // 🚫 Second Enter → HARD BLOCK
     state.isSubmitting = false;
     return;
 }
@@ -203,7 +205,10 @@ if (input === '') {
 
         state.isSubmitting = false;
     // if user used hint → not immediate correct
-        finishWord(current, !state.answeredWithHint);
+        const immediateCorrect =
+            state.attempt.attempts === 1 && !state.attempt.usedHint;
+
+        finishWord(current, immediateCorrect);
 
         return;
     }
@@ -223,7 +228,7 @@ if (input === '') {
 
     updateWord(current.id, false);
 
-    state.answeredWithHint = true;
+    state.attempt.usedHint = true;
 
     playWrong();
 
@@ -269,11 +274,15 @@ export async function startNewSession() {
     }
 
     // set first word
-    state.current = state.sentences[state.queue[0]] || null;
+    state.current = state.queue[0] || null;
 
     state.userInput = '';
     state.status = 'waiting';
-    state.answeredWithHint = false;
+    state.attempt = {
+        usedHint: false,
+        attempts: 0
+    };
+
     state.isSubmitting = false;
 
 

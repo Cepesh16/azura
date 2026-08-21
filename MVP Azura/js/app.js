@@ -54,7 +54,7 @@ async function startApp() {
         state.queueIndex = 0;
 
         // set first word
-        state.current = state.sentences[state.queue[0]] || null;
+        state.current = state.queue[0] || null;
 
         // 🔹 Show UI
         const app = document.getElementById('app');
