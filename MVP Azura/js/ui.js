@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { submitAnswer, startNewSession } from './logic.js';
+import { submitAnswer, startNewSession, handleTyping, handleEnterKey } from './logic.js';
 
 const isMobile =
     /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
@@ -307,6 +307,16 @@ export function render() {
     if (!input) return;
     input.setAttribute('enterkeyhint', 'done');
 
+    input.onbeforeinput = (e) => {
+        e.preventDefault();
+
+        handleTyping(e.inputType, e.data);
+
+        render();
+    };
+
+    input.onkeydown = handleEnterKey;
+
     input.classList.remove('flash-wrong', 'correct', 'correct-pop');
     input.contentEditable = "true";
 
@@ -359,24 +369,11 @@ export function render() {
             const text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
-
-            // strict autosubmit
-            if (
-                text.length === current.answer.length &&
-                text === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => submitAnswer(), 0);
-            }
-
-            // normalize DOM
-            if (input.textContent !== text) {
-                input.textContent = text;
-            }
         };
 
 
 
-        input.onkeydown = handleEnter;
+        input.onkeydown = handleEnterKey;
 
         return;
     }
@@ -426,84 +423,6 @@ export function render() {
 
     
     // ✅ mobile fix
-    input.onbeforeinput = (e) => {
-        const current = state.current;
-
-        // 🚫 ALWAYS block native DOM changes
-        e.preventDefault();
-
-        // =========================
-        // ✍️ typing
-        // =========================
-    if (e.inputType === 'insertText') {
-        e.preventDefault();
-
-        const text = (e.data || '').toLowerCase();
-
-        let added = false;
-
-        for (let i = 0; i < text.length; i++) {
-            const nextIndex = state.userInput.length;
-            const expected = current.answer[nextIndex];
-
-            if (text[i] === expected?.toLowerCase()) {
-                state.userInput += text[i];
-                added = true;
-            } else {
-                // stop at first wrong letter
-                break;
-            }
-        }
-
-        if (added) {
-            state.lastTypedCorrect = true;
-            updateHintUI(input, current);
-
-            // ✅ STRICT AUTOSUBMIT
-            if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
-            }
-
-        } else {
-            state.lastTypedCorrect = false;
-
-            // 🔥 FULL RESET (state + DOM + IME)
-            state.userInput = '';
-
-            updateHintUI(input, current);
-
-            // 🔥 force blur → kills mobile composition
-            input.blur();
-
-            setTimeout(() => {
-                input.focus();
-                setCaret(input, 0);
-            }, 0);
-
-            input.classList.add('flash-wrong-letter');
-            setTimeout(() => {
-                input.classList.remove('flash-wrong-letter');
-            }, 200);
-        }
-
-        return;
-    }
-
-        // =========================
-        // ⬅️ backspace
-        // =========================
-        if (e.inputType === 'deleteContentBackward') {
-            state.userInput = state.userInput.slice(0, -1);
-            updateHintUI(input, current);
-            return;
-        }
-    };
-
-    input.onkeydown = handleEnter;
+    input.onkeydown = handleEnterKey;
 
 }

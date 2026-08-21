@@ -53,6 +53,75 @@ export function buildSessionQueue() {
     return result;
 }
 
+
+export function handleTyping(inputType, data) {
+    const current = state.current;
+
+    if (!current) return;
+
+    // =========================
+    // ✍️ INSERT TEXT
+    // =========================
+    if (inputType === 'insertText') {
+
+        const text = (data || '').toLowerCase();
+
+        let added = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const nextIndex = state.userInput.length;
+            const expected = current.answer[nextIndex];
+
+            if (text[i] === expected?.toLowerCase()) {
+                state.userInput += text[i];
+                added = true;
+            } else {
+                break;
+            }
+        }
+
+        if (added) {
+            state.lastTypedCorrect = true;
+
+            // ✅ autosubmit
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => submitAnswer(), 0);
+            }
+
+        } else {
+            state.lastTypedCorrect = false;
+
+            // reset
+            state.userInput = '';
+        }
+
+        return;
+    }
+
+    // =========================
+    // ⬅️ BACKSPACE
+    // =========================
+    if (inputType === 'deleteContentBackward') {
+        state.userInput = state.userInput.slice(0, -1);
+        return;
+    }
+}
+
+export function handleEnterKey(e) {
+    if (e.key !== 'Enter') return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (state.isSubmitting) return;
+
+    submitAnswer();
+}
+
+
 // =========================
 // NEXT SENTENCE
 // =========================
