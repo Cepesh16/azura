@@ -93,6 +93,16 @@ function createGapSentence(sentenceObj) {
     return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
 }
 
+function handleEnter(e) {
+    if (e.key !== 'Enter') return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (state.isSubmitting) return;
+
+    submitAnswer();
+}
 
 export function render() {
     const sessionStateEl = document.getElementById('session-state');
@@ -346,50 +356,27 @@ export function render() {
     if (state.status === 'waiting') {
 
         input.oninput = () => {
-            let text = input.textContent.replace(/\n/g, '').toLowerCase();
+            const text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
 
-            // ✅ AUTOSUBMIT (ADD THIS)
+            // strict autosubmit
             if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
+                text.length === current.answer.length &&
+                text === current.answer.toLowerCase()
             ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
+                setTimeout(() => submitAnswer(), 0);
             }
 
-    // force clean text (no weird mobile stuff)
+            // normalize DOM
             if (input.textContent !== text) {
                 input.textContent = text;
             }
-
-    // move cursor to end
-            const range = document.createRange();
-            const sel = window.getSelection();
-
-            range.selectNodeContents(input);
-            range.collapse(false);
-
-            sel.removeAllRanges();
-            sel.addRange(range);
         };
 
 
 
-        input.onkeydown = (e) => {
-            console.log('KEY:', e.key);
-
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (state.isSubmitting) return;
-
-                submitAnswer();
-            }
-        };
+        input.onkeydown = handleEnter;
 
         return;
     }
@@ -437,22 +424,6 @@ export function render() {
     input.contentEditable = "true";
     setTimeout(() => input.focus(), 0);
 
-    function forceFocusAndCaret() {
-        input.focus(); // ✅ force focus FIRST
-
-        setTimeout(() => {
-            setCaret(input, state.userInput.length);
-        }, 0);
-    }
-
-    input.onmousedown = (e) => {
-        e.preventDefault(); // ✅ prevents weird selection issues
-        forceFocusAndCaret(); // ✅ mobile critical
-    };
-
-    input.ontouchend = forceFocusAndCaret;
-
-    input.onselectstart = (e) => e.preventDefault();
     
     // ✅ mobile fix
     input.onbeforeinput = (e) => {
@@ -533,16 +504,6 @@ export function render() {
         }
     };
 
-    input.onkeydown = (e) => {
-        console.log('KEY:', e.key);
+    input.onkeydown = handleEnter;
 
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            e.stopPropagation();
-
-            if (state.isSubmitting) return;
-
-            submitAnswer();
-        }
-    };
 }
