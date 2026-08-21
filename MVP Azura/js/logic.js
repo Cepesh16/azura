@@ -75,8 +75,6 @@ async function nextSentence() {
             fadeOut(progressRow)
         ]);
 
-        progressRow.style.display = '';
-
         render();
 
         const summary = document.getElementById('session-state');
@@ -87,7 +85,7 @@ async function nextSentence() {
 
     await fadeOut(sentenceArea);
 
-    // NEXT
+    // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
     state.current = state.sentences[state.queue[state.queueIndex]];
 
     state.userInput = '';
@@ -98,7 +96,6 @@ async function nextSentence() {
     render();
 
     const newSentenceArea = document.getElementById('sentence-area');
-
     await fadeIn(newSentenceArea);
 }
 
@@ -170,25 +167,11 @@ export function submitAnswer() {
     console.log('STATE INPUT:', JSON.stringify(state.userInput));
 
     const current = state.current;
-let input = '';
 
-const el = document.getElementById('gap-input');
+    // ❗ DO NOT read DOM anymore
+    const input = (state.userInput || '').trim().toLowerCase();
 
-if (el) {
-    // 🔥 clone node so we don’t touch real DOM
-    const clone = el.cloneNode(true);
-
-    // 🔥 remove hint completely
-    const hint = clone.querySelector('.hint');
-    if (hint) hint.remove();
-
-    // 🔥 now only user text remains
-    input = clone.innerText.trim();
-}
-
-state.userInput = input;
-
-console.log('📥 FINAL INPUT:', input);
+    console.log('📥 FINAL INPUT:', input);
 
 
 

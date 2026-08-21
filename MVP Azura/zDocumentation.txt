@@ -1,2 +1,11 @@
 CSS → visual only (opacity/transform)
 JS → structural (display on/off)
+
+
+
+
+🟦 ui.js    - “What user sees”
+
+🟨 state.js - “What user has typed”
+
+🟥 logic.js - “Is it correct or wrong?”
