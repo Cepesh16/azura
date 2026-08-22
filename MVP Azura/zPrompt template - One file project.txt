@@ -1,0 +1,10 @@
+[SYSTEM INSTRUCTION FOR CHATGPT]
+The code block below contains multiple files from a single project combined into one document. 
+Each file is explicitly separated by a comment header in the following format:
+/* ==========================================
+   FILE: path/to/filename.ext
+   ========================================== */
+
+Please process these as individual files within the same project directory structure. Do not treat this as a single merged script or style file.
+
+=================== START OF PROJECT FILES ===================

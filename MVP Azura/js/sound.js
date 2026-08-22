@@ -9,14 +9,33 @@ wrongSound.preload = 'auto';
 let currentAudio = null;
 
 // ✅ WORD AUDIO
+const audioCache = new Map();
+
 export function playWordAudio(url) {
     return new Promise((resolve) => {
-        const audio = new Audio(url);
+        if (!url) return resolve();
 
-        audio.onended = resolve;
-        audio.onerror = resolve; // fallback
+        // If we already cached an Audio element for this URL, reuse it
+        let audio = audioCache.get(url);
 
-        audio.play();
+        if (!audio) {
+            audio = new Audio(url);
+            audio.preload = 'auto';
+            audioCache.set(url, audio);
+        }
+
+        // If another playback is running on same Audio element, clone to avoid interruption
+        const playTarget = audio.cloneNode(true);
+        playTarget.onended = resolve;
+        playTarget.onerror = () => {
+            // if playback fails, still resolve to keep flow moving
+            resolve();
+        };
+
+        // Try to play (catch promise rejection)
+        playTarget.play().catch(() => {
+            resolve();
+        });
     });
 }
 
