@@ -5,11 +5,12 @@
 :root {
     /* BACKGROUND */
     /*--bg-main: #d5c5c0;*/
-    --bg-main: rgba(172, 225, 175, 0.8);
-    --bg-main: #d5f5c0;
-    --bg-main: rgba(221, 208, 106, 0.65);
     --bg-main: rgba(25, 208, 106, 0.55);
-    --bg-card: #ffffff;
+    --bg-main: rgba(172, 225, 175, 0.6);
+    --bg-main: rgba(213, 245, 192, 1);
+    --bg-main: rgba(221, 208, 106, 0.65);
+    --bg-main: #f5f7fa;
+    --bg-card: rgba(255, 255, 255, 1);
     --bg-overlay: rgba(0, 0, 0, 0.25);
 
     /* TEXT */
@@ -82,6 +83,22 @@
     --transition-normal: 0.3s ease;
     --transition-long: 0.5s ease;
     --transition-test: 2s ease;
+
+
+
+
+/*    Light theme - total opposite of dark*/
+    --bg-card: #ffffff;
+    --text-main: #0f172a;
+    --text-secondary: #d97706;
+    --text-muted: #64748b;
+    --border-light: #cbd5e1;
+    --accent: #22c55e;
+    --accent: #48bb78;
+    --progress-bg: #e2e8f0;
+    --shadow-soft: 0 4px 18px #e2e8f0;
+    --toggle-bg-on: rgba(217, 119, 6, 0.85);
+
 }
 
 /* =========================
@@ -693,6 +710,21 @@ Session summary
 
     --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
     --shadow-strong: 0 12px 36px rgba(0,0,0,0.7);
+
+
+
+/*Dark theme - for fast changing theme*/
+    --bg-card: #0f1620;
+    --text-main: #e6eef6;
+    --text-secondary: #F4C430;
+    --text-muted: #9fb0be;
+    --border-light: #1f2a33;
+    --accent: #7bd389;
+    --progress-bg: rgba(255,255,255,0.04);
+    --toggle-bg-on: #10b981;
+    --toggle-bg-on: rgba(244, 196, 48, 0.7);
+    --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
+
 }
 
 /* small tweaks so switches & spinner look good on dark */
