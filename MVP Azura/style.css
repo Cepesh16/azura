@@ -5,14 +5,17 @@
 :root {
     /* BACKGROUND */
     /*--bg-main: #d5c5c0;*/
+    --bg-main: rgba(172, 225, 175, 0.8);
     --bg-main: #d5f5c0;
+    --bg-main: rgba(221, 208, 106, 0.6);
     --bg-card: #ffffff;
     --bg-overlay: rgba(0, 0, 0, 0.25);
 
     /* TEXT */
     --text-main: #111;
-    --text-secondary: #666;
+    /*--text-secondary: #666;*/
     --text-secondary: #6F4E37;
+    /*--text-secondary: #C08081;*/
     --text-muted: #888;
     --text-soft: #555;
 
