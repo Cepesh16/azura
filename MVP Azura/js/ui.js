@@ -90,7 +90,7 @@ function createGapSentence(sentenceObj) {
     const before = sentence.slice(0, gapIndex);
     const after = sentence.slice(gapIndex + sentenceObj.answerLength);
 
-    return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" class="gap"></span></div>${after}`;
+    return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" data-placeholder="..." class="gap"></span></div>${after}`;
 }
 
 

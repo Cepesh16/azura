@@ -16,8 +16,8 @@
     /* TEXT */
     --text-main: #111;
     /*--text-secondary: #666;*/
-    --text-secondary: #6F4E37;
     /*--text-secondary: #C08081;*/
+    --text-secondary: #6F4E37;
     --text-muted: #888;
     --text-soft: #555;
 
@@ -388,7 +388,8 @@ Learning Area
     #sentence {
         font-size: var(--font-xl);
         line-height: 1.5;
-        padding-bottom: var(--space-lg);
+        /*padding-bottom: var(--space-lg);*/
+        /*background: var(--bg-main);*/
     }
 
         .text {
@@ -401,6 +402,17 @@ Gap
 .gap-wrapper {
     display: inline-flex;
 }
+    /*placeholder*/
+    .gap-wrapper > span:empty::before {
+        content: attr(data-placeholder);
+        color: var(--bg-overlay);
+        font-style: italic;
+        cursor: text;
+    }
+
+    .gap-wrapper > span:focus::before {
+        content: "";
+    }
 
     .gap {
         text-align: center;
@@ -408,7 +420,10 @@ Gap
         min-width: 6ch;
 
         color: var(--text-secondary);
+        /*background: var(--bg-main);*/
         border-bottom: 1px solid var(--text-secondary);
+        /*border-radius: var(--radius-sm);*/
+        /*outline: 1px solid var(--text-secondary);*/
         outline: none;
     }
 
@@ -425,6 +440,7 @@ Translation Row
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: var(--space-lg);
 }
 
     #translation-group {
