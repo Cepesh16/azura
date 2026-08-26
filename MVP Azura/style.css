@@ -19,7 +19,6 @@
     /*--text-secondary: #C08081;*/
     --text-secondary: #6F4E37;
     --text-muted: #888;
-    --text-soft: #555;
 
     /* BORDERS */
     --border-light: #ddd;
@@ -40,7 +39,7 @@
     /* STATES */
     --correct: #03C03C;
     --wrong: rgba(255, 0, 0, 0.5);
-    --check: rgba(0, 0, 0, 0.7);
+    --check: var(--text-secondary);
 
     /* HINT */
     --hint: rgba(0, 0, 0, 0.3);
@@ -551,15 +550,15 @@ States
 }
 
 .typed {
-    color: var(--text-main);
+    color: var(--check);
 }
 
 .typed.correct {
-    color: var(--check); /* green */
+    color: var(--check);
 }
 
 .typed.wrong {
-    color: var(--wrong); /* red */
+    color: var(--wrong);
 }
 
 .flash-wrong-letter {
@@ -699,17 +698,13 @@ Session summary
 
     --text-main: #e6eef6;
     --text-secondary: #F4C430;
-    /*--text-secondary: #bdae89 ;*/
     --text-muted: #9fb0be;
-    --text-soft: #a9bac6;
 
     --border-light: #1f2a33;
     --border-default: #23303b;
 
     --accent: #7bd389;
     --progress-bg: rgba(255,255,255,0.04);
-    /*--button-hover: rgba(255,255,255,0.02);*/
-    /*--button-hover: rgba(16, 185, 129, 0.5);*/
     --button-hover: rgba(244, 196, 48, 0.5);
 
     --toggle-bg-off: #2a3942;
@@ -717,11 +712,10 @@ Session summary
     --toggle-bg-on: rgba(244, 196, 48, 0.7);
     --toggle-knob-off: #ffffff;
     --toggle-knob-on: #ffffff;
-    /*--toggle-knob-on: #F4C430;*/
 
     --correct: #4ade80; /* green bright */
-    --wrong: rgba(255, 99, 99, 0.26);
-    --check: #dff7e8;
+    --wrong: rgba(255, 99, 99, 0.6);
+    --check: var(--text-secondary);
 
     --hint: rgba(255,255,255,0.18);
 
@@ -732,19 +726,6 @@ Session summary
     --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
     --shadow-strong: 0 12px 36px rgba(0,0,0,0.7);
 
-
-
-/*Dark theme - for fast changing theme*/
-    --bg-card: #0f1620;
-    --text-main: #e6eef6;
-    --text-secondary: #F4C430;
-    --text-muted: #9fb0be;
-    --border-light: #1f2a33;
-    --accent: #7bd389;
-    --progress-bg: rgba(255,255,255,0.04);
-    --toggle-bg-on: #10b981;
-    --toggle-bg-on: rgba(244, 196, 48, 0.7);
-    --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
 
 }
 
@@ -766,6 +747,20 @@ Session summary
     color: var(--text-main);
 }
 
+
+/*placeholder*/
+[data-theme="dark"] .gap-wrapper > span:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-muted);
+    font-style: italic;
+    cursor: text;
+}
+/*placeholder empty on focus*/
+[data-theme="dark"] .gap-wrapper > span:focus::before {
+    content: "";
+}
+
 /* keep overlay hint contrast */
 [data-theme="dark"] .hint { color: rgba(255,255,255,0.18); }
-[data-theme="dark"] .typed { color: var(--text-main); }
+[data-theme="dark"] .typed { color: var(--text-secondary); }
+[data-theme="dark"] .typed.wrong { color: var(--wrong); }
