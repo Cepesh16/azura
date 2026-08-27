@@ -1,6 +1,6 @@
 // API_URL = "https://script.google.com/macros/s/AKfycbw4tHvovXCybGpA92kxgcuwRz78y6uyPk8tPQ80U3KRU4QpFFeE0y1kE8YMvi5uCJlX/exec";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbw4tHvovXCybGpA92kxgcuwRz78y6uyPk8tPQ80U3KRU4QpFFeE0y1kE8YMvi5uCJlX/exec";
+const API_URL = "assets/json/vocabulary.json";
 
 export async function fetchSentences() {
     try {

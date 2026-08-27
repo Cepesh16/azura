@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "sentence": "She drinks a glass of water every morning.",
+    "answer": "water",
+    "partOfSpeech": "noun",
+    "translation": "вода",
+    "level": "A1",
+    "memoryLevel": "5",
+    "correct": "18",
+    "wrong": "52",
+    "lastSeen": "8/27/26",
+    "nextReview": "9/26/26",
+    "audioUrl": ""
+  },
+  {
+    "id": "2",
+    "sentence": "I always walk to school in the morning.",
+    "answer": "walk",
+    "partOfSpeech": "verb",
+    "translation": "ходить пешком, гулять",
+    "level": "A1",
+    "memoryLevel": "3",
+    "correct": "19",
+    "wrong": "22",
+    "lastSeen": "8/27/26",
+    "nextReview": "9/3/26",
+    "audioUrl": ""
+  },
+  {
+    "id": "3",
+    "sentence": "be",
+    "answer": "be",
+    "partOfSpeech": "Verb",
+    "translation": "быть",
+    "level": "",
+    "memoryLevel": "4",
+    "correct": "23",
+    "wrong": "6",
+    "lastSeen": "8/27/26",
+    "nextReview": "9/10/26",
+    "audioUrl": ""
+  },
+  {
+    "id": "4",
+    "sentence": "have",
+    "answer": "have",
+    "partOfSpeech": "Verb",
+    "translation": "иметь",
+    "level": "",
+    "memoryLevel": "5",
+    "correct": "21",
+    "wrong": "27",
+    "lastSeen": "8/27/26",
+    "nextReview": "9/26/26",
+    "audioUrl": ""
+  }
+]
