@@ -22,7 +22,23 @@
         <!-- all your app content here -->
         <div class="option-row">
             <div id="total-completed-counter"></div>
-            <button id="options-btn">Options</button>
+            <!-- <button id="options-btn">Options</button> -->
+            <div class="toggle-row">
+                <div class="toggle-box">
+                    <label for="theme-toggle">Dark mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-box">
+                    <label for="sound-toggle">Sound</label>
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
         </div>
 
 
@@ -55,7 +71,10 @@
         <div id="helper"></div>
     </div>
 
-    <div id="options-modal" style="display:none;">
+
+
+
+<!--     <div id="options-modal" style="display:none;">
         <div class="options-card">
 
             <h3 class="options-title">Settings</h3>
@@ -74,7 +93,7 @@
                     <span class="slider"></span>
                 </label>
             </div>
-<!-- 
+
             <div class="setting-row">
                 <label for="session-select">Words per session</label>
                 <select id="session-select">
@@ -83,14 +102,14 @@
                     <option value="15">15</option>
                 </select>
             </div>
- -->
+
 
 
             <div id="settings-message"></div>
             <button id="save-options">Save</button>
 
         </div>
-    </div>
+    </div> -->
 
 
 <!-- <script type="module" src="./js/app.js"></script> -->
