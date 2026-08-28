@@ -237,6 +237,11 @@ Top Navigation
                 cursor: pointer;
             }
 
+            .toggle-box .icon-wrapper {
+
+                transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
             .toggle-box svg {
                 width: var(--font-lg);
                 height: var(--font-lg);
@@ -296,11 +301,9 @@ Top Navigation
 /* --- Checked States (Triggered by the inputs) --- */
 /* When theme checkbox is active: hide moon, show sun */
 #theme-toggle:checked,
-body:has(#theme-toggle:checked) .shape-moon { display: block;  }
-
-body:has(#theme-toggle:checked) .shape-sun  { display: none; }
-
-
+body:has(#theme-toggle:checked) .shape-moon   { display: block;  }
+body:has(#theme-toggle:checked) .shape-sun    { display: none; }
+body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }
 
 /* Default sound: Show waves, hide mute slash */
 .mute-lines  { display: block;  }
@@ -310,7 +313,7 @@ body:has(#theme-toggle:checked) .shape-sun  { display: none; }
 #sound-toggle:checked,
 body:has(#sound-toggle:checked) .sound-wave { display: block;  }
 body:has(#sound-toggle:checked) .mute-lines  { display: none; }
-
+body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
 
 
 

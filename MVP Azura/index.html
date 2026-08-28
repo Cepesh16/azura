@@ -26,16 +26,18 @@
             <div class="toggle-row">
                 <div class="toggle-box">
                     <label for="theme-toggle">
-                        <!-- Theme SVG Container -->
-                        <svg class="icon-theme" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Moon Shape -->
-                            <path class="shape-moon" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                            <!-- Sun Shape -->
-                            <g class="shape-sun">
-                                <circle cx="12" cy="12" r="4"></circle>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                            </g>
-                        </svg>
+                        <!-- Theme SVG Wrapper for Animation -->
+                        <span class="icon-wrapper theme-icon-wrap">
+                            <svg class="icon-theme" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <!-- Moon Shape -->
+                                <path class="shape-moon" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                                <!-- Sun Shape -->
+                                <g class="shape-sun">
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                                </g>
+                            </svg>
+                        </span>
                     </label>
                     <label class="switch">
                         <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
@@ -44,17 +46,19 @@
                 </div>
                 <div class="toggle-box">
                     <label for="sound-toggle">
-                        <!-- Sound SVG Icon -->
-                        <svg class="icon-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-                            <!-- Regular sound waves -->
-                            <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                            <!-- Mute diagonal line (hidden by default) -->
-                            <g class="mute-lines">
-                                <line x1="22" y1="9" x2="16" y2="15"></line>
-                                <line x1="16" y1="9" x2="22" y2="15"></line>
-                            </g>
-                        </svg>
+                        <!-- Sound SVG Wrapper for Animation -->
+                        <span class="icon-wrapper sound-icon-wrap">
+                            <svg class="icon-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
+                                <!-- Regular sound waves -->
+                                <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                                <!-- Mute diagonal line (hidden by default) -->
+                                <g class="mute-lines">
+                                    <line x1="22" y1="9" x2="16" y2="15"></line>
+                                    <line x1="16" y1="9" x2="22" y2="15"></line>
+                                </g>
+                            </svg>
+                        </span>
                     </label>
                     <label class="switch">
                         <input type="checkbox" id="sound-toggle">
