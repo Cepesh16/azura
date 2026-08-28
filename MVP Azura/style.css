@@ -206,9 +206,16 @@ Top Navigation
 ========================= */
 
 .option-row {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
 }
 
+    #total-completed-counter {
+        font-size: var(--font-sm);
+        color: var(--text-secondary);
+    }
 
 
 #progress-row {
@@ -216,7 +223,6 @@ Top Navigation
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: var(--space-md);
     margin-bottom: var(--space-md);
 }
 
@@ -251,25 +257,13 @@ Top Navigation
         }
 
 
-#counter-row {
-    margin-top: var(--space-md);
-    padding: 0 var(--space-lg);
-    text-align: right;
-    
-    font-size: var(--font-md);
-    color: var(--text-secondary);
-}
-    #total-completed-counter {
+
+    #progress-counter {
         font-size: var(--font-sm);
+        color: var(--text-secondary);
+        font-weight: 500;
+        white-space: nowrap;
     }
-
-
-#progress-counter {
-    font-size: var(--font-sm);
-    color: var(--text-secondary);
-    font-weight: 500;
-    white-space: nowrap;
-}
 
 
 /* =========================
@@ -307,7 +301,6 @@ Options Modal
 
 .options-title {
     margin-top: 0;
-    margin-bottom: var(--space-md);
     font-size: var(--font-md);
     font-weight: 600;
     text-align: center;
@@ -378,7 +371,7 @@ Learning Area
 #card {
     overflow: hidden;
     padding: var(--space-xl) var(--space-lg) var(--space-xl);
-    margin-top: var(--space-md);
+    margin-bottom: var(--space-lg);
     box-shadow: var(--shadow-soft);
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -499,7 +492,6 @@ Helper
 ========================= */
 
 #helper {
-    margin-top: var(--space-lg);
     font-size: var(--font-sm);
     color: var(--text-muted);
     text-align: center;
@@ -674,7 +666,7 @@ Session summary
     }
 
     #helper {
-        margin-top: var(--space-lg);
+
     }
 
     button {
