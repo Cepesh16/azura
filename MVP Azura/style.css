@@ -230,6 +230,10 @@ Top Navigation
             .toggle-box svg {
                 width: var(--font-lg);
                 height: var(--font-lg);
+                transition: var(--transition-fast);
+            }
+            .toggle-box:hover .icon-wrapper svg {
+                transform: scale(1.1) translateY(-1px);
             }
 
             /* Toggle */
