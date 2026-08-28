@@ -25,14 +25,30 @@
             <!-- <button id="options-btn">Options</button> -->
             <div class="toggle-row">
                 <div class="toggle-box">
-                    <label for="theme-toggle">Dark mode</label>
+                    <label for="theme-toggle">
+                        <!-- Moon SVG Icon -->
+                        <svg class="icon-theme" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                        </svg>
+                        Dark mode
+                    </label>
                     <label class="switch">
                         <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
                         <span class="slider"></span>
                     </label>
                 </div>
                 <div class="toggle-box">
-                    <label for="sound-toggle">Sound</label>
+                    <label for="sound-toggle">
+                        <!-- Sound SVG Icon -->
+                        <svg class="icon-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
+                            <!-- Regular sound waves -->
+                            <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                            <!-- Mute diagonal line (hidden by default) -->
+                            <line class="mute-line" x1="22" y1="2" x2="2" y2="22" stroke="currentColor" style="display: none;" />
+                        </svg>
+                        Sound
+                    </label>
                     <label class="switch">
                         <input type="checkbox" id="sound-toggle">
                         <span class="slider"></span>
