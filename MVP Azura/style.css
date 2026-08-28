@@ -303,13 +303,13 @@ body:has(#theme-toggle:checked) .shape-sun  { display: none; }
 
 
 /* Default sound: Show waves, hide mute slash */
-.mute-line  { display: block;  }
+.mute-lines  { display: block;  }
 .sound-wave { display: none; }
 
 /* When sound checkbox is active: MUTE (hide waves, show slash) */
 #sound-toggle:checked,
 body:has(#sound-toggle:checked) .sound-wave { display: block;  }
-body:has(#sound-toggle:checked) .mute-line  { display: none; }
+body:has(#sound-toggle:checked) .mute-lines  { display: none; }
 
 
 
