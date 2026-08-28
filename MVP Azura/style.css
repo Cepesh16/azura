@@ -190,7 +190,7 @@ Main App
 #app {
     /*width: min(500px, 90vw);*/
     width: min(500px, 95%);
-    text-align: left;
+    text-align: center;
     opacity: 0;
     transform: translateY(8px);
     transition: opacity var(--transition-normal), transform var(--transition-normal);
@@ -385,10 +385,9 @@ Learning Area
 }
 
     #sentence {
+        margin-bottom: var(--space-lg);
         font-size: var(--font-xl);
         line-height: 1.5;
-        /*padding-bottom: var(--space-lg);*/
-        /*background: var(--bg-main);*/
     }
 
         .text {
@@ -437,9 +436,10 @@ Translation Row
 
 #translation-row {
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
+    justify-content: center;
     align-items: center;
-    margin-top: var(--space-lg);
+    margin-bottom: var(--space-lg);
 }
 
     #translation-group {
@@ -464,35 +464,35 @@ Translation Row
                 content: '#';
             }
 
-    .level-indicator {
-
-    }
-
-
 /* =========================
 Level Indicator
 ========================= */
 
-.level-dots {
-    display: flex;
-    gap: 4px;
+.level-indicator {
+
 }
 
-.level-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--level-empty);
-}
+    .level-dots {
+        display: flex;
+        gap: 4px;
+        justify-content: center;
+    }
 
-.level-dot.level-0,
-.level-dot.level-1 { background: var(--level-low); }
+        .level-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--level-empty);
+        }
 
-.level-dot.level-2,
-.level-dot.level-3 { background: var(--level-mid); }
+        .level-dot.level-0,
+        .level-dot.level-1 { background: var(--level-low); }
 
-.level-dot.level-4,
-.level-dot.level-5 { background: var(--level-high); }
+        .level-dot.level-2,
+        .level-dot.level-3 { background: var(--level-mid); }
+
+        .level-dot.level-4,
+        .level-dot.level-5 { background: var(--level-high); }
 
 /* =========================
 Helper
