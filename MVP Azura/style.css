@@ -215,11 +215,12 @@ Top Navigation
     #total-completed-counter {
         font-size: var(--font-sm);
         color: var(--text-secondary);
-        line-height: 1.0;
+        line-height: 1;
     }
 
     .toggle-row {
         display: flex;
+        align-items: center;
         font-size: var(--font-sm);
         color: var(--text-muted);
     }
@@ -227,17 +228,28 @@ Top Navigation
         .toggle-box {
             display: flex;
             align-items: center;
-            margin-left: var(--space-sm);
+            margin-left: var(--space-md);
         }
+            .toggle-box label {
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+                cursor: pointer;
+            }
+
+            .toggle-box svg {
+                width: var(--font-lg);
+                height: var(--font-lg);
+            }
 
             /* Toggle */
 
             .switch {
+                display: inline-block;
                 position: relative;
                 margin-left: var(--space-xs);
                 width: var(--toggle-width);
                 height: var(--toggle-height);
-                cursor: pointer;
             }
 
 
@@ -275,12 +287,44 @@ Top Navigation
                 }
 
 
+
+/* --- Default States (Light Mode / Sound On) --- */
+/* Default theme: Show moon, hide sun */
+.shape-sun  { display: block;  }
+.shape-moon { display: none; }
+
+/* --- Checked States (Triggered by the inputs) --- */
+/* When theme checkbox is active: hide moon, show sun */
+#theme-toggle:checked,
+body:has(#theme-toggle:checked) .shape-moon { display: block;  }
+
+body:has(#theme-toggle:checked) .shape-sun  { display: none; }
+
+
+
+/* Default sound: Show waves, hide mute slash */
+.mute-line  { display: block;  }
+.sound-wave { display: none; }
+
+/* When sound checkbox is active: MUTE (hide waves, show slash) */
+#sound-toggle:checked,
+body:has(#sound-toggle:checked) .sound-wave { display: block;  }
+body:has(#sound-toggle:checked) .mute-line  { display: none; }
+
+
+
+
+
+
+
+
 #progress-row {
     min-height: var(--space-sm); /* the same height as content to stabilize container*/
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: var(--space-md);
+    /*padding: 0 var(--space-lg);*/
 }
 
 #progress-bar {
@@ -326,7 +370,7 @@ Top Navigation
 /* =========================
 Options Modal
 ========================= */
-
+/*
 #options-modal {
     position: fixed;
     inset: 0;
@@ -376,7 +420,7 @@ Options Modal
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-light);
 }
-
+*/
 
 
 /* =========================
