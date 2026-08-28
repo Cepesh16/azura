@@ -73,9 +73,10 @@
     --space-xl: 42px;
 
     /* TOGGLE SIZE */
-    --toggle-width: 36px;
-    --toggle-height: 20px;
-    --toggle-knob-size: 16px;
+    --toggle-width: calc(var(--toggle-height) * 1.8);
+    --toggle-height: 20px; /* only change height */
+    --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
+    --toggle-padding: calc(var(--toggle-height) * 0.12);
 
     /* TRANSITIONS */
     --transition-fast: 0.15s ease;
@@ -263,7 +264,7 @@ Top Navigation
                     position: absolute;
                     inset: 0;
                     background-color: var(--toggle-bg-off);
-                    border-radius: 20px;
+                    border-radius: var(--toggle-height);
                     transition: var(--transition-fast);
                 }
 
@@ -272,8 +273,9 @@ Top Navigation
                         position: absolute;
                         height: var(--toggle-knob-size);
                         width: var(--toggle-knob-size);
-                        left: 2px;
-                        top: 2px;
+
+                        left: var(--toggle-padding);
+                        top: var(--toggle-padding);
                         background: var(--toggle-knob-off);
                         border-radius: 50%;
                         transition: var(--transition-fast);
@@ -281,6 +283,9 @@ Top Navigation
 
                 .switch input {
                     opacity: 0;
+                    width: 0;
+                    height: 0;
+                    position: absolute;
                 }
 
                 .switch input:checked + .slider {
@@ -288,7 +293,8 @@ Top Navigation
                 }
 
                 .switch input:checked + .slider:before {
-                    transform: translateX(16px);
+                    /* MATH FIX: Automatically calculates exactly how far to slide */
+                    transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
                     background: var(--toggle-knob-on);
                 }
 
