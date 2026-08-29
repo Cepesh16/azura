@@ -206,7 +206,7 @@ Main App
     }
 
 
-    .option-row {
+    #option-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -327,7 +327,6 @@ Top Navigation
 
             #total-completed-counter {
                 color: var(--text-secondary);
-                /*line-height: 1;*/
             }
 
 
@@ -479,16 +478,16 @@ Learning Area
         line-height: 1.5;
     }
 
-        .text {
-            display: inline;
-        }
 
 /* =========================
 Gap
 ========================= */
 .gap-wrapper {
     display: inline-flex;
+    line-height: 1.2;
+
 }
+
     /*placeholder*/
     .gap-wrapper > span:empty::before {
         content: attr(data-placeholder);
@@ -503,12 +502,12 @@ Gap
 
     .gap {
         text-align: center;
-
         min-width: 6ch;
 
         color: var(--text-secondary);
         /*background: var(--bg-main);*/
         border-bottom: 1px solid var(--text-secondary);
+        /*border: 1px solid var(--text-secondary);*/
         /*border-radius: var(--radius-sm);*/
         /*outline: 1px solid var(--text-secondary);*/
         outline: none;
@@ -607,13 +606,14 @@ States
 
 .gap.correct {
     border-bottom-color: var(--correct);
+    border-color: var(--correct);
     color: var(--correct);
     caret-color: transparent;
 }
 
 .gap.flash-wrong {
     color: var(--wrong);
-    border-bottom-color: var(--wrong);
+    border-color: var(--wrong);
     animation: wrongShake 0.25s ease;
 }
 
@@ -688,27 +688,26 @@ Session summary
 ========================= */
 
 .session-state {
-    /*padding: 32px 24px;*/
-    text-align: center;
+
 }
 
     .session-state__title {
-        font-size: 20px;
-        margin-bottom: 16px;
+        font-size: var(--font-xl);
+        margin-bottom: var(--space-lg);
     }
 
     .session-state__stats {
-        margin-bottom: 16px;
+        margin-bottom: var(--space-lg);
     }
 
     .session-state__stat {
         font-size: 15px;
         color: var(--text-secondary);
-        margin-bottom: 4px;
+        margin-bottom: var(--space-xs);
     }
 
     .session-state__actions {
-        margin-top: 12px;
+
     }
 
 
@@ -742,16 +741,20 @@ Session summary
     body {
         margin-top: var(--space-lg);
     }
-    .option-row,
+    #option-row,
     #progress-row {
         /*margin-bottom: var(--space-sm);*/
-        margin-bottom: var(--space-md);
-        padding: 0 var(--space-md);
+        /*margin-bottom: var(--space-lg);*/
+        /*padding: 0 var(--space-md);*/
         /*padding: 0;*/
     }
 
-    .option-row {
-        /*padding: 0;*/
+    #option-row {
+       padding: 0 var(--space-md);
+    }
+
+    #progress-row {
+       padding: 0 var(--space-xl);
     }
 
 
