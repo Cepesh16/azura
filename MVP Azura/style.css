@@ -197,7 +197,7 @@ Main App
     #container {
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
-        padding: var(--space-xl) var(--space-lg) var(--space-xl);
+        padding: var(--space-xl) var(--space-lg);
         box-shadow: var(--shadow-soft);
         background: var(--bg-card);
         border-radius: var(--radius);  
@@ -742,9 +742,24 @@ Session summary
     body {
         margin-top: var(--space-lg);
     }
+    .option-row,
+    #progress-row {
+        /*margin-bottom: var(--space-sm);*/
+        margin-bottom: var(--space-md);
+        padding: 0 var(--space-md);
+        /*padding: 0;*/
+    }
+
+    .option-row {
+        /*padding: 0;*/
+    }
+
+
+    #container {
+        padding: var(--space-xl) var(--space-md);
+    }
 
     #card {
-        padding: var(--space-xl) var(--space-md) var(--space-xl);
     }
 
     #sentence {
