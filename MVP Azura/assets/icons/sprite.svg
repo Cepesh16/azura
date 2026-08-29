@@ -1,0 +1,75 @@
+<svg id="sprite" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+
+  <!-- 1. Vocabulary / Book Icon -->
+  <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    <line x1="8" y1="7" x2="16" y2="7"/>
+    <line x1="8" y1="11" x2="14" y2="11"/>
+  </symbol>
+
+  <!-- 2. Streak / Daily Goal (Flame) Icon -->
+  <symbol id="icon-streak" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5z"/>
+  </symbol>
+
+  <!-- 3. Completed / Mastery (Check Badge) Icon -->
+  <symbol id="icon-completed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l2.4 2.4 3.4-.4.8 3.3 3.1 1.5-1.1 3.2 1.9 2.8-2.6 2.2-.1 3.4-3.4.8-1.9 2.8-3.1-1.5-3.3.8-.8-3.3-3.4-.4.1-3.4-2.6-2.2 1.9-2.8-1.1-3.2 3.1-1.5.8-3.3 3.4.4z"/>
+    <polyline points="9 12 11 14 15 10"/>
+  </symbol>
+
+  <!-- 4. Flashcards Icon -->
+  <symbol id="icon-flashcards" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="6" width="14" height="12" rx="2"/>
+    <path d="M18 9h2a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1"/>
+    <line x1="6" y1="12" x2="12" y2="12"/>
+  </symbol>
+
+  <!-- 5. Audio / Pronunciation (Speaker) Icon -->
+  <symbol id="icon-audio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+  </symbol>
+
+  <!-- 6. Grammar / Structure Icon -->
+  <symbol id="icon-grammar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 6h16"/>
+    <path d="M4 12h10"/>
+    <path d="M4 18h14"/>
+    <circle cx="18" cy="12" r="2"/>
+  </symbol>
+
+  <!-- 7. Favorites / Starred Words Icon -->
+  <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </symbol>
+
+  <!-- 8. Quiz / Test (Target) Icon -->
+  <symbol id="icon-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="2"/>
+  </symbol>
+
+  <!-- 9. Statistics / Progress Chart Icon -->
+  <symbol id="icon-stats" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10"/>
+    <line x1="12" y1="20" x2="12" y2="4"/>
+    <line x1="6" y1="20" x2="6" y2="14"/>
+    <line x1="2" y1="20" x2="22" y2="20"/>
+  </symbol>
+
+  <!-- 10. Light Mode / Sun Icon -->
+  <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M6.34 17.66l-1.41 1.41 M19.07 4.93l-1.41 1.41" />
+  </symbol>
+
+  <!-- 11. Dark Mode / Moon Icon -->
+  <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+  </symbol>
+
+  </svg>

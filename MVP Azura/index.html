@@ -12,6 +12,59 @@
 </head>
 <body>
 
+<!-- <div class="icon-grid">
+    
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-book"></use></svg>
+    <span>Book</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
+    <span>Streak</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
+    <span>Completed</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-flashcards"></use></svg>
+    <span>Flashcards</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-audio"></use></svg>
+    <span>Audio</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-grammar"></use></svg>
+    <span>Grammar</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
+    <span>Favorites</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+    <span>Target</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+    <span>Stats</span>
+  </div>
+
+</div> -->
+
+
+
+
+
     <div id="loading">
         <div class="spinner"></div>
         <div id="loading-text">Loading your words...</div>
@@ -27,14 +80,7 @@
                 
                     <div class="counter-box">
                         <span class="icon-wrapper">
-                            <svg class="icon-counter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                              <!-- Book / Vocabulary Card -->
-                              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                              
-                              <!-- Checkmark for completed status -->
-                              <polyline points="9 10 11.5 12.5 16 7.5" stroke-width="2.2" />
-                            </svg>
+                            <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                         </span>
                         <div id="total-completed-counter"></div>
                     </div>
@@ -47,15 +93,10 @@
                     <label for="theme-toggle">
                         <!-- Theme SVG Wrapper for Animation -->
                         <span class="icon-wrapper theme-icon-wrap">
-                            <svg class="icon-theme" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <!-- Moon Shape -->
-                                <path class="shape-moon" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                                <!-- Sun Shape -->
-                                <g class="shape-sun">
-                                    <circle cx="12" cy="12" r="4"></circle>
-                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                                </g>
-                            </svg>
+                            <!-- Sun Icon (Light Mode) -->
+                            <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                            <!-- Moon Icon (Dark Mode) -->
+                            <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
                         </span>
                     </label>
                     <label class="switch">
