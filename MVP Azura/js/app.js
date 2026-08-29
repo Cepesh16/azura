@@ -60,7 +60,7 @@ async function startApp() {
         const app = document.getElementById('app');
 
         document.getElementById('loading').style.display = 'none';
-        app.style.display = 'block';
+        app.style.display = 'flex';
 
         setTimeout(() => {
             app.classList.add('visible');

@@ -171,14 +171,18 @@ Loading
     to { transform: rotate(360deg); }
 }
 
+
+
 /* =========================
 Main App
 ========================= */
 
 #app {
-    /*width: min(500px, 90vw);*/
-    width: min(500px, 95%);
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: min(560px, 95%);
+
     opacity: 0;
 
     transform: translateY(8px);
@@ -189,6 +193,18 @@ Main App
     opacity: 1;
     transform: translateY(0);
 }
+
+    #container {
+        /*width: min(500px, 90vw);*/
+
+        padding: var(--space-xl) var(--space-lg) var(--space-xl);
+        box-shadow: var(--shadow-soft);
+        background: var(--bg-card);
+        border-radius: var(--radius);  
+        overflow: hidden;
+        text-align: center;
+    }
+
 
     .option-row {
         display: flex;
@@ -282,13 +298,6 @@ Main App
 
 
 
-    #container {
-        overflow: hidden;
-        padding: var(--space-xl) var(--space-lg) var(--space-xl);
-        box-shadow: var(--shadow-soft);
-        background: var(--bg-card);
-        border-radius: var(--radius);   
-    }
 
 /* =========================
 Top Navigation
@@ -360,6 +369,7 @@ body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
     justify-content: center;
     align-items: center;
     margin-bottom: var(--space-lg);
+    /*padding: var(--space-xs) 150px;*/
 }
 
 #progress-bar {
