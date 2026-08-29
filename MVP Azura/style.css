@@ -763,12 +763,11 @@ Session summary
     }
 
     #sentence {
-        padding-bottom: var(--space-md);
         font-size: var(--font-lg);
     }
 
     .gap {
-
+        min-width: 4ch;
     }
 
     #translation-row {
