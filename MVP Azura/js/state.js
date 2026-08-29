@@ -18,7 +18,7 @@ export const state = {
     soundEnabled: true,
 
     // Session control
-    sessionLimit: 3,
+    sessionLimit: 10,
     sessionCount: 0,
     completedCount: 0,
     totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0,
