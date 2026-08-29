@@ -4,8 +4,8 @@
 
 :root {
     /* BACKGROUND */
-    /*--bg-main: rgba(172, 225, 175, 0.6);*/
     --bg-main: #f5f7fa;
+    --bg-main: rgba(172, 225, 175, 0.6);
     --bg-card: rgba(255, 255, 255, 1);
     --bg-overlay: rgba(0, 0, 0, 0.25);
 
@@ -69,7 +69,7 @@
 
     /* TOGGLE SIZE */
     --toggle-width: calc(var(--toggle-height) * 1.8);
-    --toggle-height: 20px; /* only change height */
+    --toggle-height: 16px; /* only change height */
     --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
     --toggle-padding: calc(var(--toggle-height) * 0.12);
 
@@ -179,7 +179,6 @@ Main App
 
     overflow: hidden;
     padding: var(--space-xl) var(--space-lg) var(--space-xl);
-    margin-bottom: var(--space-lg);
     box-shadow: var(--shadow-soft);
     background: var(--bg-card);
     border-radius: var(--radius);
@@ -197,35 +196,59 @@ Main App
 Top Navigation
 ========================= */
 
+#settings {
+    margin-bottom: var(--space-lg);
+}
+
+#content {
+
+}
+
 .option-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-md);
+    font-size: var(--font-sm);
 }
-
-    #total-completed-counter {
-        font-size: var(--font-sm);
-        color: var(--text-secondary);
-        line-height: 1;
+.option-row .icon-wrapper {
+    color: var(--text-muted);
+}
+    .stats-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
     }
+        .counter-box {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+                .icon-counter {
+                    width: var(--font-lg);
+                    height: var(--font-lg);
+                }
+
+                #total-completed-counter {
+                    color: var(--text-secondary);
+                    /*line-height: 1;*/
+                }
 
     .toggle-row {
         display: flex;
         align-items: center;
-        font-size: var(--font-sm);
-        color: var(--text-muted);
+        gap: var(--space-md);
     }
 
         .toggle-box {
             display: flex;
             align-items: center;
-            margin-left: var(--space-md);
+            gap: var(--space-xs);
         }
             .toggle-box label {
-                display: inline-flex;
+/*                display: inline-flex;
                 align-items: center;
-                gap: 4px;
+                gap: 4px;*/
                 cursor: pointer;
             }
 
@@ -249,7 +272,6 @@ Top Navigation
             .switch {
                 display: inline-block;
                 position: relative;
-                margin-left: var(--space-xs);
                 width: var(--toggle-width);
                 height: var(--toggle-height);
             }
@@ -328,8 +350,7 @@ body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: var(--space-md);
-    /*padding: 0 var(--space-lg);*/
+    margin-bottom: var(--space-lg);
 }
 
 #progress-bar {
@@ -433,12 +454,7 @@ Learning Area
 ========================= */
 
 #card {
-    overflow: hidden;
-    padding: var(--space-xl) var(--space-lg) var(--space-xl);
     margin-bottom: var(--space-lg);
-    /*box-shadow: var(--shadow-soft);*/
-    /*background: var(--bg-card);*/
-    border-radius: var(--radius);
 }
 
     #sentence {
@@ -495,7 +511,6 @@ Translation Row
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: var(--space-lg);
 }
 
     #translation-group {
@@ -525,8 +540,8 @@ Translation Row
 Level Indicator
 ========================= */
 
-.level-indicator {
-
+#level-indicator {
+    /*margin-bottom: var(--space-lg);*/
 }
 
     .level-dots {
