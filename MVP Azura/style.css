@@ -196,7 +196,7 @@ Main App
 
     #container {
         /*width: min(500px, 90vw);*/
-
+        margin-bottom: var(--space-lg);
         padding: var(--space-xl) var(--space-lg) var(--space-xl);
         box-shadow: var(--shadow-soft);
         background: var(--bg-card);
@@ -208,7 +208,7 @@ Main App
 
     .option-row {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: var(--space-lg);
         padding: 0 var(--space-lg);
@@ -303,9 +303,6 @@ Main App
 Top Navigation
 ========================= */
 
-#settings {
-    margin-bottom: var(--space-lg);
-}
 
 #content {
 
@@ -369,7 +366,7 @@ body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
     justify-content: center;
     align-items: center;
     margin-bottom: var(--space-lg);
-    /*padding: var(--space-xs) 150px;*/
+    padding: 0px var(--space-lg);
 }
 
 #progress-bar {
@@ -473,7 +470,7 @@ Learning Area
 ========================= */
 
 #card {
-    margin-bottom: var(--space-lg);
+    /*margin-bottom: var(--space-lg);*/
 }
 
     #sentence {
