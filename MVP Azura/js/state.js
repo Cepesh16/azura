@@ -9,6 +9,7 @@ export const state = {
 // in export const state = { ... }
 inputLocked: false,   // used to temporarily block input while animations run
 isComposing: false,   // tracks IME composition state
+autoSubmitTimer: null,
 
     status: 'loading',
 
@@ -17,6 +18,7 @@ isComposing: false,   // tracks IME composition state
     answeredWithHint: false,
     layoutWarning: false,
     isSubmitting: false,
+
 
     soundEnabled: true,
 
