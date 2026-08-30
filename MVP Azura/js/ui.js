@@ -80,7 +80,7 @@ function updateHintUI(input, current) {
 
 function createGapSentence(sentenceObj) {
 
-    const { sentence, answer, gapIndex } = sentenceObj;
+    const { sentence, gapIndex } = sentenceObj;
 
     if (gapIndex === -1) {
         console.warn('⚠️ gapIndex not found:', sentenceObj);
@@ -90,7 +90,7 @@ function createGapSentence(sentenceObj) {
     const before = sentence.slice(0, gapIndex);
     const after = sentence.slice(gapIndex + sentenceObj.answerLength);
 
-    return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" data-placeholder="..." class="gap"></span></div>${after}`;
+    return `${before}<div class="gap-wrapper"><span id="gap-input" contenteditable="true" data-word-id="${sentenceObj.id}" data-placeholder="..." class="gap"></span></div>${after}`;
 }
 
 
@@ -279,13 +279,24 @@ export function render() {
         }
     }
 
-    // =========================
-    // SENTENCE
-    // =========================
+// =========================
+// SENTENCE
+// =========================
+
+// Reuse the existing input when we are still on the same word.
+// This is critical on mobile because replacing a focused
+// contenteditable element can hide the keyboard.
+const existingInput = document.getElementById('gap-input');
+
+const canReuseInput =
+    existingInput &&
+    existingInput.dataset.wordId === String(current.id);
+
+if (!canReuseInput) {
     sentenceEl.innerHTML = createGapSentence(current);
+}
 
-
-    translationEl.innerText = current.translation;
+translationEl.innerText = current.translation;
 
     if (posEl) {
         posEl.innerText = current.partOfSpeech
@@ -297,13 +308,20 @@ export function render() {
     if (!input) return;
     input.setAttribute('enterkeyhint', 'done');
 
-    input.classList.remove('flash-wrong', 'correct', 'correct-pop');
-    input.contentEditable = "true";
+input.classList.remove('flash-wrong', 'correct', 'correct-pop');
+input.contentEditable = "true";
 
-    setTimeout(() => input.focus(), 0);
-    input.onfocus = () => {
-        hasUserFocused = true;
-    };
+input.onfocus = () => {
+    hasUserFocused = true;
+};
+
+// Only automatically focus when the user is expected to type.
+// During wrongFlash we deliberately keep the existing focus.
+if (state.status === 'waiting' || state.status === 'wrong') {
+    setTimeout(() => {
+        input.focus();
+    }, 0);
+}
 
     // =========================
     // 🧠 HELPER
@@ -409,47 +427,100 @@ export function render() {
         return;
     }
 
-    // =========================
-    // 🔴 WRONG FLASH
-    // =========================
-    if (state.status === 'wrongFlash') {
+ // =========================
+// 🔴 WRONG FLASH
+// =========================
+if (state.status === 'wrongFlash') {
 
-        // 🔥 render typed text (same as hint mode but without hint)
-        renderOverlay(input, {
-            hintHTML: `<span style="visibility:hidden">${state.userInput}</span>`,
-            typed: state.userInput,
-            typedClass: 'wrong'
-        });
+    renderOverlay(input, {
+        hintHTML: `<span style="visibility:hidden">${state.userInput}</span>`,
+        typed: state.userInput,
+        typedClass: 'wrong'
+    });
 
-// <-- REPLACEMENT: keep keyboard visible, but lock input handling briefly
-input.classList.add('flash-wrong');
+    input.classList.add('flash-wrong');
 
-// temporarily prevent processing new input in onbeforeinput/oninput handler
-state.inputLocked = true;
+    // Lock input while the wrong-answer animation is running.
+    state.inputLocked = true;
 
-// Wait for the animation to finish (match CSS duration ~0.25s) then switch to 'wrong'
-// we avoid blur() / contentEditable=false so mobile keyboard stays visible.
-const onAnimEnd = (e) => {
-  input.removeEventListener('animationend', onAnimEnd);
+    const onAnimEnd = (e) => {
+        if (e.target !== input) return;
 
-  // clear lock and reset
-  state.inputLocked = false;
-  state.status = 'wrong';
-  state.userInput = '';
-  state.isSubmitting = false;
+        input.removeEventListener('animationend', onAnimEnd);
 
-  // ensure caret is visible and at start
-  input.focus();
-  setCaret(input, 0);
+        state.inputLocked = false;
+        state.status = 'wrong';
+        state.userInput = '';
+        state.isSubmitting = false;
 
-  render();
-};
+        // IMPORTANT:
+        // Do NOT recreate the input element.
+        // Keep the existing focused element so mobile keyboard stays open.
+        updateHintUI(input, state.current);
 
-input.addEventListener('animationend', onAnimEnd);
+        input.classList.remove('flash-wrong');
 
-// return immediately (render will update after animationend handler runs)
-return;
-    }
+        input.focus();
+        setCaret(input, 0);
+
+        // Update helper text without rebuilding the sentence.
+        if (helperEl) {
+            helperEl.innerText = 'Type the correct word';
+            helperEl.classList.add('show');
+        }
+
+        // Reattach normal input handling.
+        input.contentEditable = 'true';
+
+        input.oninput = null;
+        input.onkeydown = null;
+
+        input.oninput = () => {
+            let text = input.textContent
+                .replace(/\n/g, '')
+                .toLowerCase();
+
+            state.userInput = text;
+
+            if (
+                state.userInput.length === current.answer.length &&
+                state.userInput.toLowerCase() === current.answer.toLowerCase()
+            ) {
+                setTimeout(() => {
+                    submitAnswer();
+                }, 0);
+            }
+
+            if (input.textContent !== text) {
+                input.textContent = text;
+            }
+
+            const range = document.createRange();
+            const sel = window.getSelection();
+
+            range.selectNodeContents(input);
+            range.collapse(false);
+
+            sel.removeAllRanges();
+            sel.addRange(range);
+        };
+
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (state.isSubmitting) return;
+
+                submitAnswer();
+            }
+        };
+    };
+
+    input.addEventListener('animationend', onAnimEnd);
+
+    return;
+}
 
     // =========================
     // 🔵 HINT
