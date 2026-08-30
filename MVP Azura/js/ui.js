@@ -49,48 +49,31 @@ function setCaret(el, position) {
 
 function scheduleAutoSubmit(input, current) {
 
-    // Cancel any previous pending autosubmit.
     if (state.autoSubmitTimer) {
         clearTimeout(state.autoSubmitTimer);
         state.autoSubmitTimer = null;
     }
 
-    // Never submit while the keyboard is still composing
-    // a gesture/IME result.
-    if (state.isComposing) return;
-
-    const inputValue = state.userInput.toLowerCase();
     const answer = current.answer.toLowerCase();
 
-    if (
-        inputValue.length !== answer.length ||
-        inputValue !== answer
-    ) {
-        return;
-    }
-
-    // Wait briefly so gesture typing has time to deliver
-    // any remaining characters.
     state.autoSubmitTimer = setTimeout(() => {
 
-        state.autoSubmitTimer = null;
+        const now = Date.now();
 
-        // Re-check everything after the delay.
-        if (state.isComposing) return;
-        if (state.isSubmitting) return;
-        if (state.status !== 'waiting' && state.status !== 'wrong') return;
+        // 🔴 KEY RULE: input must NOT be changing
+        const timeSinceLastInput = now - state.lastInputTime;
 
-        const latestInput = (state.userInput || '').toLowerCase();
-        const latestAnswer = current.answer.toLowerCase();
-
-        if (
-            latestInput.length === latestAnswer.length &&
-            latestInput === latestAnswer
-        ) {
-            submitAnswer();
+        if (timeSinceLastInput < 120) {
+            return; // still typing/swiping
         }
 
-    }, 180);
+        const value = (state.userInput || '').toLowerCase();
+
+        if (value !== answer) return;
+
+        submitAnswer();
+
+    }, 150);
 }
 
 
@@ -410,6 +393,8 @@ if (state.status === 'waiting' || state.status === 'wrong') {
     if (state.status === 'waiting') {
 
         input.oninput = () => {
+state.inputStable = false;
+state.lastInputTime = Date.now();
             let text = input.textContent.replace(/\n/g, '').toLowerCase();
 
             state.userInput = text;
@@ -515,6 +500,8 @@ if (state.status === 'wrongFlash') {
         input.onkeydown = null;
 
         input.oninput = () => {
+state.inputStable = false;
+state.lastInputTime = Date.now();
             let text = input.textContent
                 .replace(/\n/g, '')
                 .toLowerCase();
@@ -586,6 +573,9 @@ input.addEventListener('compositionstart', () => {
 });
 
 input.addEventListener('compositionend', (ev) => {
+state.inputStable = false;
+state.lastInputTime = Date.now();
+
     state.isComposing = false;
     input.isComposing = false;
 
@@ -638,6 +628,8 @@ input.addEventListener('compositionend', (ev) => {
     
     // ✅ mobile fix
     input.onbeforeinput = (e) => {
+state.inputStable = false;
+state.lastInputTime = Date.now();
         const current = state.current;
 
         // 🚫 ALWAYS block native DOM changes
