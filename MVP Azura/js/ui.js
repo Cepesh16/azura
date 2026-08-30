@@ -55,27 +55,56 @@ function scheduleAutoSubmit(input, current) {
     }
 
     const answer = current.answer.toLowerCase();
+    const value = (state.userInput || '').toLowerCase();
+
+    if (
+        value.length !== answer.length ||
+        value !== answer
+    ) {
+        return;
+    }
 
     state.autoSubmitTimer = setTimeout(() => {
 
-        const now = Date.now();
+        state.autoSubmitTimer = null;
 
-        // 🔴 KEY RULE: input must NOT be changing
-        const timeSinceLastInput = now - state.lastInputTime;
+        if (state.isSubmitting) return;
+        if (state.isComposing) return;
 
-        if (timeSinceLastInput < 120) {
-            return; // still typing/swiping
+        const latestValue = (state.userInput || '').toLowerCase();
+        const latestAnswer = current.answer.toLowerCase();
+
+        if (
+            latestValue.length === latestAnswer.length &&
+            latestValue === latestAnswer
+        ) {
+            submitAnswer();
         }
-
-        const value = (state.userInput || '').toLowerCase();
-
-        if (value !== answer) return;
-
-        submitAnswer();
 
     }, 150);
 }
 
+function handleTextInput(input, current) {
+
+    if (state.inputLocked || state.isSubmitting) {
+        return;
+    }
+
+    const text = input.textContent
+        .replace(/\n/g, '')
+        .toLowerCase();
+
+    state.userInput = text;
+
+    // Keep the controlled hint/typed display.
+    updateHintUI(input, current);
+
+    // Check for an exact answer.
+    scheduleAutoSubmit(input, current);
+
+    // Keep caret at the end.
+    setCaret(input, state.userInput.length);
+}
 
 function updateHintUI(input, current) {
 
@@ -392,31 +421,9 @@ if (state.status === 'waiting' || state.status === 'wrong') {
     // =========================
     if (state.status === 'waiting') {
 
-        input.oninput = () => {
-state.inputStable = false;
-state.lastInputTime = Date.now();
-            let text = input.textContent.replace(/\n/g, '').toLowerCase();
-
-            state.userInput = text;
-
-            // ✅ AUTOSUBMIT (ADD THIS)
-scheduleAutoSubmit(input, current);
-
-    // force clean text (no weird mobile stuff)
-            if (input.textContent !== text) {
-                input.textContent = text;
-            }
-
-    // move cursor to end
-            const range = document.createRange();
-            const sel = window.getSelection();
-
-            range.selectNodeContents(input);
-            range.collapse(false);
-
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
+input.oninput = () => {
+    handleTextInput(input, current);
+};
 
 
 
@@ -499,30 +506,9 @@ if (state.status === 'wrongFlash') {
         input.oninput = null;
         input.onkeydown = null;
 
-        input.oninput = () => {
-state.inputStable = false;
-state.lastInputTime = Date.now();
-            let text = input.textContent
-                .replace(/\n/g, '')
-                .toLowerCase();
-
-            state.userInput = text;
-
-scheduleAutoSubmit(input, current);
-
-            if (input.textContent !== text) {
-                input.textContent = text;
-            }
-
-            const range = document.createRange();
-            const sel = window.getSelection();
-
-            range.selectNodeContents(input);
-            range.collapse(false);
-
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
+input.oninput = () => {
+    handleTextInput(input, current);
+};
 
         input.onkeydown = (e) => {
             if (e.key === 'Enter') {
@@ -573,23 +559,24 @@ input.addEventListener('compositionstart', () => {
 });
 
 input.addEventListener('compositionend', (ev) => {
-state.inputStable = false;
-state.lastInputTime = Date.now();
 
     state.isComposing = false;
     input.isComposing = false;
 
     const composed = (ev.data || '').toLowerCase().trim();
 
-    if (!composed) return;
+    if (!composed) {
+        return;
+    }
 
     const current = state.current;
     const answer = current.answer.toLowerCase();
 
-    // Gesture typing must match the COMPLETE answer.
-    // Never accept a valid prefix of a longer word.
+    // The gesture keyboard has now committed the COMPLETE result.
+    // Never accept only a matching prefix.
     if (composed === answer) {
-        state.userInput = answer;
+
+        state.userInput = composed;
         state.lastTypedCorrect = true;
 
         updateHintUI(input, current);
@@ -599,10 +586,8 @@ state.lastInputTime = Date.now();
         return;
     }
 
-    // Wrong gesture result.
+    // Complete gesture result is wrong.
     state.lastTypedCorrect = false;
-
-    // Keep the typed result visible briefly.
     state.userInput = composed;
 
     renderOverlay(input, {
@@ -614,13 +599,16 @@ state.lastInputTime = Date.now();
     input.classList.add('flash-wrong-letter');
 
     setTimeout(() => {
+
         input.classList.remove('flash-wrong-letter');
 
         state.userInput = '';
 
         updateHintUI(input, current);
+
         input.focus();
         setCaret(input, 0);
+
     }, 200);
 });
 
@@ -628,8 +616,10 @@ state.lastInputTime = Date.now();
     
     // ✅ mobile fix
     input.onbeforeinput = (e) => {
-state.inputStable = false;
-state.lastInputTime = Date.now();
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
         const current = state.current;
 
         // 🚫 ALWAYS block native DOM changes
@@ -643,53 +633,111 @@ if (state.inputLocked || state.isSubmitting || state.isComposing) {
         // =========================
         // ✍️ typing
         // =========================
-    if (e.inputType === 'insertText') {
-        e.preventDefault();
+if (e.inputType === 'insertText') {
+    e.preventDefault();
 
-        const text = (e.data || '').toLowerCase();
+    const text = (e.data || '').toLowerCase();
 
-        let added = false;
+    if (!text) return;
 
-        for (let i = 0; i < text.length; i++) {
-            const nextIndex = state.userInput.length;
-            const expected = current.answer[nextIndex];
+    // -------------------------------------------------
+    // MULTI-CHARACTER INPUT
+    // Usually comes from gesture/swipe/IME input.
+    // Treat it as ONE candidate instead of accepting
+    // a matching prefix character-by-character.
+    // -------------------------------------------------
+    if (text.length > 1) {
 
-            if (text[i] === expected?.toLowerCase()) {
-                state.userInput += text[i];
-                added = true;
-            } else {
-                // stop at first wrong letter
-                break;
-            }
-        }
+        const candidate = state.userInput + text;
+        const answer = current.answer.toLowerCase();
 
-        if (added) {
-            state.lastTypedCorrect = true;
+        state.lastTypedCorrect = candidate === answer;
+
+        // Complete candidate is exactly correct.
+        if (candidate === answer) {
+            state.userInput = candidate;
             updateHintUI(input, current);
 
-            // ✅ STRICT AUTOSUBMIT
-scheduleAutoSubmit(input, current);
-
-        } else {
-            state.lastTypedCorrect = false;
-
-// <-- REPLACEMENT: reset typed state but KEEP keyboard open
-state.userInput = '';
-updateHintUI(input, current);
-
-// keep keyboard visible — move caret to start so user can try again
-input.focus();
-setCaret(input, 0);
-
-// short visual flash for the wrong letter
-input.classList.add('flash-wrong-letter');
-setTimeout(() => {
-    input.classList.remove('flash-wrong-letter');
-}, 200);
+            scheduleAutoSubmit(input, current);
+            return;
         }
 
+        // Candidate is longer than the answer or otherwise wrong.
+        if (
+            candidate.length >= answer.length ||
+            !answer.startsWith(candidate)
+        ) {
+            state.userInput = candidate;
+
+            renderOverlay(input, {
+                hintHTML: `<span style="visibility:hidden">${candidate}</span>`,
+                typed: candidate,
+                typedClass: 'wrong'
+            });
+
+            input.classList.add('flash-wrong-letter');
+
+            setTimeout(() => {
+                input.classList.remove('flash-wrong-letter');
+
+                state.userInput = '';
+                state.lastTypedCorrect = true;
+
+                updateHintUI(input, current);
+
+                input.focus();
+                setCaret(input, 0);
+            }, 200);
+
+            return;
+        }
+
+        // Still a valid prefix, but not complete.
+        state.userInput = candidate;
+        updateHintUI(input, current);
         return;
     }
+
+    // -------------------------------------------------
+    // SINGLE CHARACTER INPUT
+    // Normal keyboard typing.
+    // Keep the existing strict behavior.
+    // -------------------------------------------------
+    const char = text;
+
+    const nextIndex = state.userInput.length;
+    const expected = current.answer[nextIndex];
+
+    if (char === expected?.toLowerCase()) {
+
+        state.userInput += char;
+        state.lastTypedCorrect = true;
+
+        updateHintUI(input, current);
+
+        // Important:
+        // Do not immediately submit here.
+        scheduleAutoSubmit(input, current);
+
+    } else {
+
+        state.lastTypedCorrect = false;
+        state.userInput = '';
+
+        updateHintUI(input, current);
+
+        input.focus();
+        setCaret(input, 0);
+
+        input.classList.add('flash-wrong-letter');
+
+        setTimeout(() => {
+            input.classList.remove('flash-wrong-letter');
+        }, 200);
+    }
+
+    return;
+}
 
         // =========================
         // ⬅️ backspace

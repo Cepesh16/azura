@@ -241,20 +241,6 @@ if (input === '') {
 
     render();
 
-    const gap = document.querySelector('.gap');
-
-    if (gap) {
-        const handler = () => {
-            gap.removeEventListener('animationend', handler);
-
-            state.status = 'wrong';
-            state.userInput = '';
-            state.isSubmitting = false;
-            render();
-        };
-
-        gap.addEventListener('animationend', handler);
-    }
 
 }
 
