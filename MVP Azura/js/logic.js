@@ -59,6 +59,11 @@ export function buildSessionQueue() {
 // NEXT SENTENCE
 // =========================
 async function nextSentence() {
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
+
     const sentenceArea = document.getElementById('sentence-area');
     if (!sentenceArea) return;
 
@@ -155,6 +160,10 @@ function finishWord(current, immediateCorrect) {
 // =========================
 export function submitAnswer() {
     console.log('SUBMIT CALLED');
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
 
     // 🔒 HARD LOCK (fix for mobile double fire)
     if (state.isSubmitting) {
@@ -251,6 +260,10 @@ if (input === '') {
 
 
 export async function startNewSession() {
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
 
     state.sessionCount = 0;
     state.sessionCorrect = 0;

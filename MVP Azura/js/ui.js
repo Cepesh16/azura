@@ -47,6 +47,52 @@ function setCaret(el, position) {
     sel.addRange(range);
 }
 
+function scheduleAutoSubmit(input, current) {
+
+    // Cancel any previous pending autosubmit.
+    if (state.autoSubmitTimer) {
+        clearTimeout(state.autoSubmitTimer);
+        state.autoSubmitTimer = null;
+    }
+
+    // Never submit while the keyboard is still composing
+    // a gesture/IME result.
+    if (state.isComposing) return;
+
+    const inputValue = state.userInput.toLowerCase();
+    const answer = current.answer.toLowerCase();
+
+    if (
+        inputValue.length !== answer.length ||
+        inputValue !== answer
+    ) {
+        return;
+    }
+
+    // Wait briefly so gesture typing has time to deliver
+    // any remaining characters.
+    state.autoSubmitTimer = setTimeout(() => {
+
+        state.autoSubmitTimer = null;
+
+        // Re-check everything after the delay.
+        if (state.isComposing) return;
+        if (state.isSubmitting) return;
+        if (state.status !== 'waiting' && state.status !== 'wrong') return;
+
+        const latestInput = (state.userInput || '').toLowerCase();
+        const latestAnswer = current.answer.toLowerCase();
+
+        if (
+            latestInput.length === latestAnswer.length &&
+            latestInput === latestAnswer
+        ) {
+            submitAnswer();
+        }
+
+    }, 180);
+}
+
 
 function updateHintUI(input, current) {
 
@@ -369,14 +415,7 @@ if (state.status === 'waiting' || state.status === 'wrong') {
             state.userInput = text;
 
             // ✅ AUTOSUBMIT (ADD THIS)
-            if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
-            }
+scheduleAutoSubmit(input, current);
 
     // force clean text (no weird mobile stuff)
             if (input.textContent !== text) {
@@ -482,14 +521,7 @@ if (state.status === 'wrongFlash') {
 
             state.userInput = text;
 
-            if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
-            }
+scheduleAutoSubmit(input, current);
 
             if (input.textContent !== text) {
                 input.textContent = text;
@@ -573,7 +605,7 @@ input.addEventListener('compositionend', (ev) => {
         updateHintUI(input, current);
         setCaret(input, state.userInput.length);
 
-        setTimeout(() => submitAnswer(), 0);
+        scheduleAutoSubmit(input, current);
         return;
     }
 
@@ -644,14 +676,7 @@ if (state.inputLocked || state.isSubmitting || state.isComposing) {
             updateHintUI(input, current);
 
             // ✅ STRICT AUTOSUBMIT
-            if (
-                state.userInput.length === current.answer.length &&
-                state.userInput.toLowerCase() === current.answer.toLowerCase()
-            ) {
-                setTimeout(() => {
-                    submitAnswer();
-                }, 0);
-            }
+scheduleAutoSubmit(input, current);
 
         } else {
             state.lastTypedCorrect = false;
