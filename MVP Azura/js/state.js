@@ -6,6 +6,9 @@ export const state = {
     current: null,   // current word object
 
     userInput: '',
+// in export const state = { ... }
+inputLocked: false,   // used to temporarily block input while animations run
+isComposing: false,   // tracks IME composition state
 
     status: 'loading',
 

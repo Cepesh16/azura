@@ -421,12 +421,34 @@ export function render() {
             typedClass: 'wrong'
         });
 
-        input.classList.add('flash-wrong');
+// <-- REPLACEMENT: keep keyboard visible, but lock input handling briefly
+input.classList.add('flash-wrong');
 
-        input.contentEditable = "false";
-        input.blur();
+// temporarily prevent processing new input in onbeforeinput/oninput handler
+state.inputLocked = true;
 
-        return;
+// Wait for the animation to finish (match CSS duration ~0.25s) then switch to 'wrong'
+// we avoid blur() / contentEditable=false so mobile keyboard stays visible.
+const onAnimEnd = (e) => {
+  input.removeEventListener('animationend', onAnimEnd);
+
+  // clear lock and reset
+  state.inputLocked = false;
+  state.status = 'wrong';
+  state.userInput = '';
+  state.isSubmitting = false;
+
+  // ensure caret is visible and at start
+  input.focus();
+  setCaret(input, 0);
+
+  render();
+};
+
+input.addEventListener('animationend', onAnimEnd);
+
+// return immediately (render will update after animationend handler runs)
+return;
     }
 
     // =========================
@@ -452,6 +474,49 @@ export function render() {
 
     input.ontouchend = forceFocusAndCaret;
 
+// --- IME / composition handling (place immediately after input.ontouchend = forceFocusAndCaret;)
+input.isComposing = false; // per-input flag (helpful for debugging)
+
+input.addEventListener('compositionstart', () => {
+  // user started composing (IME on Android, iOS, some desktop IMEs)
+  state.isComposing = true;
+  input.isComposing = true;
+});
+
+input.addEventListener('compositionend', (ev) => {
+  // composition finished — final text is in ev.data
+  state.isComposing = false;
+  input.isComposing = false;
+
+  // Optionally feed composed text into your existing logic.
+  // We will simply append composed characters to state.userInput
+  // and update the hint UI. This keeps behavior consistent with onbeforeinput flow.
+  const composed = (ev.data || '').toLowerCase();
+  if (composed) {
+    // append only matching letters using the same strict logic as onbeforeinput
+    const current = state.current;
+    for (let i = 0; i < composed.length; i++) {
+      const nextIndex = state.userInput.length;
+      const expected = current.answer[nextIndex];
+      if (composed[i] === expected?.toLowerCase()) {
+        state.userInput += composed[i];
+      } else {
+        break; // stop on first mismatch
+      }
+    }
+    // update UI & caret
+    updateHintUI(input, state.current);
+    setCaret(input, state.userInput.length);
+    // If autosubmit conditions met, submit (keeps same autosubmit behavior)
+    if (
+      state.userInput.length === current.answer.length &&
+      state.userInput.toLowerCase() === current.answer.toLowerCase()
+    ) {
+      setTimeout(() => submitAnswer(), 0);
+    }
+  }
+});
+
     input.onselectstart = (e) => e.preventDefault();
     
     // ✅ mobile fix
@@ -460,6 +525,11 @@ export function render() {
 
         // 🚫 ALWAYS block native DOM changes
         e.preventDefault();
+// inside input.onbeforeinput, right after e.preventDefault():
+if (state.inputLocked || state.isSubmitting || state.isComposing) {
+  // ignore events while locked, submitting, or during IME composition
+  return;
+}
 
         // =========================
         // ✍️ typing
@@ -501,23 +571,19 @@ export function render() {
         } else {
             state.lastTypedCorrect = false;
 
-            // 🔥 FULL RESET (state + DOM + IME)
-            state.userInput = '';
+// <-- REPLACEMENT: reset typed state but KEEP keyboard open
+state.userInput = '';
+updateHintUI(input, current);
 
-            updateHintUI(input, current);
+// keep keyboard visible — move caret to start so user can try again
+input.focus();
+setCaret(input, 0);
 
-            // 🔥 force blur → kills mobile composition
-            input.blur();
-
-            setTimeout(() => {
-                input.focus();
-                setCaret(input, 0);
-            }, 0);
-
-            input.classList.add('flash-wrong-letter');
-            setTimeout(() => {
-                input.classList.remove('flash-wrong-letter');
-            }, 200);
+// short visual flash for the wrong letter
+input.classList.add('flash-wrong-letter');
+setTimeout(() => {
+    input.classList.remove('flash-wrong-letter');
+}, 200);
         }
 
         return;
