@@ -545,47 +545,61 @@ if (state.status === 'wrongFlash') {
 
     input.ontouchend = forceFocusAndCaret;
 
-// --- IME / composition handling (place immediately after input.ontouchend = forceFocusAndCaret;)
-input.isComposing = false; // per-input flag (helpful for debugging)
+// --- IME / gesture typing handling ---
+input.isComposing = false;
 
 input.addEventListener('compositionstart', () => {
-  // user started composing (IME on Android, iOS, some desktop IMEs)
-  state.isComposing = true;
-  input.isComposing = true;
+    state.isComposing = true;
+    input.isComposing = true;
 });
 
 input.addEventListener('compositionend', (ev) => {
-  // composition finished — final text is in ev.data
-  state.isComposing = false;
-  input.isComposing = false;
+    state.isComposing = false;
+    input.isComposing = false;
 
-  // Optionally feed composed text into your existing logic.
-  // We will simply append composed characters to state.userInput
-  // and update the hint UI. This keeps behavior consistent with onbeforeinput flow.
-  const composed = (ev.data || '').toLowerCase();
-  if (composed) {
-    // append only matching letters using the same strict logic as onbeforeinput
+    const composed = (ev.data || '').toLowerCase().trim();
+
+    if (!composed) return;
+
     const current = state.current;
-    for (let i = 0; i < composed.length; i++) {
-      const nextIndex = state.userInput.length;
-      const expected = current.answer[nextIndex];
-      if (composed[i] === expected?.toLowerCase()) {
-        state.userInput += composed[i];
-      } else {
-        break; // stop on first mismatch
-      }
+    const answer = current.answer.toLowerCase();
+
+    // Gesture typing must match the COMPLETE answer.
+    // Never accept a valid prefix of a longer word.
+    if (composed === answer) {
+        state.userInput = answer;
+        state.lastTypedCorrect = true;
+
+        updateHintUI(input, current);
+        setCaret(input, state.userInput.length);
+
+        setTimeout(() => submitAnswer(), 0);
+        return;
     }
-    // update UI & caret
-    updateHintUI(input, state.current);
-    setCaret(input, state.userInput.length);
-    // If autosubmit conditions met, submit (keeps same autosubmit behavior)
-    if (
-      state.userInput.length === current.answer.length &&
-      state.userInput.toLowerCase() === current.answer.toLowerCase()
-    ) {
-      setTimeout(() => submitAnswer(), 0);
-    }
-  }
+
+    // Wrong gesture result.
+    state.lastTypedCorrect = false;
+
+    // Keep the typed result visible briefly.
+    state.userInput = composed;
+
+    renderOverlay(input, {
+        hintHTML: `<span style="visibility:hidden">${composed}</span>`,
+        typed: composed,
+        typedClass: 'wrong'
+    });
+
+    input.classList.add('flash-wrong-letter');
+
+    setTimeout(() => {
+        input.classList.remove('flash-wrong-letter');
+
+        state.userInput = '';
+
+        updateHintUI(input, current);
+        input.focus();
+        setCaret(input, 0);
+    }, 200);
 });
 
     input.onselectstart = (e) => e.preventDefault();
