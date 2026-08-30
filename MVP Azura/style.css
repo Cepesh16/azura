@@ -656,13 +656,69 @@ States
 }
 
 
+/* =========================
+Gap
+========================= */
+
+.gap-wrapper {
+    display: inline-flex;
+    line-height: 1.2;
+}
+
+.gap-wrapper > span:empty::before {
+    content: attr(data-placeholder);
+    color: var(--bg-overlay);
+    font-style: italic;
+    cursor: text;
+}
+
+.gap-wrapper > span:focus::before {
+    content: "";
+}
+
+.gap {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    min-width: 6ch;
+    box-sizing: border-box;
+    padding: 0 4px;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--text-secondary);
+    outline: none;
+    overflow: visible;
+}
+
+
+/* =========================
+Gap Overlay
+========================= */
+
 .overlay {
     position: relative;
     display: inline-block;
+    line-height: inherit;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.overlay-sizer {
+    display: inline-block;
+    visibility: hidden;
+    white-space: pre;
+    line-height: inherit;
 }
 
 .overlay .hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+    line-height: inherit;
     color: var(--hint);
+    pointer-events: none;
 }
 
 .overlay .typed {
@@ -670,8 +726,9 @@ States
     left: 0;
     top: 0;
     white-space: pre;
+    line-height: inherit;
+    pointer-events: none;
 }
-
 
 
 

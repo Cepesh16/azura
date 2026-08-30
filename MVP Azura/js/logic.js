@@ -93,10 +93,12 @@ if (state.autoSubmitTimer) {
     // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
     state.current = state.sentences[state.queue[state.queueIndex]];
 
-    state.userInput = '';
-    state.status = 'waiting';
-    state.answeredWithHint = false;
-    state.isSubmitting = false;
+state.userInput = '';
+state.status = 'waiting';
+state.answeredWithHint = false;
+state.isSubmitting = false;
+state.answerComplete = false;
+state.inputLocked = false;
 
     render();
 
@@ -270,10 +272,12 @@ if (state.autoSubmitTimer) {
     // set first word
     state.current = state.sentences[state.queue[0]] || null;
 
-    state.userInput = '';
-    state.status = 'waiting';
-    state.answeredWithHint = false;
-    state.isSubmitting = false;
+state.userInput = '';
+state.status = 'waiting';
+state.answeredWithHint = false;
+state.isSubmitting = false;
+state.answerComplete = false;
+state.inputLocked = false;
 
 
     const summary = document.getElementById('session-state');

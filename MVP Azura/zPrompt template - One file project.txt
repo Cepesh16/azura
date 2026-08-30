@@ -1,9 +1,34 @@
+My project structure 
+root files: index.html, style.css.
+folder assets: - folder icons (sprite.svg), folder json (vocabulary.json). folder sounds.
+folder js: anim.js, api.js, app.js, logic.js, options.js, sound.js, speech.js, state.js, ui.js.
+
+
+Here is the list of all files:
+   1. index.html
+   2. style.css
+   3. vocabulary.json
+   4. options.js
+   5. sound.js
+   6. speech.js
+   7. state.js
+   8. ui.js
+   9. anim.js
+   10. api.js
+   11. app.js
+   12. logic.js
+
+
+
+Make one file out of the files I will provide to you. I will provide you in two steps, so don't do anything after this first prompt, wait until the second. This one file will be used for chatpgt, and make the entire file as plain text (make sure to put doctype from index file, because often AI ignored it because of markdown or editor, and make sure all files are being provided fully). The first file will be index, and the second one is style, the rest file will go from the bigger to the smaller, only exception is the vocabulary it will be the last. Here is the structure of the beginning of the file:
+
+
 [SYSTEM INSTRUCTION FOR CHATGPT]
-The code block below contains multiple files from a single project combined into one document. 
+The code block below contains multiple files from a single project combined into one document. 
 Each file is explicitly separated by a comment header in the following format:
 /* ==========================================
-   FILE: path/to/filename.ext
-   ========================================== */
+   FILE: path/to/filename.ext
+   ========================================== */
 
 Please process these as individual files within the same project directory structure. Do not treat this as a single merged script or style file.
 
