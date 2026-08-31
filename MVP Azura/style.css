@@ -473,6 +473,8 @@ Learning Area
 
     #sentence {
         margin-bottom: var(--space-lg);
+        padding-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--progress-bg);
         font-size: var(--font-xl);
         line-height: 1.5;
     }
@@ -525,6 +527,8 @@ Translation Row
     justify-content: center;
     align-items: center;
 }
+
+
 
     #translation-group {
         display: flex;
