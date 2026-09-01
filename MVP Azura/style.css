@@ -93,6 +93,8 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
     margin: 0;
     margin-top: clamp(100px, 10vh, 100px);
     background: var(--bg-main);
@@ -126,10 +128,15 @@ button {
         transform: scale(0.96);
     }
 
+    .icon-wrapper {
+        display: flex;
+        align-items: center;
+    }
     .icon-wrapper svg {
         width: var(--font-lg);
         height: var(--font-lg);
         color: var(--text-muted);
+        transition: transform var(--transition-fast);
     }
 
 select {
@@ -242,7 +249,7 @@ Main App
                 }
 
                 .toggle-box svg {
-                    transition: var(--transition-fast);
+                    /*transition: var(--transition-fast);*/
                 }
                 .toggle-box:hover .icon-wrapper svg {
                     transform: scale(1.1) translateY(-1px);
@@ -263,7 +270,7 @@ Main App
                         inset: 0;
                         background-color: var(--toggle-bg-off);
                         border-radius: var(--toggle-height);
-                        transition: var(--transition-fast);
+                        transition: none; /* No transition on page load */
                     }
 
                         .slider:before {
@@ -276,6 +283,13 @@ Main App
                             top: var(--toggle-padding);
                             background: var(--toggle-knob-off);
                             border-radius: 50%;
+                            transition: none; /* No transition on page load */
+                        }
+                        /* FIX THE FAST CLICK: Apply the transition whenever the user HOVERS or FOCUSES the switch area */
+                        .toggle-box:hover .slider,
+                        .toggle-box:focus-within .slider,
+                        .toggle-box:hover .slider:before,
+                        .toggle-box:focus-within .slider:before {
                             transition: var(--transition-fast);
                         }
 
@@ -295,6 +309,7 @@ Main App
                         transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
                         background: var(--toggle-knob-on);
                     }
+
 
 
 
@@ -340,7 +355,11 @@ Top Navigation
 #theme-toggle:checked,
 body:has(#theme-toggle:checked) .shape-moon   { display: block;  }
 body:has(#theme-toggle:checked) .shape-sun    { display: none; }
-body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }
+/*body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }*/
+/* Only trigger rotation if the body contains a checked toggle AND the user is interacting with it */
+body:has(#theme-toggle:checked):has(#theme-toggle:focus-within) .theme-icon-wrap { 
+  transform: rotate(360deg); 
+}
 
 /* Default sound: Show waves, hide mute slash */
 .mute-lines  { display: block;  }
@@ -350,8 +369,10 @@ body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }
 #sound-toggle:checked,
 body:has(#sound-toggle:checked) .sound-wave { display: block;  }
 body:has(#sound-toggle:checked) .mute-lines  { display: none; }
-body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
-
+/*body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }*/
+body:has(#sound-toggle:checked):has(#sound-toggle:focus-within) .sound-icon-wrap { 
+  transform: rotate(360deg); 
+}
 
 
 
@@ -502,14 +523,10 @@ Gap
 
     .gap {
         text-align: center;
-        min-width: 6ch;
+        padding: 0 var(--space-xs);
 
         color: var(--text-secondary);
-        /*background: var(--bg-main);*/
         border-bottom: 1px solid var(--text-secondary);
-        /*border: 1px solid var(--text-secondary);*/
-        /*border-radius: var(--radius-sm);*/
-        /*outline: 1px solid var(--text-secondary);*/
         outline: none;
     }
 
@@ -517,6 +534,47 @@ Gap
             line-height: inherit;
             white-space: pre;
         }
+
+/* =========================
+Gap Overlay
+========================= */
+
+.overlay {
+    position: relative;
+    display: inline-block;
+    line-height: inherit;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.overlay-sizer {
+    display: inline-block;
+    visibility: hidden;
+    white-space: pre;
+    line-height: inherit;
+}
+
+.overlay .hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+    line-height: inherit;
+    color: var(--hint);
+    pointer-events: none;
+}
+
+.overlay .typed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+    line-height: inherit;
+    pointer-events: none;
+}
+
+
+
 
 /* =========================
 Translation Row
@@ -552,6 +610,12 @@ Translation Row
                 content: '#';
                 font-size: var(--font-md);
             }
+
+        .icon-hint:hover {
+            cursor: pointer;
+            transform: scale(1.1) translateY(-1px);
+        }
+
 
 /* =========================
 Level Indicator
@@ -657,80 +721,6 @@ States
 @keyframes wrongFlash {
     0% { background: rgba(231, 76, 60, 0.2); }
     100% { background: transparent; }
-}
-
-
-/* =========================
-Gap
-========================= */
-
-.gap-wrapper {
-    display: inline-flex;
-    line-height: 1.2;
-}
-
-.gap-wrapper > span:empty::before {
-    content: attr(data-placeholder);
-    color: var(--bg-overlay);
-    font-style: italic;
-    cursor: text;
-}
-
-.gap-wrapper > span:focus::before {
-    content: "";
-}
-
-.gap {
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    padding: 0 var(--space-xs);
-    box-sizing: border-box;
-    text-align: center;
-    line-height: 1.2;
-    color: var(--text-secondary);
-    border-bottom: 1px solid var(--text-secondary);
-    outline: none;
-    overflow: visible;
-}
-
-
-/* =========================
-Gap Overlay
-========================= */
-
-.overlay {
-    position: relative;
-    display: inline-block;
-    line-height: inherit;
-    white-space: nowrap;
-    pointer-events: none;
-}
-
-.overlay-sizer {
-    display: inline-block;
-    visibility: hidden;
-    white-space: pre;
-    line-height: inherit;
-}
-
-.overlay .hint {
-    position: absolute;
-    left: 0;
-    top: 0;
-    white-space: pre;
-    line-height: inherit;
-    color: var(--hint);
-    pointer-events: none;
-}
-
-.overlay .typed {
-    position: absolute;
-    left: 0;
-    top: 0;
-    white-space: pre;
-    line-height: inherit;
-    pointer-events: none;
 }
 
 
@@ -938,23 +928,23 @@ Session summary
    ==============================*/
 
 .icon-grid {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 16px;
-    padding: 20px;
+    /*gap: 16px;*/
+    /*padding: 20px;*/
     font-family: system-ui, sans-serif;
 }
 .icon-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px;
-    border: 1px solid #e2e8f0;
+    padding: var(--space-xs);
+    /*border: 1px solid #e2e8f0;*/
     border-radius: 8px;
 }
 .icon-card svg {
-    width: 32px;
-    height: 32px;
+    width: var(--font-xl);
+    height: var(--font-xl);
     color: #0284c7;
 }
 .icon-card span {

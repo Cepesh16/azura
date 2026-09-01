@@ -7,12 +7,21 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<script>
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+</script>
     <title>English Trainer</title>
     <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 <body>
 
-<!-- <div class="icon-grid">
+
+    
+<!-- 
+<div class="icon-grid">
     
   <div class="icon-card">
     <svg><use href="assets/icons/sprite.svg#icon-book"></use></svg>
@@ -59,9 +68,15 @@
     <span>Stats</span>
   </div>
 
-</div> -->
 
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-hint"></use></svg>
+    <span>Hint</span>
+  </div>
 
+</div>
+
+ -->
 
 
 
@@ -90,9 +105,9 @@
 
             <div class="toggle-row">
                 <div class="toggle-box">
-                    <label for="theme-toggle">
+                    <label class="icon-wrapper theme-icon-wrap" for="theme-toggle">
                         <!-- Theme SVG Wrapper for Animation -->
-                        <span class="icon-wrapper theme-icon-wrap">
+                        <span class="">
                             <!-- Sun Icon (Light Mode) -->
                             <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
                             <!-- Moon Icon (Dark Mode) -->

@@ -72,4 +72,21 @@
     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
   </symbol>
 
+  <!-- 12. Hint / Question Icon -->
+  <symbol id="icon-hint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2.5" />
+  </symbol>
+
+<!-- 12. Hint / Bulb Circle Icon (Glowing) -->
+<symbol id="icon-hint-bulb-glow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 8a2.5 2.5 0 0 0-2.5 2.5c0 1 .5 1.5 1 2V14h3v-1.5c.5-.5 1-1 1-2A2.5 2.5 0 0 0 12 8z" />
+  <path d="M11 16h2" />
+  <path d="M12 5v1M7 10h1M16 10h1M8.5 6.5l.7.7M15.5 6.5l-.7.7" />
+</symbol>
+
+
+
   </svg>
