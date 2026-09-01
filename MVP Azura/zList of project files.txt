@@ -1,0 +1,4795 @@
+I want you to help me with developing app. Just look at my project, and then I will ask you to do something.
+
+
+==================================================
+English trainer app
+==================================================
+
+This app is an interactive English vocabulary trainer designed for sentence-based learning:
+
+Gap-Fill Exercises: Displays sentences with missing target words for users to type in.
+
+Instant Feedback & Hints: Evaluates answers in real time, provides spelling hints, and highlights errors.
+
+Audio & Pronunciation: Plays voice audio for target words to aid listening comprehension.
+
+Progress Tracking: Tracks memory levels, correct/wrong counts, and session accuracy, saving progress locally.
+
+==================================================
+Project Structure
+==================================================
+1. index.html:
+2. style.css:
+3. assets/json/vocabulary.json:
+4. js/state.js:
+5. js/api.js:
+6. js/audio.js
+7. js/speech.js
+8. js/animations.js
+9. js/ui.js
+10. js/options.js
+11. js/game.js
+12. app.js
+
+
+
+==================================================
+Files
+==================================================
+
+
+1. index.html:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="app-version" content="2026-08-06-1.3">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>English Trainer</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+</head>
+<body>
+
+<!-- <div class="icon-grid">
+    
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-book"></use></svg>
+    <span>Book</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
+    <span>Streak</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
+    <span>Completed</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-flashcards"></use></svg>
+    <span>Flashcards</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-audio"></use></svg>
+    <span>Audio</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-grammar"></use></svg>
+    <span>Grammar</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
+    <span>Favorites</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+    <span>Target</span>
+  </div>
+
+  <div class="icon-card">
+    <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+    <span>Stats</span>
+  </div>
+
+</div> -->
+
+
+
+
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <div id="loading-text">Loading your words...</div>
+    </div>
+
+ 
+
+    <div id="app" style="display: none;">
+        
+        <header id="option-row">
+
+            <div class="stats-row">
+                
+                    <div class="counter-box">
+                        <span class="icon-wrapper">
+                            <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                        </span>
+                        <div id="total-completed-counter"></div>
+                    </div>
+                    <div id="level-indicator"></div>
+
+            </div>
+
+            <div class="toggle-row">
+                <div class="toggle-box">
+                    <label for="theme-toggle">
+                        <!-- Theme SVG Wrapper for Animation -->
+                        <span class="icon-wrapper theme-icon-wrap">
+                            <!-- Sun Icon (Light Mode) -->
+                            <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                            <!-- Moon Icon (Dark Mode) -->
+                            <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
+                        </span>
+                    </label>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-box">
+                    <label for="sound-toggle">
+                        <!-- Sound SVG Wrapper for Animation -->
+                        <span class="icon-wrapper sound-icon-wrap">
+                            <svg class="icon-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
+                                <!-- Regular sound waves -->
+                                <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                                <!-- Mute diagonal line (hidden by default) -->
+                                <g class="mute-lines">
+                                    <line x1="22" y1="9" x2="16" y2="15"></line>
+                                    <line x1="16" y1="9" x2="22" y2="15"></line>
+                                </g>
+                            </svg>
+                        </span>
+                    </label>
+                    <label class="switch">
+                        <input type="checkbox" id="sound-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>   
+
+                        
+
+
+
+
+            <!-- <button id="options-btn">Options</button> -->
+
+        </header>   
+
+        <div id="progress-row">
+
+            <div id="progress-bar"></div>
+
+            <div id="progress-counter"></div>
+        </div>
+
+        <main id="container">
+
+
+
+            <div id="content">
+
+                <div id="card">
+            
+                    <div id="session-state" class="session-state fade-hidden"></div>
+
+                    <div id="sentence-area">
+                        <div id="sentence"></div>
+                        <div id="translation-row">
+                            <div id="translation-group">
+                                <div id="translation"></div>
+                                <div id="part-of-speech"></div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        
+        <div id="helper"></div>
+
+    </div>
+
+
+
+
+<!--     <div id="options-modal" style="display:none;">
+        <div class="options-card">
+
+            <h3 class="options-title">Settings</h3>
+
+            <div class="setting-row">
+                <label for="theme-toggle">Dark mode</label>
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-row">
+                <label for="sound-toggle">Sound</label>
+                <label class="switch">
+                    <input type="checkbox" id="sound-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="setting-row">
+                <label for="session-select">Words per session</label>
+                <select id="session-select">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+
+
+
+            <div id="settings-message"></div>
+            <button id="save-options">Save</button>
+
+        </div>
+    </div> -->
+
+
+<!-- <script type="module" src="./js/app.js"></script> -->
+<link rel="stylesheet" href="./style.css?v=1.3">
+
+<script type="module" src="./js/app.js?v=1.3"></script>
+
+
+</body>
+</html>
+
+
+2. style.css:
+/* =========================
+🎨 THEME VARIABLES
+========================= */
+
+:root {
+    /* BACKGROUND */
+    --bg-main: #f5f7fa;
+    /*--bg-main: rgba(172, 225, 175, 0.6);*/
+    --bg-card: rgba(255, 255, 255, 1);
+    --bg-overlay: rgba(0, 0, 0, 0.25);
+
+    /* TEXT */
+    --text-main: #0f172a;
+    --text-secondary: #d97706;
+    /*--text-muted: #64748b;*/
+    --text-muted: #8390a2;
+
+    /* BORDERS */
+    --border-light: #cbd5e1;
+    --border-default: #aaa;
+
+    /* UI COLORS */
+    --accent: #48bb78;
+    --progress-bg: #e2e8f0;
+    --button-hover: #f5f5f5;
+
+    /* TOGGLE */
+    --toggle-bg-off: #ccc;
+    --toggle-bg-on: rgba(217, 119, 6, 0.85);
+    --toggle-knob-off: #ffffff;
+    --toggle-knob-on: #ffffff;
+
+    /* STATES */
+    --correct: #03C03C;
+    --wrong: rgba(255, 0, 0, 0.5);
+    --check: var(--text-secondary);
+
+    /* HINT */
+    --hint: rgba(0, 0, 0, 0.3);
+
+    /* LEVEL COLORS */
+    --level-low: #e57373;
+    --level-mid: #ffb74d;
+    --level-high: #81c784;
+    --level-empty: #ccc;
+
+    /* SHADOWS */
+    --shadow-soft: 0 4px 18px #e2e8f0;
+    /*--shadow-soft: 0 4px 18px var(--bg-main);*/
+    --shadow-strong: 0 10px 30px rgba(0,0,0,0.12);
+
+    /* SIZES */
+    --radius: 12px;
+    --radius-sm: 8px;
+
+    /* FONT */
+    --font-xl: 24px;
+    --font-lg: 20px;
+    --font-md: 16px;
+    --font-sm: 14px;
+    --font-xs: 12px;
+
+    /* SPACING */
+    --space-xs: 6px;
+    --space-sm: 10px;
+    --space-md: 16px;
+    --space-lg: 28px;
+    --space-xl: 42px;
+
+    /* TOGGLE SIZE */
+    --toggle-width: calc(var(--toggle-height) * 1.8);
+    --toggle-height: 16px; /* only change height */
+    --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
+    --toggle-padding: calc(var(--toggle-height) * 0.12);
+
+    /* TRANSITIONS */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-long: 0.5s ease;
+    --transition-test: 2s ease;
+
+
+}
+
+
+
+/* =========================
+Global
+========================= */
+
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    margin-top: clamp(100px, 10vh, 100px);
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+button {
+    padding: var(--space-xs) var(--space-xl);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+    button:hover,
+    #options-btn:hover,
+    #save-options:hover {
+        transform: translateY(-1px);
+        background: var(--button-hover);
+        color: var(--text-main);
+    }
+
+    button:focus {
+      outline: 3px solid var(--text-secondary); /* Changes the outer ring color */
+    }
+
+    button:active {
+        transform: scale(0.96);
+    }
+
+    .icon-wrapper svg {
+        width: var(--font-lg);
+        height: var(--font-lg);
+        color: var(--text-muted);
+    }
+
+select {
+    cursor: pointer;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* =========================
+Loading
+========================= */
+
+#loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    font-size: var(--font-xl);
+}
+    #loading-text {
+        font-size: var(--font-xl);
+        color: var(--accent);
+    }
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--bg-card);
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1.25s linear infinite;
+    margin-bottom: var(--space-lg);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+
+/* =========================
+Main App
+========================= */
+
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: min(560px, 95%);
+
+    opacity: 0;
+
+    transform: translateY(8px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+#app.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+    #container {
+        /*width: min(500px, 90vw);*/
+        margin-bottom: var(--space-lg);
+        padding: var(--space-xl) var(--space-lg);
+        box-shadow: var(--shadow-soft);
+        background: var(--bg-card);
+        border-radius: var(--radius);  
+        overflow: hidden;
+        text-align: center;
+    }
+
+
+    #option-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-lg);
+        padding: 0 var(--space-lg);
+        font-size: var(--font-sm);
+    }
+
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+            .toggle-box {
+                display: flex;
+                align-items: center;
+                gap: var(--space-xs);
+            }
+                .toggle-box label {
+    /*                display: inline-flex;
+                    align-items: center;
+                    gap: 4px;*/
+                    cursor: pointer;
+                }
+
+                .toggle-box .icon-wrapper {
+                    display: flex;
+                    align-items: center;
+                    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .toggle-box svg {
+                    transition: var(--transition-fast);
+                }
+                .toggle-box:hover .icon-wrapper svg {
+                    transform: scale(1.1) translateY(-1px);
+                }
+
+                /* Toggle */
+
+                .switch {
+                    display: inline-block;
+                    position: relative;
+                    width: var(--toggle-width);
+                    height: var(--toggle-height);
+                }
+
+
+                    .slider {
+                        position: absolute;
+                        inset: 0;
+                        background-color: var(--toggle-bg-off);
+                        border-radius: var(--toggle-height);
+                        transition: var(--transition-fast);
+                    }
+
+                        .slider:before {
+                            content: "";
+                            position: absolute;
+                            height: var(--toggle-knob-size);
+                            width: var(--toggle-knob-size);
+
+                            left: var(--toggle-padding);
+                            top: var(--toggle-padding);
+                            background: var(--toggle-knob-off);
+                            border-radius: 50%;
+                            transition: var(--transition-fast);
+                        }
+
+                    .switch input {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                        position: absolute;
+                    }
+
+                    .switch input:checked + .slider {
+                        background-color: var(--toggle-bg-on);
+                    }
+
+                    .switch input:checked + .slider:before {
+                        /* MATH FIX: Automatically calculates exactly how far to slide */
+                        transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
+                        background: var(--toggle-knob-on);
+                    }
+
+
+
+
+/* =========================
+Top Navigation
+========================= */
+
+
+#content {
+
+}
+
+
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+    .counter-box {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+    }
+            .icon-counter {
+
+            }
+
+            #total-completed-counter {
+                color: var(--text-secondary);
+            }
+
+
+
+/* --- Default States (Light Mode / Sound On) --- */
+/* Default theme: Show moon, hide sun */
+.shape-sun  { display: block;  }
+.shape-moon { display: none; }
+
+/* --- Checked States (Triggered by the inputs) --- */
+/* When theme checkbox is active: hide moon, show sun */
+#theme-toggle:checked,
+body:has(#theme-toggle:checked) .shape-moon   { display: block;  }
+body:has(#theme-toggle:checked) .shape-sun    { display: none; }
+body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }
+
+/* Default sound: Show waves, hide mute slash */
+.mute-lines  { display: block;  }
+.sound-wave { display: none; }
+
+/* When sound checkbox is active: MUTE (hide waves, show slash) */
+#sound-toggle:checked,
+body:has(#sound-toggle:checked) .sound-wave { display: block;  }
+body:has(#sound-toggle:checked) .mute-lines  { display: none; }
+body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }
+
+
+
+
+
+
+
+#progress-row {
+    min-height: var(--space-sm); /* the same height as content to stabilize container*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+    padding: 0px var(--space-lg);
+}
+
+#progress-bar {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    width: fit-content;   /* 👈 prevents stretching forever */
+}
+
+    .progress-segment {
+        height: var(--space-xs);
+        flex: 1;
+        background: var(--progress-bg);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+    }
+
+        .progress-segment::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-long);
+        }
+
+        .progress-segment.filled::after {
+            transform: scaleX(1);
+        }
+
+
+
+    #progress-counter {
+        font-size: var(--font-sm);
+        color: var(--text-secondary);
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+
+/* =========================
+Options Modal
+========================= */
+/*
+#options-modal {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-overlay);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.options-card {
+    text-align: center;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    width: 280px;
+    box-shadow: var(--shadow-strong);
+    transform: translateY(10px);
+    opacity: 0;
+    animation: modalFadeIn var(--transition-fast) forwards;
+}
+
+@keyframes modalFadeIn {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.options-title {
+    margin-top: 0;
+    font-size: var(--font-md);
+    font-weight: 600;
+    text-align: center;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-sm);
+}
+
+#session-select {
+    padding: 4px 6px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light);
+}
+*/
+
+
+/* =========================
+Learning Area
+========================= */
+
+#card {
+    /*margin-bottom: var(--space-lg);*/
+}
+
+    #sentence {
+        margin-bottom: var(--space-lg);
+        padding-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--progress-bg);
+        font-size: var(--font-xl);
+        line-height: 1.5;
+    }
+
+
+/* =========================
+Gap
+========================= */
+.gap-wrapper {
+    display: inline-flex;
+    line-height: 1.2;
+}
+
+    /*placeholder*/
+    .gap-wrapper > span:empty::before {
+        content: attr(data-placeholder);
+        color: var(--bg-overlay);
+        font-style: italic;
+        cursor: text;
+    }
+
+    .gap-wrapper > span:focus::before {
+        content: "";
+    }
+
+    .gap {
+        text-align: center;
+        min-width: 6ch;
+
+        color: var(--text-secondary);
+        /*background: var(--bg-main);*/
+        border-bottom: 1px solid var(--text-secondary);
+        /*border: 1px solid var(--text-secondary);*/
+        /*border-radius: var(--radius-sm);*/
+        /*outline: 1px solid var(--text-secondary);*/
+        outline: none;
+    }
+
+        .gap span {
+            line-height: inherit;
+            white-space: pre;
+        }
+
+/* =========================
+Translation Row
+========================= */
+
+#translation-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+    #translation-group {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+    }
+
+        #translation {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+        }
+
+
+        #part-of-speech {
+            padding-top: 2px;
+            font-size: var(--font-md);
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+            #part-of-speech::before {
+                content: '#';
+                font-size: var(--font-md);
+            }
+
+/* =========================
+Level Indicator
+========================= */
+
+#level-indicator {
+    /*margin-bottom: var(--space-lg);*/
+}
+
+    .level-dots {
+        display: flex;
+        gap: 4px;
+        justify-content: center;
+    }
+
+        .level-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--level-empty);
+        }
+
+        .level-dot.level-0,
+        .level-dot.level-1 { background: var(--level-low); }
+
+        .level-dot.level-2,
+        .level-dot.level-3 { background: var(--level-mid); }
+
+        .level-dot.level-4,
+        .level-dot.level-5 { background: var(--level-high); }
+
+/* =========================
+Helper
+========================= */
+
+#helper {
+    font-size: var(--font-sm);
+    color: var(--text-muted);
+    text-align: center;
+    min-height: 18px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+#helper.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+States
+========================= */
+
+.gap.correct {
+    border-bottom-color: var(--correct);
+    border-color: var(--correct);
+    color: var(--correct);
+    caret-color: transparent;
+}
+
+.gap.flash-wrong {
+    color: var(--wrong);
+    border-color: var(--wrong);
+    animation: wrongShake 0.25s ease;
+}
+
+@keyframes wrongShake {
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-3px); }
+}
+
+.gap.correct-pop {
+    animation: correctPop 0.22s ease;
+}
+
+@keyframes correctPop {
+    50% { transform: scale(1.08); }
+}
+
+.hint {
+    color: var(--hint);
+    opacity: 1;
+}
+
+.typed {
+    color: var(--check);
+}
+
+.typed.correct {
+    color: var(--check);
+}
+
+.typed.wrong {
+    color: var(--wrong);
+}
+
+.flash-wrong-letter {
+    animation: wrongFlash 0.2s;
+}
+
+@keyframes wrongFlash {
+    0% { background: rgba(231, 76, 60, 0.2); }
+    100% { background: transparent; }
+}
+
+
+/* =========================
+Gap
+========================= */
+
+.gap-wrapper {
+    display: inline-flex;
+    line-height: 1.2;
+}
+
+.gap-wrapper > span:empty::before {
+    content: attr(data-placeholder);
+    color: var(--bg-overlay);
+    font-style: italic;
+    cursor: text;
+}
+
+.gap-wrapper > span:focus::before {
+    content: "";
+}
+
+.gap {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    min-width: 6ch;
+    box-sizing: border-box;
+    padding: 0 4px;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--text-secondary);
+    outline: none;
+    overflow: visible;
+}
+
+
+/* =========================
+Gap Overlay
+========================= */
+
+.overlay {
+    position: relative;
+    display: inline-block;
+    line-height: inherit;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.overlay-sizer {
+    display: inline-block;
+    visibility: hidden;
+    white-space: pre;
+    line-height: inherit;
+}
+
+.overlay .hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+    line-height: inherit;
+    color: var(--hint);
+    pointer-events: none;
+}
+
+.overlay .typed {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: pre;
+    line-height: inherit;
+    pointer-events: none;
+}
+
+
+
+#sentence {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================
+Session summary
+========================= */
+
+.session-state {
+
+}
+
+    .session-state__title {
+        font-size: var(--font-xl);
+        margin-bottom: var(--space-lg);
+    }
+
+    .session-state__stats {
+        margin-bottom: var(--space-lg);
+    }
+
+    .session-state__stat {
+        font-size: 15px;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-xs);
+    }
+
+    .session-state__actions {
+
+    }
+
+
+
+/* =========================
+ ANIMATION 
+========================= */
+#sentence-area,
+#session-state,
+#progress-row {
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+}
+
+.fade-hidden {
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+}
+
+.fade-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+
+
+/*Mobile*/
+
+@media (max-width: 480px) {
+    body {
+        margin-top: var(--space-lg);
+    }
+    #option-row,
+    #progress-row {
+        /*margin-bottom: var(--space-sm);*/
+        /*margin-bottom: var(--space-lg);*/
+        /*padding: 0 var(--space-md);*/
+        /*padding: 0;*/
+    }
+
+    #option-row {
+       padding: 0 var(--space-md);
+    }
+
+    #progress-row {
+       padding: 0 var(--space-xl);
+    }
+
+
+    #container {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    #card {
+    }
+
+    #sentence {
+        font-size: var(--font-lg);
+    }
+
+    .gap {
+        min-width: 4ch;
+    }
+
+    #translation-row {
+
+    }
+
+    #helper {
+
+    }
+
+    button {
+        padding: var(--space-sm) var(--space-lg);
+    }
+}
+
+
+
+
+
+
+/* =========================
+   Dark theme (data-theme="dark")
+   ========================= */
+
+[data-theme="dark"] {
+    --bg-main: #0b1116;
+    --bg-card: #0f1620;
+    --bg-overlay: rgba(0, 0, 0, 0.6);
+
+    --text-main: #e6eef6;
+    --text-secondary: #F4C430;
+    /*--text-muted: #9fb0be;*/
+    --text-muted: #68747f;
+
+    --border-light: #1f2a33;
+    --border-default: #23303b;
+
+    --accent: #7bd389;
+    --progress-bg: rgba(255,255,255,0.04);
+    --button-hover: rgba(244, 196, 48, 0.5);
+
+    --toggle-bg-off: #2a3942;
+    --toggle-bg-on: #10b981;
+    --toggle-bg-on: rgba(244, 196, 48, 0.7);
+    --toggle-knob-off: #ffffff;
+    --toggle-knob-on: #ffffff;
+
+    --correct: #4ade80; /* green bright */
+    --wrong: rgba(255, 99, 99, 0.6);
+    --check: var(--text-secondary);
+
+    --hint: rgba(255,255,255,0.18);
+
+    --level-low: #ff8a8a;
+    --level-mid: #ffb86b;
+    --level-high: #7bd389;
+    --level-empty: #68747f;
+
+    --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
+    --shadow-strong: 0 12px 36px rgba(0,0,0,0.7);
+
+
+}
+
+/* small tweaks so switches & spinner look good on dark */
+[data-theme="dark"] .spinner {
+    border: 4px solid var(--bg-card);
+    border-top: 4px solid var(--accent);
+}
+
+[data-theme="dark"] button {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-light);
+    /*border-color: var(--button-hover);*/
+}
+
+[data-theme="dark"] .options-card {
+    background: var(--bg-card);
+    color: var(--text-main);
+}
+
+
+/*placeholder*/
+[data-theme="dark"] .gap-wrapper > span:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-muted);
+    font-style: italic;
+    cursor: text;
+}
+/*placeholder empty on focus*/
+[data-theme="dark"] .gap-wrapper > span:focus::before {
+    content: "";
+}
+
+/* keep overlay hint contrast */
+[data-theme="dark"] .hint { color: rgba(255,255,255,0.18); }
+[data-theme="dark"] .typed { color: var(--text-secondary); }
+[data-theme="dark"] .typed.wrong { color: var(--wrong); }
+
+
+
+
+
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    padding: 20px;
+    font-family: system-ui, sans-serif;
+}
+.icon-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+.icon-card svg {
+    width: 32px;
+    height: 32px;
+    color: #0284c7;
+}
+.icon-card span {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #334155;
+}
+
+
+3. assets/json/vocabulary.json:
+[
+  {
+    "id": "1",
+    "sentence": "She drinks a glass of water every morning.",
+    "answer": "water",
+    "partOfSpeech": "noun",
+    "translation": "вода",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "2",
+    "sentence": "I always walk to school in the morning.",
+    "answer": "walk",
+    "partOfSpeech": "verb",
+    "translation": "ходить пешком, гулять",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "3",
+    "sentence": "The sun is very bright today.",
+    "answer": "bright",
+    "partOfSpeech": "adjective",
+    "translation": "яркий",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "4",
+    "sentence": "He drives his car slowly through town.",
+    "answer": "slowly",
+    "partOfSpeech": "adverb",
+    "translation": "медленно",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "5",
+    "sentence": "We stayed inside because it was raining.",
+    "answer": "because",
+    "partOfSpeech": "conjunction",
+    "translation": "потому что",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "6",
+    "sentence": "Put the keys on the dining table.",
+    "answer": "on",
+    "partOfSpeech": "preposition",
+    "translation": "на",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "7",
+    "sentence": "She likes to read books before sleep.",
+    "answer": "she",
+    "partOfSpeech": "pronoun",
+    "translation": "она",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "8",
+    "sentence": "The small cat is sleeping on the couch.",
+    "answer": "cat",
+    "partOfSpeech": "noun",
+    "translation": "кот, кошка",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "9",
+    "sentence": "Please open the window to let fresh air in.",
+    "answer": "open",
+    "partOfSpeech": "verb",
+    "translation": "открывать",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "10",
+    "sentence": "He bought a new jacket for the winter.",
+    "answer": "new",
+    "partOfSpeech": "adjective",
+    "translation": "новый",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "11",
+    "sentence": "She speaks English well after studying.",
+    "answer": "well",
+    "partOfSpeech": "adverb",
+    "translation": "хорошо",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "12",
+    "sentence": "I will call you after I finish my work.",
+    "answer": "after",
+    "partOfSpeech": "preposition",
+    "translation": "после",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "13",
+    "sentence": "They bought a house and moved in quickly.",
+    "answer": "and",
+    "partOfSpeech": "conjunction",
+    "translation": "и",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "14",
+    "sentence": "They are planning a trip together.",
+    "answer": "they",
+    "partOfSpeech": "pronoun",
+    "translation": "они",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "15",
+    "sentence": "Turn off the light before leaving the room.",
+    "answer": "light",
+    "partOfSpeech": "noun",
+    "translation": "свет",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "16",
+    "sentence": "We must run to catch the last bus.",
+    "answer": "run",
+    "partOfSpeech": "verb",
+    "translation": "бежать",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "17",
+    "sentence": "It is a hot summer afternoon.",
+    "answer": "hot",
+    "partOfSpeech": "adjective",
+    "translation": "горячий, жаркий",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "18",
+    "sentence": "The train arrived early at the station.",
+    "answer": "early",
+    "partOfSpeech": "adverb",
+    "translation": "рано",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "19",
+    "sentence": "The dog ran under the wooden fence.",
+    "answer": "under",
+    "partOfSpeech": "preposition",
+    "translation": "под",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "20",
+    "sentence": "We enjoyed our meal at the restaurant.",
+    "answer": "we",
+    "partOfSpeech": "pronoun",
+    "translation": "мы",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "21",
+    "sentence": "Put your coat on the chair near the door.",
+    "answer": "chair",
+    "partOfSpeech": "noun",
+    "translation": "стул",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "22",
+    "sentence": "We help our brother with his homework.",
+    "answer": "help",
+    "partOfSpeech": "verb",
+    "translation": "помогать",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "23",
+    "sentence": "She wore a red dress to the party.",
+    "answer": "red",
+    "partOfSpeech": "adjective",
+    "translation": "красный",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "24",
+    "sentence": "Speak clearly so everyone can hear you.",
+    "answer": "clearly",
+    "partOfSpeech": "adverb",
+    "translation": "четко, ясно",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "25",
+    "sentence": "Walk across the street at the light.",
+    "answer": "across",
+    "partOfSpeech": "preposition",
+    "translation": "через",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "26",
+    "sentence": "He lost his wallet at the market.",
+    "answer": "he",
+    "partOfSpeech": "pronoun",
+    "translation": "он",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "27",
+    "sentence": "He wrote a long letter to his family.",
+    "answer": "letter",
+    "partOfSpeech": "noun",
+    "translation": "письмо",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "28",
+    "sentence": "They play soccer every Saturday afternoon.",
+    "answer": "play",
+    "partOfSpeech": "verb",
+    "translation": "играть",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "29",
+    "sentence": "The apple was sweet and delicious.",
+    "answer": "delicious",
+    "partOfSpeech": "adjective",
+    "translation": "вкусный",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "30",
+    "sentence": "She smiled happily when she won.",
+    "answer": "happily",
+    "partOfSpeech": "adverb",
+    "translation": "счастливо",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "31",
+    "sentence": "I got a gift from my best friend.",
+    "answer": "from",
+    "partOfSpeech": "preposition",
+    "translation": "от, из",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "32",
+    "sentence": "I like coffee, but I prefer tea.",
+    "answer": "but",
+    "partOfSpeech": "conjunction",
+    "translation": "но",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "33",
+    "sentence": "It is raining heavily outside right now.",
+    "answer": "it",
+    "partOfSpeech": "pronoun",
+    "translation": "оно, это",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "34",
+    "sentence": "Give me a hand.",
+    "answer": "hand",
+    "partOfSpeech": "noun",
+    "translation": "рука",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "35",
+    "sentence": "I think this is a great idea.",
+    "answer": "think",
+    "partOfSpeech": "verb",
+    "translation": "думать",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "36",
+    "sentence": "The river is very deep and cold.",
+    "answer": "deep",
+    "partOfSpeech": "adjective",
+    "translation": "глубокий",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "37",
+    "sentence": "Work hard to achieve your target goals.",
+    "answer": "hard",
+    "partOfSpeech": "adverb",
+    "translation": "усердно",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "38",
+    "sentence": "Place the book between two lamps.",
+    "answer": "between",
+    "partOfSpeech": "preposition",
+    "translation": "между",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "39",
+    "sentence": "You should take a short rest today.",
+    "answer": "you",
+    "partOfSpeech": "pronoun",
+    "translation": "ты, вы",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "40",
+    "sentence": "I want tea or coffee with breakfast.",
+    "answer": "or",
+    "partOfSpeech": "conjunction",
+    "translation": "или",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "41",
+    "sentence": "She received an invitation to the wedding.",
+    "answer": "invitation",
+    "partOfSpeech": "noun",
+    "translation": "приглашение",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "42",
+    "sentence": "They decide to move to a new city.",
+    "answer": "decide",
+    "partOfSpeech": "verb",
+    "translation": "решать",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "43",
+    "sentence": "The weather was cloudy all afternoon.",
+    "answer": "cloudy",
+    "partOfSpeech": "adjective",
+    "translation": "облачный",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "44",
+    "sentence": "He completed the assignment easily.",
+    "answer": "easily",
+    "partOfSpeech": "adverb",
+    "translation": "легко",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "45",
+    "sentence": "We stayed home although it was sunny.",
+    "answer": "although",
+    "partOfSpeech": "conjunction",
+    "translation": "хотя",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "46",
+    "sentence": "Walk through the tunnel to get there.",
+    "answer": "through",
+    "partOfSpeech": "preposition",
+    "translation": "через, сквозь",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "47",
+    "sentence": "Is anyone ready to start the exam?",
+    "answer": "anyone",
+    "partOfSpeech": "pronoun",
+    "translation": "кто-нибудь",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "48",
+    "sentence": "He made a serious mistake in the report.",
+    "answer": "mistake",
+    "partOfSpeech": "noun",
+    "translation": "ошибка",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "49",
+    "sentence": "I forget her keys on the counter.",
+    "answer": "forget",
+    "partOfSpeech": "verb",
+    "translation": "забывать",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "50",
+    "sentence": "The mountain peak was dangerous to climb.",
+    "answer": "dangerous",
+    "partOfSpeech": "adjective",
+    "translation": "опасный",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "51",
+    "sentence": "The engine started working suddenly.",
+    "answer": "suddenly",
+    "partOfSpeech": "adverb",
+    "translation": "внезапно",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "52",
+    "sentence": "Sit beside me during the lecture.",
+    "answer": "beside",
+    "partOfSpeech": "preposition",
+    "translation": "рядом с",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "53",
+    "sentence": "Everybody was excited about the event.",
+    "answer": "everybody",
+    "partOfSpeech": "pronoun",
+    "translation": "все, каждый",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "54",
+    "sentence": "They booked a comfortable hotel room.",
+    "answer": "hotel",
+    "partOfSpeech": "noun",
+    "translation": "отель",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "55",
+    "sentence": "They explain the rule to their classmates.",
+    "answer": "explain",
+    "partOfSpeech": "verb",
+    "translation": "объяснять",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "56",
+    "sentence": "She felt lonely in the big house.",
+    "answer": "lonely",
+    "partOfSpeech": "adjective",
+    "translation": "одинокий",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "57",
+    "sentence": "I answer the phone politely.",
+    "answer": "politely",
+    "partOfSpeech": "adverb",
+    "translation": "вежливо",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "58",
+    "sentence": "Store the items inside the closet.",
+    "answer": "inside",
+    "partOfSpeech": "preposition",
+    "translation": "внутри",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "59",
+    "sentence": "I could not find anything in my bag.",
+    "answer": "anything",
+    "partOfSpeech": "pronoun",
+    "translation": "что-нибудь, ничто",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "60",
+    "sentence": "We need to find a solution quickly.",
+    "answer": "solution",
+    "partOfSpeech": "noun",
+    "translation": "решение",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "61",
+    "sentence": "They borrow a camera for their vacation.",
+    "answer": "borrow",
+    "partOfSpeech": "verb",
+    "translation": "одалживать",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "62",
+    "sentence": "The local market sells fresh produce.",
+    "answer": "fresh",
+    "partOfSpeech": "adjective",
+    "translation": "свежий",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "63",
+    "sentence": "Drive carefully when the roads are wet.",
+    "answer": "carefully",
+    "partOfSpeech": "adverb",
+    "translation": "осторожно",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "64",
+    "sentence": "Place the painting above the fireplace.",
+    "answer": "above",
+    "partOfSpeech": "preposition",
+    "translation": "над",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "65",
+    "sentence": "Nothing can change my decision now.",
+    "answer": "nothing",
+    "partOfSpeech": "pronoun",
+    "translation": "ничто",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "66",
+    "sentence": "He lives on the third floor here.",
+    "answer": "floor",
+    "partOfSpeech": "noun",
+    "translation": "этаж",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "67",
+    "sentence": "They refuse to accept the offer.",
+    "answer": "refuse",
+    "partOfSpeech": "verb",
+    "translation": "отказываться",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "68",
+    "sentence": "The performance was crowded and loud.",
+    "answer": "crowded",
+    "partOfSpeech": "adjective",
+    "translation": "людный, переполненный",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "69",
+    "sentence": "She entered the room quietly.",
+    "answer": "quietly",
+    "partOfSpeech": "adverb",
+    "translation": "тихо",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "70",
+    "sentence": "Stand behind the yellow line, please.",
+    "answer": "behind",
+    "partOfSpeech": "preposition",
+    "translation": "за, позади",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "71",
+    "sentence": "Somebody left a notebook on the desk.",
+    "answer": "somebody",
+    "partOfSpeech": "pronoun",
+    "translation": "кто-то",
+    "level": "A2",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "72",
+    "sentence": "The company announced a new policy.",
+    "answer": "policy",
+    "partOfSpeech": "noun",
+    "translation": "политика, правила",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "73",
+    "sentence": "I achieve my goals through hard work.",
+    "answer": "achieve",
+    "partOfSpeech": "verb",
+    "translation": "достигать",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "74",
+    "sentence": "The report was accurate in every detail.",
+    "answer": "accurate",
+    "partOfSpeech": "adjective",
+    "translation": "точный",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "75",
+    "sentence": "He performed brilliantly in the play.",
+    "answer": "brilliantly",
+    "partOfSpeech": "adverb",
+    "translation": "блестяще",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "76",
+    "sentence": "He was tired, therefore he went home.",
+    "answer": "therefore",
+    "partOfSpeech": "adverb / conjunction",
+    "translation": "поэтому",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "77",
+    "sentence": "Look beyond the current difficulty.",
+    "answer": "beyond",
+    "partOfSpeech": "preposition",
+    "translation": "за пределами, вне",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "78",
+    "sentence": "Whichever option you pick is fine.",
+    "answer": "whichever",
+    "partOfSpeech": "pronoun",
+    "translation": "какой бы ни, любой",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "79",
+    "sentence": "She showed remarkable patience today.",
+    "answer": "patience",
+    "partOfSpeech": "noun",
+    "translation": "терпение",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "80",
+    "sentence": "They encourage us to take this course.",
+    "answer": "encourage",
+    "partOfSpeech": "verb",
+    "translation": "поощрять, поддерживать",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "81",
+    "sentence": "It was a frequent problem last year.",
+    "answer": "frequent",
+    "partOfSpeech": "adjective",
+    "translation": "частый",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "82",
+    "sentence": "The plan was executed efficiently.",
+    "answer": "efficiently",
+    "partOfSpeech": "adverb",
+    "translation": "эффективно",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "83",
+    "sentence": "I like hiking, whereas my brother prefers swimming.",
+    "answer": "whereas",
+    "partOfSpeech": "conjunction",
+    "translation": "в то время как",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "84",
+    "sentence": "He succeeded despite facing many obstacles.",
+    "answer": "despite",
+    "partOfSpeech": "preposition",
+    "translation": "несмотря на",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "85",
+    "sentence": "Themselves finished the entire task alone.",
+    "answer": "themselves",
+    "partOfSpeech": "pronoun",
+    "translation": "они сами",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "86",
+    "sentence": "He took the opportunity to study abroad.",
+    "answer": "opportunity",
+    "partOfSpeech": "noun",
+    "translation": "возможность",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "87",
+    "sentence": "Scientists investigate the causes of climate change.",
+    "answer": "investigate",
+    "partOfSpeech": "verb",
+    "translation": "расследовать, исследовать",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "88",
+    "sentence": "She gave an impressive presentation.",
+    "answer": "impressive",
+    "partOfSpeech": "adjective",
+    "translation": "впечатляющий",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "89",
+    "sentence": "He handled the pressure calmly.",
+    "answer": "calmly",
+    "partOfSpeech": "adverb",
+    "translation": "спокойно",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "90",
+    "sentence": "Save your work whenever you make changes.",
+    "answer": "whenever",
+    "partOfSpeech": "conjunction",
+    "translation": "когда бы ни",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "91",
+    "sentence": "Put the carpet underneath the coffee table.",
+    "answer": "underneath",
+    "partOfSpeech": "preposition",
+    "translation": "под, снизу",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "92",
+    "sentence": "Whoever knows the answer should step forward.",
+    "answer": "whoever",
+    "partOfSpeech": "pronoun",
+    "translation": "кто бы ни",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "93",
+    "sentence": "They reached an agreement after long debate.",
+    "answer": "agreement",
+    "partOfSpeech": "noun",
+    "translation": "соглашение",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "94",
+    "sentence": "Managers require a complete update.",
+    "answer": "require",
+    "partOfSpeech": "verb",
+    "translation": "требовать",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "95",
+    "sentence": "The strategy proved highly effective.",
+    "answer": "effective",
+    "partOfSpeech": "adjective",
+    "translation": "эффективный",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "96",
+    "sentence": "The project progressed smoothly overnight.",
+    "answer": "smoothly",
+    "partOfSpeech": "adverb",
+    "translation": "гладко",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "97",
+    "sentence": "Finish your work; otherwise, you cannot go.",
+    "answer": "otherwise",
+    "partOfSpeech": "adverb / conjunction",
+    "translation": "иначе",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "98",
+    "sentence": "Park the car alongside the pavement.",
+    "answer": "alongside",
+    "partOfSpeech": "preposition",
+    "translation": "рядом, бок о бок",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "99",
+    "sentence": "She prefers doing things herself.",
+    "answer": "herself",
+    "partOfSpeech": "pronoun",
+    "translation": "она сама",
+    "level": "B1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  },
+  {
+    "id": "100",
+    "sentence": "The cat sleeps on the bed",
+    "answer": "cat",
+    "partOfSpeech": "noun",
+    "translation": "кот, кошка",
+    "level": "A1",
+    "memoryLevel": "",
+    "correct": "",
+    "wrong": "",
+    "lastSeen": "",
+    "nextReview": "",
+    "audioUrl": ""
+  }
+]
+
+
+4. js/state.js:
+export const state = {
+    sentences: [],   // active dataset from API
+
+    queue: [],       // session order
+    queueIndex: 0,   // pointer in session
+    current: null,   // current word object
+
+    userInput: '',
+// in export const state = { ... }
+inputLocked: false,   // used to temporarily block input while animations run
+isComposing: false,   // tracks IME composition state
+autoSubmitTimer: null,
+answerComplete: false,
+
+    status: 'loading',
+
+    flashWrong: false,
+    lastTypedCorrect: true,
+    answeredWithHint: false,
+    layoutWarning: false,
+    isSubmitting: false,
+
+
+    soundEnabled: true,
+
+    // Session control
+    sessionLimit: 10,
+    sessionCount: 0,
+    completedCount: 0,
+    totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0,
+    nextSessionLimit: null,
+    sessionWords: [],
+
+    // Session stats
+    sessionCorrect: 0,
+    sessionWrong: 0,
+};
+
+
+5. js/api.js:
+const API_URL = "assets/json/vocabulary.json";
+
+export async function fetchSentences() {
+    try {
+        const res = await fetch(API_URL);
+
+        const text = await res.text();
+
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('❌ API did not return JSON:', text);
+            alert('Temporary server issue. Please reload.');
+            return null;
+        }
+
+        return data.map(row => {
+
+            const sentence = row.sentence;
+            const answer = row.answer;
+            const answerLength = answer.length;
+
+            const match = sentence.match(new RegExp(`\\b${answer}\\b`, 'i'));
+            const gapIndex = match ? match.index : -1;
+
+            const isFirstWord = gapIndex === 0;
+
+            const base = answer.toLowerCase();
+
+            const formattedAnswer = isFirstWord
+                ? base.charAt(0).toUpperCase() + base.slice(1)
+                : base;
+
+            return {
+                id: row.id,
+                sentence,
+                answer,
+                translation: row.translation,
+                audioUrl: row.audioUrl,
+                partOfSpeech: row.partOfSpeech,
+
+                // 🔥 precomputed
+                gapIndex,
+                isFirstWord,
+                formattedAnswer,
+                answerLength
+            };
+        });
+
+    } catch (err) {
+        console.error('❌ Network error:', err);
+        alert('Network error. Check connection and reload.');
+        return null; // ✅ FIXED
+    }
+}
+
+export async function updateWord(id, correct) {
+    try {
+        await fetch(`${API_URL}?action=update&id=${id}&correct=${correct}`);
+    } catch (err) {
+        console.error('❌ updateWord failed:', err);
+    }
+}
+
+
+
+
+6. js/sound.js:
+import { state } from './state.js';
+
+const correctSound = new Audio('./assets/sounds/correct.mp3');
+const wrongSound = new Audio('./assets/sounds/wrong.mp3');
+
+correctSound.preload = 'auto';
+wrongSound.preload = 'auto';
+
+let currentAudio = null;
+
+// ✅ WORD AUDIO
+const audioCache = new Map();
+
+export function playWordAudio(url) {
+    return new Promise((resolve) => {
+        if (!url) return resolve();
+
+        // If we already cached an Audio element for this URL, reuse it
+        let audio = audioCache.get(url);
+
+        if (!audio) {
+            audio = new Audio(url);
+            audio.preload = 'auto';
+            audioCache.set(url, audio);
+        }
+
+        // If another playback is running on same Audio element, clone to avoid interruption
+        const playTarget = audio.cloneNode(true);
+        playTarget.onended = resolve;
+        playTarget.onerror = () => {
+            // if playback fails, still resolve to keep flow moving
+            resolve();
+        };
+
+        // Try to play (catch promise rejection)
+        playTarget.play().catch(() => {
+            resolve();
+        });
+    });
+}
+
+// ✅ EXISTING
+export function playCorrect() {
+    if (!state.soundEnabled) return;
+
+    correctSound.currentTime = 0;
+    correctSound.play().catch(() => {});
+}
+
+export function playWrong() {
+    if (!state.soundEnabled) return;
+
+    wrongSound.currentTime = 0;
+    wrongSound.play().catch(() => {});
+}
+
+
+7. js/speech.js:
+export function speak(text, onEnd) {
+    // ❗ Check support
+    if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+        console.warn('🔇 Speech not supported');
+
+        // fallback → just continue flow
+        if (onEnd) onEnd();
+        return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.onend = () => {
+        if (onEnd) onEnd();
+    };
+
+    speechSynthesis.cancel(); // stop previous if any
+    speechSynthesis.speak(utterance);
+}
+
+
+8. js/animations.js:
+
+
+
+9. js/ui.js:
+import { state } from './state.js';
+import { submitAnswer, startNewSession } from './logic.js';
+
+const isMobile =
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+let hasUserFocused = false;
+
+
+// ============================================================
+// RENDER OVERLAY
+// ============================================================
+
+function renderOverlay(
+    input,
+    { hintHTML, typed, typedClass, fullText }
+) {
+
+    input.innerHTML = '';
+
+    const overlay = document.createElement('span');
+    overlay.className = 'overlay';
+
+    // Invisible element that controls the real width.
+    const sizer = document.createElement('span');
+    sizer.className = 'overlay-sizer';
+    sizer.textContent = fullText || typed || '';
+
+    const hint = document.createElement('span');
+    hint.className = 'hint';
+    hint.innerHTML = hintHTML || '';
+
+    const typedEl = document.createElement('span');
+    typedEl.className = `typed ${typedClass || ''}`;
+    typedEl.textContent = typed || '';
+
+    overlay.appendChild(sizer);
+    overlay.appendChild(hint);
+    overlay.appendChild(typedEl);
+
+    input.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+        setCaret(
+            input,
+            (state.userInput || '').length
+        );
+    });
+}
+
+
+// ============================================================
+// CARET
+// ============================================================
+
+function setCaret(el, position) {
+
+    const range = document.createRange();
+    const sel = window.getSelection();
+
+    const typedNode =
+        el.querySelector('.typed');
+
+    if (!typedNode || !typedNode.firstChild) {
+        return;
+    }
+
+    const textNode =
+        typedNode.firstChild;
+
+    const safePos =
+        Math.min(position, textNode.length);
+
+    range.setStart(
+        textNode,
+        safePos
+    );
+
+    range.collapse(true);
+
+    sel.removeAllRanges();
+    sel.addRange(range);
+}
+
+
+// ============================================================
+// AUTOSUBMIT
+// ============================================================
+
+function scheduleAutoSubmit(input, current) {
+
+    if (state.autoSubmitTimer) {
+        clearTimeout(state.autoSubmitTimer);
+        state.autoSubmitTimer = null;
+    }
+
+if (state.isComposing) return;
+if (state.inputLocked && !state.answerComplete) return;
+if (state.isSubmitting) return;
+
+    const value =
+        (state.userInput || '').toLowerCase();
+
+    const answer =
+        current.answer.toLowerCase();
+
+    if (value !== answer) {
+        return;
+    }
+
+    state.autoSubmitTimer = setTimeout(() => {
+
+        state.autoSubmitTimer = null;
+
+if (state.isComposing) return;
+if (state.inputLocked && !state.answerComplete) return;
+if (state.isSubmitting) return;
+
+        const latestValue =
+            (state.userInput || '').toLowerCase();
+
+        const latestAnswer =
+            current.answer.toLowerCase();
+
+        if (
+            latestValue === latestAnswer &&
+            latestValue.length === latestAnswer.length
+        ) {
+            submitAnswer();
+        }
+
+    }, 350);
+}
+
+
+// ============================================================
+// HINT UI
+// ============================================================
+
+function updateHintUI(input, current) {
+
+    const rawTyped =
+        (state.userInput || '').toLowerCase();
+
+    const isFirstWord =
+        current.isFirstWord;
+
+    const fullAnswer =
+        current.formattedAnswer;
+
+    const typed =
+        isFirstWord && rawTyped.length > 0
+            ? rawTyped.charAt(0).toUpperCase() +
+              rawTyped.slice(1)
+            : rawTyped;
+
+    // IMPORTANT:
+    // The FULL answer is visible as the hint.
+    // The typed element is positioned on top of it.
+    const hintHTML =
+        fullAnswer;
+
+    const typedClass =
+        state.lastTypedCorrect
+            ? 'correct'
+            : 'wrong';
+
+    renderOverlay(input, {
+        hintHTML,
+        typed,
+        typedClass,
+        fullText: fullAnswer
+    });
+
+    setCaret(
+        input,
+        rawTyped.length
+    );
+}
+
+
+// ============================================================
+// TYPED-ONLY UI
+// ============================================================
+
+function updateTypedOnlyUI(input, current) {
+
+    const rawTyped =
+        (state.userInput || '').toLowerCase();
+
+    const typed =
+        current.isFirstWord && rawTyped.length > 0
+            ? rawTyped.charAt(0).toUpperCase() +
+              rawTyped.slice(1)
+            : rawTyped;
+
+    renderOverlay(input, {
+        hintHTML: '',
+        typed,
+        typedClass:
+            state.lastTypedCorrect
+                ? 'correct'
+                : 'wrong',
+        fullText: typed
+    });
+
+    setCaret(
+        input,
+        rawTyped.length
+    );
+}
+
+
+// ============================================================
+// GAP WIDTH
+// ============================================================
+
+function adjustGapWidth(input, current) {
+
+    if (!input || !current) {
+        return;
+    }
+
+    const answer =
+        (
+            current.formattedAnswer ||
+            current.answer ||
+            ''
+        ).trim();
+
+    if (!answer) {
+        return;
+    }
+
+    const cs =
+        window.getComputedStyle(input);
+
+    const meas =
+        document.createElement('span');
+
+    meas.style.position = 'absolute';
+    meas.style.visibility = 'hidden';
+    meas.style.whiteSpace = 'pre';
+    meas.style.fontFamily = cs.fontFamily;
+    meas.style.fontSize = cs.fontSize;
+    meas.style.fontWeight = cs.fontWeight;
+    meas.style.letterSpacing = cs.letterSpacing;
+    meas.style.padding = cs.padding;
+    meas.style.lineHeight = cs.lineHeight;
+
+    meas.textContent = answer;
+
+    document.body.appendChild(meas);
+
+    const textWidth =
+        meas.offsetWidth;
+
+    document.body.removeChild(meas);
+
+    const PAD = 12;
+
+    let maxWidth = Infinity;
+
+    const sentenceEl =
+        document.getElementById('sentence');
+
+    if (sentenceEl) {
+
+        const rect =
+            sentenceEl.getBoundingClientRect();
+
+        maxWidth =
+            Math.max(
+                80,
+                rect.width - 20
+            );
+    }
+
+    const finalWidth =
+        Math.min(
+            textWidth + PAD,
+            maxWidth
+        );
+
+    input.style.boxSizing =
+        'border-box';
+
+    input.style.width =
+        finalWidth + 'px';
+
+    input.style.minWidth =
+        finalWidth + 'px';
+
+    input.style.maxWidth =
+        finalWidth + 'px';
+
+    input.style.whiteSpace =
+        'nowrap';
+
+    input.style.overflow =
+        'visible';
+}
+
+
+// ============================================================
+// CREATE SENTENCE
+// ============================================================
+
+function createGapSentence(sentenceObj) {
+
+    const {
+        sentence,
+        gapIndex
+    } = sentenceObj;
+
+    if (gapIndex === -1) {
+
+        console.warn(
+            '⚠️ gapIndex not found:',
+            sentenceObj
+        );
+
+        return sentence;
+    }
+
+    const before =
+        sentence.slice(
+            0,
+            gapIndex
+        );
+
+    const after =
+        sentence.slice(
+            gapIndex +
+            sentenceObj.answerLength
+        );
+
+    return `${before}
+        <div class="gap-wrapper">
+            <span
+                id="gap-input"
+                contenteditable="true"
+                data-word-id="${sentenceObj.id}"
+                data-placeholder="..."
+                class="gap"
+            ></span>
+        </div>
+    ${after}`;
+}
+
+
+// ============================================================
+// RENDER
+// ============================================================
+
+export function render() {
+
+    const sessionStateEl =
+        document.getElementById('session-state');
+
+    const sentenceAreaEl =
+        document.getElementById('sentence-area');
+
+    if (
+        !sentenceAreaEl ||
+        !sessionStateEl
+    ) {
+        return;
+    }
+
+    const sentenceEl =
+        document.getElementById('sentence');
+
+    const translationEl =
+        document.getElementById('translation');
+
+    const posEl =
+        document.getElementById('part-of-speech');
+
+    const levelEl =
+        document.getElementById('level-indicator');
+
+    const progressBar =
+        document.getElementById('progress-bar');
+
+    const totalCompletedEl =
+        document.getElementById(
+            'total-completed-counter'
+        );
+
+    if (totalCompletedEl) {
+
+        totalCompletedEl.innerText =
+            `${state.totalCompleted}`;
+    }
+
+    const progressCounter =
+        document.getElementById(
+            'progress-counter'
+        );
+
+    const helperEl =
+        document.getElementById('helper');
+
+    const current =
+        state.current;
+
+
+    // ========================================================
+    // IDLE
+    // ========================================================
+
+    if (state.status === 'idle') {
+
+        sessionStateEl.innerHTML = `
+            <div class="session-state session-state--start">
+                <div class="session-state__title">
+                    Ready to learn?
+                </div>
+
+                <div class="session-state__actions">
+                    <button id="start-btn">
+                        Start session
+                    </button>
+                </div>
+            </div>
+        `;
+
+        sentenceEl.innerHTML = '';
+        translationEl.innerText = '';
+
+        const btn =
+            document.getElementById('start-btn');
+
+        if (btn) {
+
+            btn.onclick = () => {
+
+                state.status = 'waiting';
+
+                render();
+            };
+        }
+
+        return;
+    }
+
+
+    // ========================================================
+    // VISIBILITY
+    // ========================================================
+
+    const isFinished =
+        state.status === 'finished';
+
+    if (levelEl) {
+
+        levelEl.classList.toggle(
+            'hidden',
+            isFinished
+        );
+    }
+
+    if (progressBar) {
+
+        progressBar.classList.toggle(
+            'hidden',
+            isFinished
+        );
+    }
+
+    if (progressCounter) {
+
+        progressCounter.classList.toggle(
+            'hidden',
+            isFinished
+        );
+    }
+
+    if (helperEl) {
+
+        helperEl.classList.toggle(
+            'hidden',
+            isFinished
+        );
+    }
+
+
+    // ========================================================
+    // FINISHED
+    // ========================================================
+
+    if (state.status === 'finished') {
+
+        sessionStateEl.innerHTML = `
+            <div class="session-state session-state--end">
+
+                <div class="session-state__title">
+                    Session complete
+                </div>
+
+                <div class="session-state__stats">
+
+                    <div class="session-state__stat">
+                        Correct:
+                        ${state.sessionCorrect}
+                        /
+                        ${state.sessionCount}
+                    </div>
+
+                    <div class="session-state__stat">
+                        Wrong:
+                        ${state.sessionWrong}
+                    </div>
+
+                    <div class="session-state__stat">
+                        Accuracy:
+                        ${
+                            Math.round(
+                                (
+                                    state.sessionCorrect /
+                                    state.sessionCount
+                                ) * 100
+                            )
+                        }%
+                    </div>
+
+                </div>
+
+                <div class="session-state__actions">
+                    <button id="restart-btn">
+                        New session
+                    </button>
+                </div>
+
+            </div>
+        `;
+
+        const btn =
+            document.getElementById(
+                'restart-btn'
+            );
+
+        if (btn) {
+
+            btn.onclick = () =>
+                startNewSession();
+        }
+
+        return;
+    }
+
+
+    // ========================================================
+    // EMPTY
+    // ========================================================
+
+    if (!current) {
+
+        sentenceEl.innerHTML =
+            `<div>Done</div>`;
+
+        translationEl.innerText = '';
+
+        return;
+    }
+
+
+    // ========================================================
+    // LEVEL
+    // ========================================================
+
+    if (levelEl) {
+
+        const level =
+            Math.min(
+                current.memoryLevel || 0,
+                5
+            );
+
+        let dots = '';
+
+        for (let i = 0; i < 5; i++) {
+
+            if (i < level) {
+
+                dots +=
+                    `<div class="level-dot level-${level}"></div>`;
+
+            } else {
+
+                dots +=
+                    `<div class="level-dot"></div>`;
+            }
+        }
+
+        levelEl.innerHTML =
+            `<div class="level-dots">${dots}</div>`;
+    }
+
+
+    // ========================================================
+    // PROGRESS
+    // ========================================================
+
+    if (
+        progressBar &&
+        state.queue.length > 0
+    ) {
+
+        const total =
+            state.queue.length;
+
+        if (!progressBar.dataset.initialized) {
+
+            let html = '';
+
+            for (
+                let i = 0;
+                i < total;
+                i++
+            ) {
+
+                html +=
+                    `<div class="progress-segment"></div>`;
+            }
+
+            progressBar.innerHTML =
+                html;
+
+            progressBar.dataset.initialized =
+                'true';
+        }
+
+        const segments =
+            progressBar.children;
+
+        for (
+            let i = 0;
+            i < segments.length;
+            i++
+        ) {
+
+            segments[i].classList.remove(
+                'filled',
+                'active'
+            );
+
+            if (
+                i <
+                state.completedCount
+            ) {
+
+                segments[i].classList.add(
+                    'filled'
+                );
+
+            } else if (
+                i ===
+                state.completedCount
+            ) {
+
+                segments[i].classList.add(
+                    'active'
+                );
+            }
+        }
+    }
+
+
+    // ========================================================
+    // SENTENCE
+    // ========================================================
+
+    const existingInput =
+        document.getElementById(
+            'gap-input'
+        );
+
+    const canReuseInput =
+        existingInput &&
+        existingInput.dataset.wordId ===
+            String(current.id);
+
+    if (!canReuseInput) {
+
+        sentenceEl.innerHTML =
+            createGapSentence(
+                current
+            );
+    }
+
+    translationEl.innerText =
+        current.translation;
+
+    if (posEl) {
+
+        posEl.innerText =
+            current.partOfSpeech
+                ? current.partOfSpeech.toLowerCase()
+                : '';
+    }
+
+    const input =
+        document.getElementById(
+            'gap-input'
+        );
+
+    if (!input) {
+        return;
+    }
+
+    input.setAttribute(
+        'enterkeyhint',
+        'done'
+    );
+
+
+    // ========================================================
+    // BASE INPUT STATE
+    // ========================================================
+
+    input.classList.remove(
+        'flash-wrong',
+        'correct',
+        'correct-pop'
+    );
+
+    input.contentEditable =
+        'true';
+
+    input.onfocus = () => {
+        hasUserFocused = true;
+    };
+
+
+    // ========================================================
+    // HELPER
+    // ========================================================
+
+    if (helperEl) {
+
+        if (!hasUserFocused) {
+
+            helperEl.innerText =
+                'Tap to start';
+
+            helperEl.classList.add(
+                'show'
+            );
+
+        } else if (
+            state.sessionCount < 1
+        ) {
+
+            helperEl.innerText =
+                'Type the missing word and press Enter';
+
+            helperEl.classList.add(
+                'show'
+            );
+
+        } else if (
+            state.status === 'waiting' &&
+            state.userInput === ''
+        ) {
+
+            helperEl.innerText =
+                'Press Enter to reveal hint';
+
+            helperEl.classList.add(
+                'show'
+            );
+
+        } else if (
+            state.status === 'wrong'
+        ) {
+
+            helperEl.innerText =
+                'Type the correct word';
+
+            helperEl.classList.add(
+                'show'
+            );
+
+        } else if (
+            state.status === 'correct'
+        ) {
+
+            helperEl.innerText =
+                'Good';
+
+            helperEl.classList.add(
+                'show'
+            );
+
+        } else {
+
+            helperEl.innerText = '';
+        }
+    }
+
+
+    // ========================================================
+    // RESET HANDLERS
+    // ========================================================
+
+    input.oninput = null;
+    input.onkeydown = null;
+    input.onbeforeinput = null;
+    input.oncompositionstart = null;
+    input.oncompositionend = null;
+    input.onmousedown = null;
+    input.ontouchend = null;
+    input.onselectstart = null;
+    input.onanimationend = null;
+
+
+    // ========================================================
+    // ENTER
+    // ========================================================
+
+    input.onkeydown = (e) => {
+
+        if (e.key !== 'Enter') {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (state.isSubmitting) {
+            return;
+        }
+
+        submitAnswer();
+    };
+
+
+    // ========================================================
+    // CORRECT
+    // ========================================================
+
+    if (state.status === 'correct') {
+
+        input.textContent =
+            current.formattedAnswer;
+
+        input.classList.add(
+            'correct',
+            'correct-pop'
+        );
+
+        input.contentEditable =
+            'false';
+
+        input.blur();
+
+        return;
+    }
+
+
+    // ========================================================
+    // WRONG FLASH
+    // ========================================================
+
+    if (state.status === 'wrongFlash') {
+
+        renderOverlay(input, {
+            hintHTML:
+                `<span style="visibility:hidden">${
+                    state.userInput
+                }</span>`,
+
+            typed:
+                state.userInput,
+
+            typedClass:
+                'wrong',
+
+            fullText:
+                current.formattedAnswer
+        });
+
+        input.classList.add(
+            'flash-wrong'
+        );
+
+        state.inputLocked = true;
+
+
+        input.onanimationend = (e) => {
+
+            if (e.target !== input) {
+                return;
+            }
+
+            input.classList.remove(
+                'flash-wrong'
+            );
+
+            state.inputLocked = false;
+            state.status = 'wrong';
+            state.userInput = '';
+            state.isSubmitting = false;
+            state.answeredWithHint = true;
+
+            // CRITICAL:
+            // Re-render the hint phase so that
+            // all normal input handlers are installed.
+            render();
+        };
+
+        return;
+    }
+
+
+    // ========================================================
+    // NORMAL / HINT INPUT MODE
+    // ========================================================
+
+    input.contentEditable =
+        'true';
+
+
+    // Fresh question:
+    // show typed letters only.
+    //
+    // Hint phase:
+    // show full hint with typed letters on top.
+
+    if (state.status === 'wrong') {
+
+        updateHintUI(
+            input,
+            current
+        );
+
+        adjustGapWidth(
+            input,
+            current
+        );
+
+    } else if (
+        state.userInput.length > 0
+    ) {
+
+        updateTypedOnlyUI(
+            input,
+            current
+        );
+
+        adjustGapWidth(
+            input,
+            current
+        );
+
+    } else {
+
+        input.innerHTML = '';
+
+        input.style.minWidth = '';
+        input.style.width = '';
+        input.style.maxWidth = '';
+        input.style.overflow = '';
+    }
+
+
+    // ========================================================
+    // FOCUS
+    // ========================================================
+
+    setTimeout(() => {
+
+        if (
+            !state.isSubmitting &&
+            !state.inputLocked
+        ) {
+            input.focus();
+        }
+
+    }, 0);
+
+
+    function forceFocusAndCaret() {
+
+        input.focus();
+
+        setTimeout(() => {
+
+            setCaret(
+                input,
+                state.userInput.length
+            );
+
+        }, 0);
+    }
+
+
+    input.onmousedown = (e) => {
+
+        e.preventDefault();
+
+        forceFocusAndCaret();
+    };
+
+
+    input.ontouchend = () => {
+        forceFocusAndCaret();
+    };
+
+
+    input.onselectstart = (e) => {
+        e.preventDefault();
+    };
+
+
+    // ========================================================
+    // COMPOSITION / SWIPE
+    // ========================================================
+
+    input.isComposing = false;
+
+
+    input.oncompositionstart = () => {
+
+        if (state.autoSubmitTimer) {
+
+            clearTimeout(
+                state.autoSubmitTimer
+            );
+
+            state.autoSubmitTimer = null;
+        }
+
+        state.isComposing = true;
+        input.isComposing = true;
+    };
+
+
+    input.oncompositionend = (e) => {
+
+        state.isComposing = false;
+        input.isComposing = false;
+
+        const candidate =
+            (e.data || '')
+                .toLowerCase()
+                .trim();
+
+        if (!candidate) {
+            return;
+        }
+
+        const currentWord =
+            state.current;
+
+        const answer =
+            currentWord.answer.toLowerCase();
+
+
+        // ====================================================
+        // BEFORE HINT
+        //
+        // Swipe result is just user input.
+        // NO letter correctness checking.
+        // ====================================================
+
+        if (!state.answeredWithHint) {
+
+            state.userInput =
+                candidate;
+
+            state.lastTypedCorrect =
+                true;
+
+            updateTypedOnlyUI(
+                input,
+                currentWord
+            );
+
+            adjustGapWidth(
+                input,
+                currentWord
+            );
+
+            scheduleAutoSubmit(
+                input,
+                currentWord
+            );
+
+            return;
+        }
+
+
+        // ====================================================
+        // HINT PHASE — CORRECT SWIPE
+        // ====================================================
+
+if (candidate === answer) {
+
+    state.userInput = candidate;
+    state.lastTypedCorrect = true;
+
+    updateHintUI(
+        input,
+        currentWord
+    );
+
+    adjustGapWidth(
+        input,
+        currentWord
+    );
+
+    state.answerComplete = true;
+    state.inputLocked = true;
+
+    scheduleAutoSubmit(
+        input,
+        currentWord
+    );
+
+    return;
+}
+
+
+        // ====================================================
+        // HINT PHASE — WRONG SWIPE
+        // ====================================================
+
+        state.lastTypedCorrect =
+            false;
+
+        renderOverlay(input, {
+
+            hintHTML:
+                `<span style="visibility:hidden">${
+                    candidate
+                }</span>`,
+
+            typed:
+                candidate,
+
+            typedClass:
+                'wrong',
+
+            fullText:
+                currentWord.formattedAnswer
+        });
+
+        input.classList.add(
+            'flash-wrong-letter'
+        );
+
+        setTimeout(() => {
+
+            input.classList.remove(
+                'flash-wrong-letter'
+            );
+
+            state.userInput = '';
+            state.lastTypedCorrect = true;
+
+            updateHintUI(
+                input,
+                currentWord
+            );
+
+            adjustGapWidth(
+                input,
+                currentWord
+            );
+
+            input.focus();
+            setCaret(input, 0);
+
+        }, 200);
+    };
+
+
+    // ========================================================
+    // BEFOREINPUT
+    //
+    // Before hint:
+    //   free typing, no correctness check.
+    //
+    // After hint:
+    //   strict character-by-character checking.
+    // ========================================================
+
+input.onbeforeinput = (e) => {
+
+    const currentWord =
+        state.current;
+
+
+    // ====================================================
+    // ANSWER ALREADY COMPLETE
+    //
+    // Do NOT cancel the pending autosubmit.
+    // Simply reject any extra input.
+    // ====================================================
+
+    if (
+        state.answerComplete ||
+        state.inputLocked ||
+        state.isSubmitting
+    ) {
+
+        e.preventDefault();
+        return;
+    }
+
+
+    // ====================================================
+    // NORMAL NEW INPUT
+    //
+    // Cancel a pending autosubmit because the answer
+    // may be changing again.
+    // ====================================================
+
+    if (state.autoSubmitTimer) {
+
+        clearTimeout(
+            state.autoSubmitTimer
+        );
+
+        state.autoSubmitTimer = null;
+    }
+
+
+        // ----------------------------------------------------
+        // COMPOSITION / SWIPE
+        //
+        // compositionend handles the completed candidate.
+        // ----------------------------------------------------
+
+        if (state.isComposing) {
+
+            e.preventDefault();
+            return;
+        }
+
+
+        // ====================================================
+        // INSERT TEXT
+        // ====================================================
+
+        if (e.inputType === 'insertText') {
+
+            e.preventDefault();
+
+            const text =
+                (e.data || '')
+                    .toLowerCase();
+
+            if (!text) {
+                return;
+            }
+
+
+            // =================================================
+            // PHASE 1 — BEFORE HINT
+            //
+            // Accept anything.
+            // Enter checks it.
+            // Exact correct answers autosubmit.
+            // =================================================
+
+            if (!state.answeredWithHint) {
+
+                state.userInput += text;
+
+                state.lastTypedCorrect =
+                    true;
+
+                updateTypedOnlyUI(
+                    input,
+                    currentWord
+                );
+
+                scheduleAutoSubmit(
+                    input,
+                    currentWord
+                );
+
+                return;
+            }
+
+
+            // =================================================
+            // PHASE 2 — HINT SHOWN
+            // =================================================
+
+
+            // -------------------------------------------------
+            // MULTI-CHARACTER INPUT
+            // -------------------------------------------------
+
+            if (text.length > 1) {
+
+                const answer =
+                    currentWord.answer.toLowerCase();
+
+                // A complete swipe candidate replaces
+                // the current typed value.
+                state.userInput = text;
+
+                if (text === answer) {
+
+                    state.lastTypedCorrect =
+                        true;
+
+                    updateHintUI(
+                        input,
+                        currentWord
+                    );
+
+                    scheduleAutoSubmit(
+                        input,
+                        currentWord
+                    );
+
+                    return;
+                }
+
+
+                // Wrong gesture.
+                state.lastTypedCorrect =
+                    false;
+
+                renderOverlay(input, {
+
+                    hintHTML:
+                        `<span style="visibility:hidden">${
+                            text
+                        }</span>`,
+
+                    typed:
+                        text,
+
+                    typedClass:
+                        'wrong',
+
+                    fullText:
+                        currentWord.formattedAnswer
+                });
+
+                input.classList.add(
+                    'flash-wrong-letter'
+                );
+
+                setTimeout(() => {
+
+                    input.classList.remove(
+                        'flash-wrong-letter'
+                    );
+
+                    state.userInput = '';
+                    state.lastTypedCorrect = true;
+
+                    updateHintUI(
+                        input,
+                        currentWord
+                    );
+
+                    input.focus();
+                    setCaret(input, 0);
+
+                }, 200);
+
+                return;
+            }
+
+
+            // -------------------------------------------------
+            // SINGLE CHARACTER — HINT PHASE
+            // -------------------------------------------------
+
+            const char =
+                text;
+
+            const nextIndex =
+                state.userInput.length;
+
+            const expected =
+                currentWord.answer[nextIndex];
+
+
+if (
+    char ===
+    expected?.toLowerCase()
+) {
+
+    state.userInput += char;
+
+    state.lastTypedCorrect = true;
+
+    updateHintUI(
+        input,
+        currentWord
+    );
+
+    // Full answer reached.
+    if (
+        state.userInput.length ===
+        currentWord.answer.length &&
+        state.userInput.toLowerCase() ===
+        currentWord.answer.toLowerCase()
+    ) {
+
+        state.answerComplete = true;
+        state.inputLocked = true;
+
+        scheduleAutoSubmit(
+            input,
+            currentWord
+        );
+
+        return;
+    }
+
+    scheduleAutoSubmit(
+        input,
+        currentWord
+    );
+
+} else {
+
+                // Wrong letter during hint phase:
+                // do not add it to state.
+                // Show the flash.
+                state.lastTypedCorrect =
+                    false;
+
+                input.classList.add(
+                    'flash-wrong-letter'
+                );
+
+                setTimeout(() => {
+
+                    input.classList.remove(
+                        'flash-wrong-letter'
+                    );
+
+                }, 200);
+
+                updateHintUI(
+                    input,
+                    currentWord
+                );
+
+                input.focus();
+
+                setCaret(
+                    input,
+                    state.userInput.length
+                );
+            }
+
+            return;
+        }
+
+
+        // ====================================================
+        // BACKSPACE
+        // ====================================================
+
+        if (
+            e.inputType ===
+            'deleteContentBackward'
+        ) {
+
+            e.preventDefault();
+
+            state.userInput =
+                state.userInput.slice(0, -1);
+
+            state.lastTypedCorrect =
+                true;
+
+            if (state.answeredWithHint) {
+
+                updateHintUI(
+                    input,
+                    currentWord
+                );
+
+            } else {
+
+                updateTypedOnlyUI(
+                    input,
+                    currentWord
+                );
+            }
+
+            setCaret(
+                input,
+                state.userInput.length
+            );
+
+            return;
+        }
+    };
+}
+
+
+10. js/options.js:
+import { state } from './state.js';
+
+export function initOptions() {
+    const btn = document.getElementById('options-btn');
+    const modal = document.getElementById('options-modal');
+    const save = document.getElementById('save-options');
+    const toggle = document.getElementById('sound-toggle');
+
+    // =========================
+    // 🔊 SOUND TOGGLE (existing)
+    // =========================
+    if (toggle) {
+        const saved = localStorage.getItem('soundEnabled');
+
+        if (saved !== null) {
+            state.soundEnabled = saved === 'true';
+        }
+
+        toggle.checked = state.soundEnabled;
+
+        toggle.addEventListener('change', () => {
+            state.soundEnabled = toggle.checked;
+            localStorage.setItem('soundEnabled', state.soundEnabled);
+        });
+    }
+
+    // =========================
+    // 🌗 THEME TOGGLE (new)
+    // =========================
+    const themeToggle = document.getElementById('theme-toggle');
+
+    // Apply saved theme on load
+    const savedTheme = localStorage.getItem('theme'); // 'dark' or 'light' or null
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeToggle) themeToggle.checked = true;
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        if (themeToggle) themeToggle.checked = false;
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    }
+
+    // =========================
+    // 🧩 MODAL LOGIC (existing)
+    // =========================
+    if (!btn || !modal) return;
+
+    // open
+    btn.onclick = () => {
+        modal.style.display = 'flex';
+    };
+
+    // close on outside click
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // save (just close for now)
+    if (save) {
+        save.onclick = () => {
+            modal.style.display = 'none';
+        };
+    }
+}
+
+
+11. js/logic.js:
+console.log('🚨 LOGIC.JS LOADED');
+
+const version = '1.3';
+
+import { state } from './state.js';
+import { render } from './ui.js';
+import { speak } from './speech.js';
+import { playCorrect, playWrong, playWordAudio } from './sound.js';
+import { updateWord } from './api.js';
+import { fadeIn, fadeOut } from './anim.js';
+
+
+function normalize(str) {
+    return str
+    .replace(/\u00A0/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+// =========================
+// SESSION QUEUE (unchanged)
+// =========================
+const recentHistory = [];
+const HISTORY_LIMIT = 5;
+
+function getWeight(memoryLevel) {
+    const weights = [10, 8, 6, 4, 2, 1];
+    const level = Number(memoryLevel) || 0;
+    return weights[Math.min(level, 5)];
+}
+
+export function buildSessionQueue() {
+    const total = state.sentences.length;
+
+    if (!total) return [];
+
+    const limit = Math.max(1, Number(state.sessionLimit) || 5);
+
+    console.log('SESSION LIMIT:', limit);
+    console.log('TOTAL SENTENCES:', total);
+
+    // 🔹 create array of all indices
+    const indices = [...Array(total).keys()];
+
+    // 🔹 shuffle (Fisher-Yates)
+    for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    const result = indices.slice(0, limit);
+
+    console.log('✅ QUEUE BUILT:', result);
+
+    return result;
+}
+
+// =========================
+// NEXT SENTENCE
+// =========================
+async function nextSentence() {
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
+
+    const sentenceArea = document.getElementById('sentence-area');
+    if (!sentenceArea) return;
+
+    state.queueIndex++;
+
+    // 🏁 FINISHED
+    if (state.queueIndex >= state.queue.length) {
+        const progressRow = document.getElementById('progress-row');
+
+        state.status = 'finished';
+
+        await Promise.all([
+            fadeOut(sentenceArea),
+            fadeOut(progressRow)
+        ]);
+
+        render();
+
+        const summary = document.getElementById('session-state');
+        await fadeIn(summary);
+
+        return;
+    }
+
+    await fadeOut(sentenceArea);
+
+    // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
+    state.current = state.sentences[state.queue[state.queueIndex]];
+
+state.userInput = '';
+state.status = 'waiting';
+state.answeredWithHint = false;
+state.isSubmitting = false;
+state.answerComplete = false;
+state.inputLocked = false;
+
+    render();
+
+    const newSentenceArea = document.getElementById('sentence-area');
+    await fadeIn(newSentenceArea);
+}
+
+// =========================
+// FINISH WORD
+// =========================
+function finishWord(current, immediateCorrect) {
+    state.sessionCount++;
+    state.completedCount++;
+    state.totalCompleted++;
+    localStorage.setItem('totalCompleted', state.totalCompleted);
+    render();
+
+
+    if (immediateCorrect) {
+        current.memoryLevel = Math.min(
+            (Number(current.memoryLevel) || 0) + 1,
+            5
+            );
+
+        current.correct = (Number(current.correct) || 0) + 1;
+        state.sessionCorrect++;
+    }
+
+    current.lastSeen = new Date();
+
+    if (immediateCorrect) {
+        updateWord(current.id, true);
+    }
+
+    state.status = 'correct';
+    render();
+
+    playCorrect();
+
+    // American or British pronunciation        
+    const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
+
+    (async () => {
+
+        // optional delay only if NOT immediate
+        if (!immediateCorrect) {
+            await new Promise(r => setTimeout(r, 600));
+        }
+
+        await playWordAudio(url);
+
+        nextSentence();
+
+    })();
+
+
+}
+
+// =========================
+// 🚨 FINAL FIXED SUBMIT
+// =========================
+export function submitAnswer() {
+    console.log('SUBMIT CALLED');
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
+
+    // 🔒 HARD LOCK (fix for mobile double fire)
+    if (state.isSubmitting) {
+        console.log('⛔ BLOCKED DOUBLE SUBMIT');
+        return;
+    }
+
+    state.isSubmitting = true;
+
+    console.log('STATE INPUT:', JSON.stringify(state.userInput));
+
+    const current = state.current;
+
+    // ❗ DO NOT read DOM anymore
+    const input = (state.userInput || '').trim().toLowerCase();
+
+    console.log('📥 FINAL INPUT:', input);
+
+
+
+// =========================
+// ❗ EMPTY INPUT
+// =========================
+if (input === '') {
+
+    // First Enter → show hint
+    if (!state.answeredWithHint) {
+        state.answeredWithHint = true;
+        state.status = 'wrong';
+        render();
+    }
+
+    // 🚫 Second Enter → HARD BLOCK
+    state.isSubmitting = false;
+    return;
+}
+
+// =========================
+// ✅ CORRECT (ONLY if user typed)
+// =========================
+    const isCorrect =
+    input.length === current.answer.length &&
+    normalize(input) === normalize(current.answer);
+
+    if (isCorrect) {
+
+        state.isSubmitting = false;
+    // if user used hint → not immediate correct
+        finishWord(current, !state.answeredWithHint);
+
+        return;
+    }
+
+// =========================
+// ❌ WRONG
+// =========================
+    state.sessionWrong++;
+
+    current.memoryLevel = Math.max(
+        (Number(current.memoryLevel) || 0) - 1,
+        0
+        );
+
+    current.wrong = (Number(current.wrong) || 0) + 1;
+    current.lastSeen = new Date();
+
+    updateWord(current.id, false);
+
+    state.answeredWithHint = true;
+
+    playWrong();
+
+    state.status = 'wrongFlash';
+    state.flashWrong = true;
+
+    render();
+
+
+}
+
+
+export async function startNewSession() {
+if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+}
+
+    state.sessionCount = 0;
+    state.sessionCorrect = 0;
+    state.sessionWrong = 0;
+    state.completedCount = 0;
+
+    // 🔥 build new session queue
+    state.queue = buildSessionQueue();
+    state.queueIndex = 0;
+
+    // 🔥 RESET PROGRESS BAR
+    const bar = document.getElementById('progress-bar');
+    if (bar) {
+        bar.dataset.initialized = '';
+        bar.innerHTML = '';
+    }
+
+    // set first word
+    state.current = state.sentences[state.queue[0]] || null;
+
+state.userInput = '';
+state.status = 'waiting';
+state.answeredWithHint = false;
+state.isSubmitting = false;
+state.answerComplete = false;
+state.inputLocked = false;
+
+
+    const summary = document.getElementById('session-state');
+    const progressRow = document.getElementById('progress-row');
+
+    await fadeOut(summary);
+
+    render();
+
+    const sentenceArea = document.getElementById('sentence-area');
+
+    await Promise.all([
+        fadeIn(sentenceArea),
+        fadeIn(progressRow)
+    ]);
+}
+
+
+12. app.js:
+import { fetchSentences } from './api.js';
+import { state } from './state.js';
+import { buildSessionQueue } from './logic.js';
+import { render } from './ui.js';
+import { initOptions } from './options.js';
+
+const version = '1.3';
+console.log('VERSION:', version);
+
+async function startApp() {
+    try {
+
+        // 🔥 VERSION CHECK (after modules loaded)
+        const savedVersion = localStorage.getItem('appVersion');
+
+        if (savedVersion && savedVersion !== version) {
+            localStorage.setItem('appVersion', version);
+            location.reload();
+            return;
+        } else {
+            localStorage.setItem('appVersion', version);
+        }
+
+        // 🔹 Load data
+        const data = await fetchSentences();
+        if (!data) return; // stop app init completely
+        
+        console.log('AFTER FETCH:', data.length);
+
+        // SINGLE SOURCE OF TRUTH
+        state.sentences = data;
+
+        state.userInput = '';
+        state.status = 'waiting';
+
+        state.sessionCount = 0;
+        state.sessionCorrect = 0;
+        state.sessionWrong = 0;
+        state.queueIndex = 0;     
+        state.completedCount = 0;
+
+        localStorage.removeItem('sessionData'); // dev mode
+
+        // 🔹 Build session
+        state.queue = buildSessionQueue();
+
+        console.log('QUEUE:', state.queue);
+
+        if (!state.queue || state.queue.length === 0) {
+            console.error('❌ EMPTY QUEUE');
+            return;
+        }
+
+        state.queueIndex = 0;
+
+        // set first word
+        state.current = state.sentences[state.queue[0]] || null;
+
+        // 🔹 Show UI
+        const app = document.getElementById('app');
+
+        document.getElementById('loading').style.display = 'none';
+        app.style.display = 'flex';
+
+        setTimeout(() => {
+            app.classList.add('visible');
+            render();
+            initOptions();
+        }, 10);
+
+    } catch (err) {
+        console.error('Error loading data:', err);
+    }
+}
+
+startApp();
+

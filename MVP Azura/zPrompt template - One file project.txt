@@ -1,22 +1,22 @@
 My project structure 
 root files: index.html, style.css.
-folder assets: - folder icons (sprite.svg), folder json (vocabulary.json). folder sounds.
-folder js: anim.js, api.js, app.js, logic.js, options.js, sound.js, speech.js, state.js, ui.js.
+folder 'assets': - folder icons (sprite.svg), folder json (vocabulary.json). folder sounds.
+folder 'js': anim.js, api.js, app.js, logic.js, options.js, sound.js, speech.js, state.js, ui.js.
 
 
 Here is the list of all files:
    1. index.html
    2. style.css
    3. vocabulary.json
-   4. options.js
-   5. sound.js
-   6. speech.js
-   7. state.js
-   8. ui.js
-   9. anim.js
-   10. api.js
-   11. app.js
-   12. logic.js
+   4. ui.js
+   5. logic.js
+   6. app.js
+   7. api.js
+   8. state.js
+   9. options.js
+   10. anim.js
+   11. sound.js
+   12. speech.js
 
 
 

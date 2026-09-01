@@ -684,9 +684,8 @@ Gap
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    min-width: 6ch;
+    padding: 0 var(--space-xs);
     box-sizing: border-box;
-    padding: 0 4px;
     text-align: center;
     line-height: 1.2;
     color: var(--text-secondary);

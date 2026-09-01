@@ -232,6 +232,8 @@ function adjustGapWidth(input, current) {
         return;
     }
 
+    // Measure the actual answer text using the same
+    // typography as the gap.
     const cs =
         window.getComputedStyle(input);
 
@@ -241,6 +243,7 @@ function adjustGapWidth(input, current) {
     meas.style.position = 'absolute';
     meas.style.visibility = 'hidden';
     meas.style.whiteSpace = 'pre';
+
     meas.style.fontFamily = cs.fontFamily;
     meas.style.fontSize = cs.fontSize;
     meas.style.fontWeight = cs.fontWeight;
@@ -252,53 +255,19 @@ function adjustGapWidth(input, current) {
 
     document.body.appendChild(meas);
 
-    const textWidth =
+    const answerWidth =
         meas.offsetWidth;
 
-    document.body.removeChild(meas);
+    meas.remove();
 
-    const PAD = 12;
-
-    let maxWidth = Infinity;
-
-    const sentenceEl =
-        document.getElementById('sentence');
-
-    if (sentenceEl) {
-
-        const rect =
-            sentenceEl.getBoundingClientRect();
-
-        maxWidth =
-            Math.max(
-                80,
-                rect.width - 20
-            );
-    }
-
-    const finalWidth =
-        Math.min(
-            textWidth + PAD,
-            maxWidth
-        );
-
-    input.style.boxSizing =
-        'border-box';
-
-    input.style.width =
-        finalWidth + 'px';
-
+    // The answer width is the FLOOR.
+    // The gap is still allowed to grow/shrink
+    // naturally according to the user's typed text.
     input.style.minWidth =
-        finalWidth + 'px';
+        answerWidth + 'px';
 
-    input.style.maxWidth =
-        finalWidth + 'px';
-
-    input.style.whiteSpace =
-        'nowrap';
-
-    input.style.overflow =
-        'visible';
+    input.style.width = '';
+    input.style.maxWidth = '';
 }
 
 
@@ -936,11 +905,6 @@ export function render() {
             current
         );
 
-        adjustGapWidth(
-            input,
-            current
-        );
-
     } else if (
         state.userInput.length > 0
     ) {
@@ -950,20 +914,17 @@ export function render() {
             current
         );
 
-        adjustGapWidth(
-            input,
-            current
-        );
-
     } else {
 
         input.innerHTML = '';
-
-        input.style.minWidth = '';
-        input.style.width = '';
-        input.style.maxWidth = '';
-        input.style.overflow = '';
     }
+
+    // Always establish the minimum width from
+    // the correct answer.
+    adjustGapWidth(
+        input,
+        current
+    );
 
 
     // ========================================================
