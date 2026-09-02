@@ -1,51 +1,45 @@
 import { state } from './state.js';
 import { submitAnswer, startNewSession } from './logic.js';
 
-const isMobile =
-    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-
 let hasUserFocused = false;
 
 
 // ============================================================
-// RENDER OVERLAY
+// MEASURE TEXT
 // ============================================================
 
-function renderOverlay(
-    input,
-    { hintHTML, typed, typedClass, fullText }
-) {
+function measureText(input, text) {
 
-    input.innerHTML = '';
+    if (!text) {
+        return 0;
+    }
 
-    const overlay = document.createElement('span');
-    overlay.className = 'overlay';
+    const cs =
+        window.getComputedStyle(input);
 
-    // Invisible element that controls the real width.
-    const sizer = document.createElement('span');
-    sizer.className = 'overlay-sizer';
-    sizer.textContent = fullText || typed || '';
+    const meas =
+        document.createElement('span');
 
-    const hint = document.createElement('span');
-    hint.className = 'hint';
-    hint.innerHTML = hintHTML || '';
+    meas.style.position = 'absolute';
+    meas.style.visibility = 'hidden';
+    meas.style.whiteSpace = 'pre';
 
-    const typedEl = document.createElement('span');
-    typedEl.className = `typed ${typedClass || ''}`;
-    typedEl.textContent = typed || '';
+    meas.style.fontFamily = cs.fontFamily;
+    meas.style.fontSize = cs.fontSize;
+    meas.style.fontWeight = cs.fontWeight;
+    meas.style.letterSpacing = cs.letterSpacing;
+    meas.style.lineHeight = cs.lineHeight;
 
-    overlay.appendChild(sizer);
-    overlay.appendChild(hint);
-    overlay.appendChild(typedEl);
+    meas.textContent = text;
 
-    input.appendChild(overlay);
+    document.body.appendChild(meas);
 
-    requestAnimationFrame(() => {
-        setCaret(
-            input,
-            (state.userInput || '').length
-        );
-    });
+    const width =
+        meas.getBoundingClientRect().width;
+
+    meas.remove();
+
+    return width;
 }
 
 
@@ -53,166 +47,39 @@ function renderOverlay(
 // CARET
 // ============================================================
 
-function setCaret(el, position) {
+function setCaret(input, position) {
 
-    const range = document.createRange();
-    const sel = window.getSelection();
-
-    const typedNode =
-        el.querySelector('.typed');
-
-    if (!typedNode || !typedNode.firstChild) {
+    if (!input) {
         return;
     }
 
-    const textNode =
-        typedNode.firstChild;
+    const safePosition =
+        Math.max(
+            0,
+            Math.min(
+                position,
+                input.value.length
+            )
+        );
 
-    const safePos =
-        Math.min(position, textNode.length);
+    input.focus();
 
-    range.setStart(
-        textNode,
-        safePos
-    );
-
-    range.collapse(true);
-
-    sel.removeAllRanges();
-    sel.addRange(range);
-}
-
-
-// ============================================================
-// AUTOSUBMIT
-// ============================================================
-
-function scheduleAutoSubmit(input, current) {
-
-    if (state.autoSubmitTimer) {
-        clearTimeout(state.autoSubmitTimer);
-        state.autoSubmitTimer = null;
+    try {
+        input.setSelectionRange(
+            safePosition,
+            safePosition
+        );
+    } catch (err) {
+        // Ignore selection errors.
     }
-
-if (state.isComposing) return;
-if (state.inputLocked && !state.answerComplete) return;
-if (state.isSubmitting) return;
-
-    const value =
-        (state.userInput || '').toLowerCase();
-
-    const answer =
-        current.answer.toLowerCase();
-
-    if (value !== answer) {
-        return;
-    }
-
-    state.autoSubmitTimer = setTimeout(() => {
-
-        state.autoSubmitTimer = null;
-
-if (state.isComposing) return;
-if (state.inputLocked && !state.answerComplete) return;
-if (state.isSubmitting) return;
-
-        const latestValue =
-            (state.userInput || '').toLowerCase();
-
-        const latestAnswer =
-            current.answer.toLowerCase();
-
-        if (
-            latestValue === latestAnswer &&
-            latestValue.length === latestAnswer.length
-        ) {
-            submitAnswer();
-        }
-
-    }, 350);
-}
-
-
-// ============================================================
-// HINT UI
-// ============================================================
-
-function updateHintUI(input, current) {
-
-    const rawTyped =
-        (state.userInput || '').toLowerCase();
-
-    const isFirstWord =
-        current.isFirstWord;
-
-    const fullAnswer =
-        current.formattedAnswer;
-
-    const typed =
-        isFirstWord && rawTyped.length > 0
-            ? rawTyped.charAt(0).toUpperCase() +
-              rawTyped.slice(1)
-            : rawTyped;
-
-    // IMPORTANT:
-    // The FULL answer is visible as the hint.
-    // The typed element is positioned on top of it.
-    const hintHTML =
-        fullAnswer;
-
-    const typedClass =
-        state.lastTypedCorrect
-            ? 'correct'
-            : 'wrong';
-
-    renderOverlay(input, {
-        hintHTML,
-        typed,
-        typedClass,
-        fullText: fullAnswer
-    });
-
-    setCaret(
-        input,
-        rawTyped.length
-    );
-}
-
-
-// ============================================================
-// TYPED-ONLY UI
-// ============================================================
-
-function updateTypedOnlyUI(input, current) {
-
-    const rawTyped =
-        (state.userInput || '').toLowerCase();
-
-    const typed =
-        current.isFirstWord && rawTyped.length > 0
-            ? rawTyped.charAt(0).toUpperCase() +
-              rawTyped.slice(1)
-            : rawTyped;
-
-    renderOverlay(input, {
-        hintHTML: '',
-        typed,
-        typedClass:
-            state.lastTypedCorrect
-                ? 'correct'
-                : 'wrong',
-        fullText: typed
-    });
-
-    setCaret(
-        input,
-        rawTyped.length
-    );
 }
 
 
 // ============================================================
 // GAP WIDTH
+//
+// Minimum = answer width
+// Actual width = max(answer width, typed text width)
 // ============================================================
 
 function adjustGapWidth(input, current) {
@@ -232,42 +99,162 @@ function adjustGapWidth(input, current) {
         return;
     }
 
-    // Measure the actual answer text using the same
-    // typography as the gap.
-    const cs =
-        window.getComputedStyle(input);
+    const answerWidth =
+        measureText(
+            input,
+            answer
+        );
 
-    const meas =
-        document.createElement('span');
+    const typedRaw =
+        state.userInput || '';
 
-    meas.style.position = 'absolute';
-    meas.style.visibility = 'hidden';
-    meas.style.whiteSpace = 'pre';
+    const typed =
+        current.isFirstWord && typedRaw.length > 0
+            ? typedRaw.charAt(0).toUpperCase() +
+              typedRaw.slice(1)
+            : typedRaw;
 
-    meas.style.fontFamily = cs.fontFamily;
-    meas.style.fontSize = cs.fontSize;
-    meas.style.fontWeight = cs.fontWeight;
-    meas.style.letterSpacing = cs.letterSpacing;
-    meas.style.padding = cs.padding;
-    meas.style.lineHeight = cs.lineHeight;
+    const typedWidth =
+        measureText(
+            input,
+            typed
+        );
 
-    meas.textContent = answer;
+const WIDTH_BUFFER = 10;
 
-    document.body.appendChild(meas);
+const finalWidth =
+    Math.max(
+        answerWidth,
+        typedWidth
+    ) + WIDTH_BUFFER;
+
+input.style.minWidth =
+    (answerWidth + WIDTH_BUFFER) + 'px';
+
+input.style.width =
+    finalWidth + 'px';
+
+    input.style.maxWidth =
+        'none';
+
+    input.style.whiteSpace =
+        'nowrap';
+}
+
+
+// ============================================================
+// RENDER HINT
+//
+// The input itself displays the typed text.
+//
+// The overlay displays ONLY the remaining letters of the answer.
+// ============================================================
+
+function renderHint(input, current) {
+
+    const wrap =
+        input.closest('.gap-input-wrap');
+
+    if (!wrap) {
+        return;
+    }
+
+    let overlay =
+        wrap.querySelector('.overlay');
+
+    if (!overlay) {
+
+        overlay =
+            document.createElement('span');
+
+        overlay.className =
+            'overlay';
+
+        wrap.appendChild(
+            overlay
+        );
+    }
+
+    overlay.innerHTML = '';
+
+    // No hint before the user reveals it.
+    if (!state.answeredWithHint) {
+        return;
+    }
+
+    const typedRaw =
+        state.userInput || '';
+
+    const answer =
+        current.formattedAnswer ||
+        current.answer ||
+        '';
+
+    const typed =
+        typedRaw;
+
+    const remaining =
+        answer.slice(
+            typed.length
+        );
+
+    // Nothing remains to show.
+    if (!remaining) {
+        return;
+    }
+
+    // --------------------------------------------------------
+    // The ENTIRE answer must be centered.
+    //
+    // Example:
+    //
+    //      answer = "opening"
+    //      typed  = "op"
+    //
+    // We center "opening", then place "ening"
+    // immediately after "op".
+    // --------------------------------------------------------
 
     const answerWidth =
-        meas.offsetWidth;
+        measureText(
+            input,
+            answer
+        );
 
-    meas.remove();
+    const typedWidth =
+        measureText(
+            input,
+            typed
+        );
 
-    // The answer width is the FLOOR.
-    // The gap is still allowed to grow/shrink
-    // naturally according to the user's typed text.
-    input.style.minWidth =
-        answerWidth + 'px';
+    const inputWidth =
+        input.getBoundingClientRect().width;
 
-    input.style.width = '';
-    input.style.maxWidth = '';
+    const answerStart =
+        (
+            inputWidth -
+            answerWidth
+        ) / 2;
+
+    const hintStart =
+        answerStart +
+        typedWidth;
+
+    const hint =
+        document.createElement('span');
+
+    hint.className =
+        'hint';
+
+    hint.textContent =
+        remaining;
+
+    hint.style.left =
+        hintStart + 'px';
+
+    overlay.appendChild(
+        hint
+    );
 }
 
 
@@ -305,16 +292,101 @@ function createGapSentence(sentenceObj) {
         );
 
     return `${before}
-        <div class="gap-wrapper">
-            <span
-                id="gap-input"
-                contenteditable="true"
-                data-word-id="${sentenceObj.id}"
-                data-placeholder="..."
-                class="gap"
-            ></span>
-        </div>
+        <span class="gap-wrapper">
+            <span class="gap-input-wrap">
+                <input
+                    id="gap-input"
+                    type="text"
+                    data-word-id="${sentenceObj.id}"
+                    class="gap"
+                    inputmode="text"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    enterkeyhint="done"
+                    aria-label="Type missing word"
+                >
+            </span>
+        </span>
     ${after}`;
+}
+
+
+// ============================================================
+// AUTOSUBMIT
+// ============================================================
+
+function scheduleAutoSubmit(input, current) {
+
+    if (state.autoSubmitTimer) {
+
+        clearTimeout(
+            state.autoSubmitTimer
+        );
+
+        state.autoSubmitTimer = null;
+    }
+
+    if (state.isComposing) {
+        return;
+    }
+
+    if (
+        state.inputLocked &&
+        !state.answerComplete
+    ) {
+        return;
+    }
+
+    if (state.isSubmitting) {
+        return;
+    }
+
+    const value =
+        (state.userInput || '').toLowerCase();
+
+    const answer =
+        current.answer.toLowerCase();
+
+    if (value !== answer) {
+        return;
+    }
+
+    state.autoSubmitTimer =
+        setTimeout(() => {
+
+            state.autoSubmitTimer = null;
+
+            if (state.isComposing) {
+                return;
+            }
+
+            if (
+                state.inputLocked &&
+                !state.answerComplete
+            ) {
+                return;
+            }
+
+            if (state.isSubmitting) {
+                return;
+            }
+
+            const latestValue =
+                (state.userInput || '').toLowerCase();
+
+            const latestAnswer =
+                current.answer.toLowerCase();
+
+            if (
+                latestValue === latestAnswer &&
+                latestValue.length === latestAnswer.length
+            ) {
+                submitAnswer();
+            }
+
+        }, 350);
 }
 
 
@@ -356,12 +428,6 @@ export function render() {
         document.getElementById(
             'total-completed-counter'
         );
-
-    if (totalCompletedEl) {
-
-        totalCompletedEl.innerText =
-            `${state.totalCompleted}`;
-    }
 
     const progressCounter =
         document.getElementById(
@@ -405,13 +471,25 @@ export function render() {
 
             btn.onclick = () => {
 
-                state.status = 'waiting';
+                state.status =
+                    'waiting';
 
                 render();
             };
         }
 
         return;
+    }
+
+
+    // ========================================================
+    // GLOBAL COUNTER
+    // ========================================================
+
+    if (totalCompletedEl) {
+
+        totalCompletedEl.innerText =
+            `${state.totalCompleted}`;
     }
 
 
@@ -543,7 +621,7 @@ export function render() {
 
         const level =
             Math.min(
-                current.memoryLevel || 0,
+                Number(current.memoryLevel) || 0,
                 5
             );
 
@@ -642,9 +720,7 @@ export function render() {
     // ========================================================
 
     const existingInput =
-        document.getElementById(
-            'gap-input'
-        );
+        document.getElementById('gap-input');
 
     const canReuseInput =
         existingInput &&
@@ -671,22 +747,35 @@ export function render() {
     }
 
     const input =
-        document.getElementById(
-            'gap-input'
-        );
+        document.getElementById('gap-input');
 
     if (!input) {
         return;
     }
 
-    input.setAttribute(
-        'enterkeyhint',
-        'done'
-    );
+
+    // ========================================================
+    // SYNC NATIVE INPUT
+    // ========================================================
+
+    if (
+        input.value !==
+        (state.userInput || '')
+    ) {
+
+        input.value =
+            state.userInput || '';
+    }
+
+    input.disabled =
+        false;
+
+    input.dataset.wordId =
+        String(current.id);
 
 
     // ========================================================
-    // BASE INPUT STATE
+    // BASE CLASSES
     // ========================================================
 
     input.classList.remove(
@@ -695,10 +784,13 @@ export function render() {
         'correct-pop'
     );
 
-    input.contentEditable =
-        'true';
+
+    // ========================================================
+    // FOCUS
+    // ========================================================
 
     input.onfocus = () => {
+
         hasUserFocused = true;
     };
 
@@ -812,7 +904,10 @@ export function render() {
 
     if (state.status === 'correct') {
 
-        input.textContent =
+        state.userInput =
+            current.formattedAnswer;
+
+        input.value =
             current.formattedAnswer;
 
         input.classList.add(
@@ -820,8 +915,21 @@ export function render() {
             'correct-pop'
         );
 
-        input.contentEditable =
-            'false';
+        input.disabled =
+            true;
+
+        const wrap =
+            input.closest('.gap-input-wrap');
+
+        if (wrap) {
+
+            const overlay =
+                wrap.querySelector('.overlay');
+
+            if (overlay) {
+                overlay.innerHTML = '';
+            }
+        }
 
         input.blur();
 
@@ -835,28 +943,15 @@ export function render() {
 
     if (state.status === 'wrongFlash') {
 
-        renderOverlay(input, {
-            hintHTML:
-                `<span style="visibility:hidden">${
-                    state.userInput
-                }</span>`,
-
-            typed:
-                state.userInput,
-
-            typedClass:
-                'wrong',
-
-            fullText:
-                current.formattedAnswer
-        });
+        input.value =
+            state.userInput || '';
 
         input.classList.add(
             'flash-wrong'
         );
 
-        state.inputLocked = true;
-
+        state.inputLocked =
+            true;
 
         input.onanimationend = (e) => {
 
@@ -868,15 +963,24 @@ export function render() {
                 'flash-wrong'
             );
 
-            state.inputLocked = false;
-            state.status = 'wrong';
-            state.userInput = '';
-            state.isSubmitting = false;
-            state.answeredWithHint = true;
+            state.inputLocked =
+                false;
 
-            // CRITICAL:
-            // Re-render the hint phase so that
-            // all normal input handlers are installed.
+            state.status =
+                'wrong';
+
+            state.userInput =
+                '';
+
+            input.value =
+                '';
+
+            state.isSubmitting =
+                false;
+
+            state.answeredWithHint =
+                true;
+
             render();
         };
 
@@ -885,43 +989,264 @@ export function render() {
 
 
     // ========================================================
-    // NORMAL / HINT INPUT MODE
+    // NORMAL INPUT
     // ========================================================
 
-    input.contentEditable =
-        'true';
+    input.disabled =
+        false;
 
-
-    // Fresh question:
-    // show typed letters only.
-    //
-    // Hint phase:
-    // show full hint with typed letters on top.
-
-    if (state.status === 'wrong') {
-
-        updateHintUI(
-            input,
-            current
-        );
-
-    } else if (
-        state.userInput.length > 0
-    ) {
-
-        updateTypedOnlyUI(
-            input,
-            current
-        );
-
-    } else {
-
-        input.innerHTML = '';
-    }
-
-    // Always establish the minimum width from
-    // the correct answer.
     adjustGapWidth(
+        input,
+        current
+    );
+
+    renderHint(
+        input,
+        current
+    );
+
+
+    // ========================================================
+    // COMPOSITION
+    // ========================================================
+
+    input.oncompositionstart = () => {
+
+        if (state.autoSubmitTimer) {
+
+            clearTimeout(
+                state.autoSubmitTimer
+            );
+
+            state.autoSubmitTimer =
+                null;
+        }
+
+        state.isComposing =
+            true;
+    };
+
+
+    input.oncompositionend = () => {
+
+        state.isComposing =
+            false;
+
+        state.userInput =
+            input.value;
+
+        adjustGapWidth(
+            input,
+            current
+        );
+
+        renderHint(
+            input,
+            current
+        );
+
+        scheduleAutoSubmit(
+            input,
+            current
+        );
+    };
+
+
+    // ========================================================
+    // INPUT
+    //
+    // BEFORE HINT:
+    //   Accept everything.
+    //
+    // AFTER HINT:
+    //   Only accept the next correct character.
+    // ========================================================
+
+    input.onbeforeinput = (e) => {
+
+        if (
+            state.inputLocked ||
+            state.answerComplete ||
+            state.isSubmitting
+        ) {
+            e.preventDefault();
+            return;
+        }
+
+        if (state.autoSubmitTimer) {
+
+            clearTimeout(
+                state.autoSubmitTimer
+            );
+
+            state.autoSubmitTimer =
+                null;
+        }
+
+        if (state.isComposing) {
+            return;
+        }
+
+        // -----------------------------------------------
+        // BEFORE HINT
+        // -----------------------------------------------
+
+        if (!state.answeredWithHint) {
+            return;
+        }
+
+        // -----------------------------------------------
+        // HINT PHASE
+        // -----------------------------------------------
+
+        if (
+            e.inputType === 'insertText' &&
+            e.data
+        ) {
+
+            const text =
+                e.data.toLowerCase();
+
+            // For regular typing we handle one
+            // character at a time.
+            if (text.length !== 1) {
+                return;
+            }
+
+            const nextIndex =
+                state.userInput.length;
+
+            const expected =
+                current.answer[nextIndex]
+                    ?.toLowerCase();
+
+            if (text !== expected) {
+
+                e.preventDefault();
+
+                input.classList.remove(
+                    'flash-wrong-letter'
+                );
+
+                void input.offsetWidth;
+
+                input.classList.add(
+                    'flash-wrong-letter'
+                );
+
+                return;
+            }
+
+            return;
+        }
+
+
+        // -----------------------------------------------
+        // BACKSPACE
+        // -----------------------------------------------
+
+        if (
+            e.inputType ===
+            'deleteContentBackward'
+        ) {
+            return;
+        }
+    };
+
+
+    // ========================================================
+    // INPUT EVENT
+    // ========================================================
+
+    input.oninput = () => {
+
+        if (
+            state.inputLocked ||
+            state.isSubmitting
+        ) {
+            return;
+        }
+
+        if (state.isComposing) {
+            return;
+        }
+
+        state.userInput =
+            input.value;
+
+        state.lastTypedCorrect =
+            true;
+
+        adjustGapWidth(
+            input,
+            current
+        );
+
+        renderHint(
+            input,
+            current
+        );
+
+        scheduleAutoSubmit(
+            input,
+            current
+        );
+
+        setCaret(
+            input,
+            state.userInput.length
+        );
+    };
+
+
+    // ========================================================
+    // MOUSE / TOUCH
+    // ========================================================
+
+    input.onmousedown = () => {
+
+        setTimeout(() => {
+
+            setCaret(
+                input,
+                state.userInput.length
+            );
+
+        }, 0);
+    };
+
+    input.ontouchend = () => {
+
+        setTimeout(() => {
+
+            setCaret(
+                input,
+                state.userInput.length
+            );
+
+        }, 0);
+    };
+
+
+    // ========================================================
+    // DISABLE SELECTION BEHAVIOR OUTSIDE INPUT
+    // ========================================================
+
+    input.onselectstart = () => {
+        return true;
+    };
+
+
+    // ========================================================
+    // INITIAL WIDTH + HINT
+    // ========================================================
+
+    adjustGapWidth(
+        input,
+        current
+    );
+
+    renderHint(
         input,
         current
     );
@@ -935,532 +1260,17 @@ export function render() {
 
         if (
             !state.isSubmitting &&
-            !state.inputLocked
+            !state.inputLocked &&
+            !input.disabled
         ) {
+
             input.focus();
+
+            setCaret(
+                input,
+                state.userInput.length
+            );
         }
 
     }, 0);
-
-
-    function forceFocusAndCaret() {
-
-        input.focus();
-
-        setTimeout(() => {
-
-            setCaret(
-                input,
-                state.userInput.length
-            );
-
-        }, 0);
-    }
-
-
-    input.onmousedown = (e) => {
-
-        e.preventDefault();
-
-        forceFocusAndCaret();
-    };
-
-
-    input.ontouchend = () => {
-        forceFocusAndCaret();
-    };
-
-
-    input.onselectstart = (e) => {
-        e.preventDefault();
-    };
-
-
-    // ========================================================
-    // COMPOSITION / SWIPE
-    // ========================================================
-
-    input.isComposing = false;
-
-
-    input.oncompositionstart = () => {
-
-        if (state.autoSubmitTimer) {
-
-            clearTimeout(
-                state.autoSubmitTimer
-            );
-
-            state.autoSubmitTimer = null;
-        }
-
-        state.isComposing = true;
-        input.isComposing = true;
-    };
-
-
-    input.oncompositionend = (e) => {
-
-        state.isComposing = false;
-        input.isComposing = false;
-
-        const candidate =
-            (e.data || '')
-                .toLowerCase()
-                .trim();
-
-        if (!candidate) {
-            return;
-        }
-
-        const currentWord =
-            state.current;
-
-        const answer =
-            currentWord.answer.toLowerCase();
-
-
-        // ====================================================
-        // BEFORE HINT
-        //
-        // Swipe result is just user input.
-        // NO letter correctness checking.
-        // ====================================================
-
-        if (!state.answeredWithHint) {
-
-            state.userInput =
-                candidate;
-
-            state.lastTypedCorrect =
-                true;
-
-            updateTypedOnlyUI(
-                input,
-                currentWord
-            );
-
-            adjustGapWidth(
-                input,
-                currentWord
-            );
-
-            scheduleAutoSubmit(
-                input,
-                currentWord
-            );
-
-            return;
-        }
-
-
-        // ====================================================
-        // HINT PHASE — CORRECT SWIPE
-        // ====================================================
-
-if (candidate === answer) {
-
-    state.userInput = candidate;
-    state.lastTypedCorrect = true;
-
-    updateHintUI(
-        input,
-        currentWord
-    );
-
-    adjustGapWidth(
-        input,
-        currentWord
-    );
-
-    state.answerComplete = true;
-    state.inputLocked = true;
-
-    scheduleAutoSubmit(
-        input,
-        currentWord
-    );
-
-    return;
-}
-
-
-        // ====================================================
-        // HINT PHASE — WRONG SWIPE
-        // ====================================================
-
-        state.lastTypedCorrect =
-            false;
-
-        renderOverlay(input, {
-
-            hintHTML:
-                `<span style="visibility:hidden">${
-                    candidate
-                }</span>`,
-
-            typed:
-                candidate,
-
-            typedClass:
-                'wrong',
-
-            fullText:
-                currentWord.formattedAnswer
-        });
-
-        input.classList.add(
-            'flash-wrong-letter'
-        );
-
-        setTimeout(() => {
-
-            input.classList.remove(
-                'flash-wrong-letter'
-            );
-
-            state.userInput = '';
-            state.lastTypedCorrect = true;
-
-            updateHintUI(
-                input,
-                currentWord
-            );
-
-            adjustGapWidth(
-                input,
-                currentWord
-            );
-
-            input.focus();
-            setCaret(input, 0);
-
-        }, 200);
-    };
-
-
-    // ========================================================
-    // BEFOREINPUT
-    //
-    // Before hint:
-    //   free typing, no correctness check.
-    //
-    // After hint:
-    //   strict character-by-character checking.
-    // ========================================================
-
-input.onbeforeinput = (e) => {
-
-    const currentWord =
-        state.current;
-
-
-    // ====================================================
-    // ANSWER ALREADY COMPLETE
-    //
-    // Do NOT cancel the pending autosubmit.
-    // Simply reject any extra input.
-    // ====================================================
-
-    if (
-        state.answerComplete ||
-        state.inputLocked ||
-        state.isSubmitting
-    ) {
-
-        e.preventDefault();
-        return;
-    }
-
-
-    // ====================================================
-    // NORMAL NEW INPUT
-    //
-    // Cancel a pending autosubmit because the answer
-    // may be changing again.
-    // ====================================================
-
-    if (state.autoSubmitTimer) {
-
-        clearTimeout(
-            state.autoSubmitTimer
-        );
-
-        state.autoSubmitTimer = null;
-    }
-
-
-        // ----------------------------------------------------
-        // COMPOSITION / SWIPE
-        //
-        // compositionend handles the completed candidate.
-        // ----------------------------------------------------
-
-        if (state.isComposing) {
-
-            e.preventDefault();
-            return;
-        }
-
-
-        // ====================================================
-        // INSERT TEXT
-        // ====================================================
-
-        if (e.inputType === 'insertText') {
-
-            e.preventDefault();
-
-            const text =
-                (e.data || '')
-                    .toLowerCase();
-
-            if (!text) {
-                return;
-            }
-
-
-            // =================================================
-            // PHASE 1 — BEFORE HINT
-            //
-            // Accept anything.
-            // Enter checks it.
-            // Exact correct answers autosubmit.
-            // =================================================
-
-            if (!state.answeredWithHint) {
-
-                state.userInput += text;
-
-                state.lastTypedCorrect =
-                    true;
-
-                updateTypedOnlyUI(
-                    input,
-                    currentWord
-                );
-
-                scheduleAutoSubmit(
-                    input,
-                    currentWord
-                );
-
-                return;
-            }
-
-
-            // =================================================
-            // PHASE 2 — HINT SHOWN
-            // =================================================
-
-
-            // -------------------------------------------------
-            // MULTI-CHARACTER INPUT
-            // -------------------------------------------------
-
-            if (text.length > 1) {
-
-                const answer =
-                    currentWord.answer.toLowerCase();
-
-                // A complete swipe candidate replaces
-                // the current typed value.
-                state.userInput = text;
-
-                if (text === answer) {
-
-                    state.lastTypedCorrect =
-                        true;
-
-                    updateHintUI(
-                        input,
-                        currentWord
-                    );
-
-                    scheduleAutoSubmit(
-                        input,
-                        currentWord
-                    );
-
-                    return;
-                }
-
-
-                // Wrong gesture.
-                state.lastTypedCorrect =
-                    false;
-
-                renderOverlay(input, {
-
-                    hintHTML:
-                        `<span style="visibility:hidden">${
-                            text
-                        }</span>`,
-
-                    typed:
-                        text,
-
-                    typedClass:
-                        'wrong',
-
-                    fullText:
-                        currentWord.formattedAnswer
-                });
-
-                input.classList.add(
-                    'flash-wrong-letter'
-                );
-
-                setTimeout(() => {
-
-                    input.classList.remove(
-                        'flash-wrong-letter'
-                    );
-
-                    state.userInput = '';
-                    state.lastTypedCorrect = true;
-
-                    updateHintUI(
-                        input,
-                        currentWord
-                    );
-
-                    input.focus();
-                    setCaret(input, 0);
-
-                }, 200);
-
-                return;
-            }
-
-
-            // -------------------------------------------------
-            // SINGLE CHARACTER — HINT PHASE
-            // -------------------------------------------------
-
-            const char =
-                text;
-
-            const nextIndex =
-                state.userInput.length;
-
-            const expected =
-                currentWord.answer[nextIndex];
-
-
-if (
-    char ===
-    expected?.toLowerCase()
-) {
-
-    state.userInput += char;
-
-    state.lastTypedCorrect = true;
-
-    updateHintUI(
-        input,
-        currentWord
-    );
-
-    // Full answer reached.
-    if (
-        state.userInput.length ===
-        currentWord.answer.length &&
-        state.userInput.toLowerCase() ===
-        currentWord.answer.toLowerCase()
-    ) {
-
-        state.answerComplete = true;
-        state.inputLocked = true;
-
-        scheduleAutoSubmit(
-            input,
-            currentWord
-        );
-
-        return;
-    }
-
-    scheduleAutoSubmit(
-        input,
-        currentWord
-    );
-
-} else {
-
-                // Wrong letter during hint phase:
-                // do not add it to state.
-                // Show the flash.
-                state.lastTypedCorrect =
-                    false;
-
-                input.classList.add(
-                    'flash-wrong-letter'
-                );
-
-                setTimeout(() => {
-
-                    input.classList.remove(
-                        'flash-wrong-letter'
-                    );
-
-                }, 200);
-
-                updateHintUI(
-                    input,
-                    currentWord
-                );
-
-                input.focus();
-
-                setCaret(
-                    input,
-                    state.userInput.length
-                );
-            }
-
-            return;
-        }
-
-
-        // ====================================================
-        // BACKSPACE
-        // ====================================================
-
-        if (
-            e.inputType ===
-            'deleteContentBackward'
-        ) {
-
-            e.preventDefault();
-
-            state.userInput =
-                state.userInput.slice(0, -1);
-
-            state.lastTypedCorrect =
-                true;
-
-            if (state.answeredWithHint) {
-
-                updateHintUI(
-                    input,
-                    currentWord
-                );
-
-            } else {
-
-                updateTypedOnlyUI(
-                    input,
-                    currentWord
-                );
-            }
-
-            setCaret(
-                input,
-                state.userInput.length
-            );
-
-            return;
-        }
-    };
 }

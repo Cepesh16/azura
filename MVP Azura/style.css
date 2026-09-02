@@ -501,80 +501,155 @@ Learning Area
     }
 
 
-/* =========================
-Gap
-========================= */
+ /* =========================
+    Gap
+    ========================= */
+
 .gap-wrapper {
-    display: inline-flex;
+    display: inline-block;
     line-height: 1.2;
+    vertical-align: middle;
 }
 
-    /*placeholder*/
-    .gap-wrapper > span:empty::before {
-        content: attr(data-placeholder);
-        color: var(--bg-overlay);
-        font-style: italic;
-        cursor: text;
-    }
-
-    .gap-wrapper > span:focus::before {
-        content: "";
-    }
-
-    .gap {
-        text-align: center;
-        padding: 0 var(--space-xs);
-
-        color: var(--text-secondary);
-        border-bottom: 1px solid var(--text-secondary);
-        outline: none;
-    }
-
-        .gap span {
-            line-height: inherit;
-            white-space: pre;
-        }
-
-/* =========================
-Gap Overlay
-========================= */
-
-.overlay {
+.gap-input-wrap {
     position: relative;
     display: inline-block;
-    line-height: inherit;
-    white-space: nowrap;
-    pointer-events: none;
+    line-height: 1.2;
+    vertical-align: middle;
 }
 
-.overlay-sizer {
+
+/* =========================
+   Native Input
+   ========================= */
+
+input.gap {
     display: inline-block;
-    visibility: hidden;
-    white-space: pre;
+    vertical-align: middle;
+
+    width: 0;
+    min-width: 4ch;
+    box-sizing: border-box;
+
+    margin: 0;
+
+    background: transparent;
+
+    border: none;
+    border-bottom: 1px solid var(--text-secondary);
+    border-radius: 0;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
     line-height: inherit;
+
+    text-align: left;
+
+    color: var(--text-secondary);
+    caret-color: var(--text-secondary);
+
+    white-space: nowrap;
+
+    -webkit-appearance: none;
+    appearance: none;
 }
 
-.overlay .hint {
+
+/* =========================
+   Hint Overlay
+   ========================= */
+
+.gap-input-wrap .overlay {
     position: absolute;
-    left: 0;
+
     top: 0;
-    white-space: pre;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    white-space: nowrap;
+
     line-height: inherit;
+
+    overflow: visible;
+}
+
+.gap-input-wrap .overlay .hint {
+    position: absolute;
+
+    top: 0;
+
     color: var(--hint);
-    pointer-events: none;
-}
 
-.overlay .typed {
-    position: absolute;
-    left: 0;
-    top: 0;
     white-space: pre;
-    line-height: inherit;
+
     pointer-events: none;
+
+    line-height: inherit;
 }
 
 
+/* =========================
+   Correct
+   ========================= */
 
+input.gap.correct {
+    border-bottom-color: var(--correct);
+    color: var(--correct);
+    caret-color: transparent;
+}
+
+
+/* =========================
+   Wrong Answer Flash
+   ========================= */
+
+input.gap.flash-wrong {
+    color: var(--wrong);
+    border-color: var(--wrong);
+    animation: wrongShake 0.25s ease;
+}
+
+
+/* =========================
+   Correct Pop
+   ========================= */
+
+input.gap.correct-pop {
+    animation: correctPop 0.22s ease;
+}
+
+@keyframes correctPop {
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+
+/* =========================
+   Wrong Letter
+   ========================= */
+
+.flash-wrong-letter {
+    animation: wrongFlash 0.2s;
+}
+
+@keyframes wrongFlash {
+    0% {
+        background: rgba(231, 76, 60, 0.2);
+    }
+
+    100% {
+        background: transparent;
+    }
+}
 
 /* =========================
 Translation Row
@@ -724,7 +799,6 @@ States
 }
 
 
-
 #sentence {
     opacity: 1;
     transform: translateY(0);
@@ -817,10 +891,9 @@ Session summary
         font-size: var(--font-lg);
     }
 
-    .gap {
-        min-width: 4ch;
-    }
-
+/* =========================
+ Responsive tweaks
+ ========================= */
     #translation-row {
 
     }
