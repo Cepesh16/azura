@@ -507,15 +507,15 @@ Learning Area
 
 .gap-wrapper {
     display: inline-block;
-    line-height: 1.2;
-    vertical-align: middle;
+    line-height: inherit;
+    vertical-align: baseline;
 }
 
 .gap-input-wrap {
     position: relative;
     display: inline-block;
-    line-height: 1.2;
-    vertical-align: middle;
+    line-height: inherit;
+    vertical-align: baseline;
 }
 
 
@@ -525,7 +525,6 @@ Learning Area
 
 input.gap {
     display: inline-block;
-    vertical-align: middle;
 
     width: 0;
     min-width: 4ch;
@@ -545,7 +544,12 @@ input.gap {
     font-size: inherit;
     font-weight: inherit;
     letter-spacing: inherit;
+
+    /* Match the surrounding sentence line */
     line-height: inherit;
+
+    /* Let the input text follow the sentence baseline */
+    vertical-align: baseline;
 
     text-align: center;
 
@@ -584,7 +588,7 @@ input.gap {
 .gap-input-wrap .overlay .hint {
     position: absolute;
 
-    top: 0;
+    top: 1px;
 
     color: var(--hint);
 
