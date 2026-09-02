@@ -547,7 +547,7 @@ input.gap {
     letter-spacing: inherit;
     line-height: inherit;
 
-    text-align: left;
+    text-align: center;
 
     color: var(--text-secondary);
     caret-color: var(--text-secondary);

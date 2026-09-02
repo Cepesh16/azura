@@ -177,12 +177,44 @@ function renderHint(input, current) {
 
     overlay.innerHTML = '';
 
-    // No hint before the user reveals it.
+    // --------------------------------------------------------
+    // NORMAL MODE
+    //
+    // No hint yet.
+    // Keep native input centered.
+    // --------------------------------------------------------
+
     if (!state.answeredWithHint) {
+
+        input.style.textAlign =
+            'center';
+
+        input.style.paddingLeft =
+            '0px';
+
+        input.style.paddingRight =
+            '0px';
+
         return;
     }
 
-    const typedRaw =
+
+    // --------------------------------------------------------
+    // HINT MODE
+    //
+    // The entire answer is centered inside the input,
+    // but the user's typed text starts at the LEFT
+    // edge of that centered answer.
+    // --------------------------------------------------------
+
+    input.style.textAlign =
+        'left';
+
+    input.style.paddingRight =
+        '0px';
+
+
+    const typed =
         state.userInput || '';
 
     const answer =
@@ -190,55 +222,50 @@ function renderHint(input, current) {
         current.answer ||
         '';
 
-    const typed =
-        typedRaw;
-
     const remaining =
         answer.slice(
             typed.length
         );
 
-    // Nothing remains to show.
-    if (!remaining) {
-        return;
-    }
-
-    // --------------------------------------------------------
-    // The ENTIRE answer must be centered.
-    //
-    // Example:
-    //
-    //      answer = "opening"
-    //      typed  = "op"
-    //
-    // We center "opening", then place "ening"
-    // immediately after "op".
-    // --------------------------------------------------------
-
+    // Width of the complete answer.
     const answerWidth =
         measureText(
             input,
             answer
         );
 
+    const inputWidth =
+        input.getBoundingClientRect().width;
+
+    // Left edge of the centered answer.
+    const answerStart =
+        Math.max(
+            0,
+            (inputWidth - answerWidth) / 2
+        );
+
+    // Move native left-aligned text to that position.
+    input.style.paddingLeft =
+        answerStart + 'px';
+
+
+    // Nothing remains to display.
+    if (!remaining) {
+        return;
+    }
+
+
+    // --------------------------------------------------------
+    // HINT POSITION
+    //
+    // Hint starts immediately after the real typed text.
+    // --------------------------------------------------------
+
     const typedWidth =
         measureText(
             input,
             typed
         );
-
-    const inputWidth =
-        input.getBoundingClientRect().width;
-
-    const answerStart =
-        (
-            inputWidth -
-            answerWidth
-        ) / 2;
-
-    const hintStart =
-        answerStart +
-        typedWidth;
 
     const hint =
         document.createElement('span');
@@ -250,7 +277,10 @@ function renderHint(input, current) {
         remaining;
 
     hint.style.left =
-        hintStart + 'px';
+        (
+            answerStart +
+            typedWidth
+        ) + 'px';
 
     overlay.appendChild(
         hint
@@ -906,6 +936,10 @@ export function render() {
 
         state.userInput =
             current.formattedAnswer;
+
+        input.style.textAlign = 'center';
+        input.style.paddingLeft = '0px';
+        input.style.paddingRight = '0px';
 
         input.value =
             current.formattedAnswer;
