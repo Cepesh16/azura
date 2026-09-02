@@ -142,6 +142,8 @@ input.style.width =
 }
 
 
+
+
 // ============================================================
 // RENDER HINT
 //
@@ -932,43 +934,41 @@ export function render() {
     // CORRECT
     // ========================================================
 
-    if (state.status === 'correct') {
+if (state.status === 'correct') {
 
-        state.userInput =
-            current.formattedAnswer;
+    state.userInput =
+        current.formattedAnswer;
 
-        input.style.textAlign = 'center';
-        input.style.paddingLeft = '0px';
-        input.style.paddingRight = '0px';
+    input.style.textAlign = 'center';
+    input.style.paddingLeft = '0px';
+    input.style.paddingRight = '0px';
 
-        input.value =
-            current.formattedAnswer;
+    input.value =
+        current.formattedAnswer;
 
-        input.classList.add(
-            'correct',
-            'correct-pop'
-        );
+    input.classList.add(
+        'correct',
+        'correct-pop'
+    );
 
-        input.disabled =
-            true;
+    const wrap = input.closest('.gap-input-wrap');
 
-        const wrap =
-            input.closest('.gap-input-wrap');
+    if (wrap) {
+        wrap.classList.add('correct');
 
-        if (wrap) {
+        const overlay =
+            wrap.querySelector('.overlay');
 
-            const overlay =
-                wrap.querySelector('.overlay');
-
-            if (overlay) {
-                overlay.innerHTML = '';
-            }
+        if (overlay) {
+            overlay.innerHTML = '';
         }
-
-        input.blur();
-
-        return;
     }
+
+    input.disabled = true;
+    input.blur();
+
+    return;
+}
 
 
     // ========================================================
@@ -984,6 +984,9 @@ export function render() {
             'flash-wrong'
         );
 
+        const wrap = input.closest('.gap-input-wrap');
+        if (wrap) wrap.classList.add('flash-wrong');
+
         state.inputLocked =
             true;
 
@@ -996,6 +999,7 @@ export function render() {
             input.classList.remove(
                 'flash-wrong'
             );
+            wrap?.classList.remove('flash-wrong');
 
             state.inputLocked =
                 false;

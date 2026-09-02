@@ -518,6 +518,16 @@ Learning Area
     vertical-align: baseline;
 }
 
+    .gap-input-wrap::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 3px;
+        height: 1px;
+        background: var(--text-secondary);
+    }
+
 
 /* =========================
    Native Input
@@ -535,7 +545,6 @@ input.gap {
     background: transparent;
 
     border: none;
-    border-bottom: 1px solid var(--text-secondary);
     border-radius: 0;
 
     outline: none;
@@ -604,8 +613,11 @@ input.gap {
    Correct
    ========================= */
 
+.gap-input-wrap.correct::after {
+    background: var(--correct);
+}
+
 input.gap.correct {
-    border-bottom-color: var(--correct);
     color: var(--correct);
     caret-color: transparent;
 }
@@ -614,6 +626,10 @@ input.gap.correct {
 /* =========================
    Wrong Answer Flash
    ========================= */
+
+.gap-input-wrap.flash-wrong::after {
+    background: var(--wrong);
+}
 
 input.gap.flash-wrong {
     color: var(--wrong);
