@@ -633,7 +633,6 @@ input.gap.correct {
 
 input.gap.flash-wrong {
     color: var(--wrong);
-    border-color: var(--wrong);
     animation: wrongShake 0.25s ease;
 }
 
@@ -765,19 +764,6 @@ Helper
 States
 ========================= */
 
-.gap.correct {
-    border-bottom-color: var(--correct);
-    border-color: var(--correct);
-    color: var(--correct);
-    caret-color: transparent;
-}
-
-.gap.flash-wrong {
-    color: var(--wrong);
-    border-color: var(--wrong);
-    animation: wrongShake 0.25s ease;
-}
-
 @keyframes wrongShake {
     25% { transform: translateX(-4px); }
     50% { transform: translateX(4px); }
@@ -797,17 +783,6 @@ States
     opacity: 1;
 }
 
-.typed {
-    color: var(--check);
-}
-
-.typed.correct {
-    color: var(--check);
-}
-
-.typed.wrong {
-    color: var(--wrong);
-}
 
 .flash-wrong-letter {
     animation: wrongFlash 0.2s;

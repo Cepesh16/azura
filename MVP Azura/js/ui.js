@@ -142,7 +142,19 @@ input.style.width =
 }
 
 
+function setGapState(input, stateName) {
+    const wrap = input.closest('.gap-input-wrap');
+    if (!wrap) return;
 
+    wrap.classList.remove(
+        'correct',
+        'flash-wrong'
+    );
+
+    if (stateName) {
+        wrap.classList.add(stateName);
+    }
+}
 
 // ============================================================
 // RENDER HINT
@@ -946,15 +958,24 @@ if (state.status === 'correct') {
     input.value =
         current.formattedAnswer;
 
+    // Input controls text/caret appearance.
     input.classList.add(
         'correct',
         'correct-pop'
     );
 
-    const wrap = input.closest('.gap-input-wrap');
+    // Wrapper controls the underline.
+    setGapState(
+        input,
+        'correct'
+    );
+
+    input.disabled = true;
+
+    const wrap =
+        input.closest('.gap-input-wrap');
 
     if (wrap) {
-        wrap.classList.add('correct');
 
         const overlay =
             wrap.querySelector('.overlay');
@@ -964,7 +985,6 @@ if (state.status === 'correct') {
         }
     }
 
-    input.disabled = true;
     input.blur();
 
     return;
@@ -975,20 +995,19 @@ if (state.status === 'correct') {
     // WRONG FLASH
     // ========================================================
 
-    if (state.status === 'wrongFlash') {
+if (state.status === 'wrongFlash') {
 
-        input.value =
-            state.userInput || '';
+    input.value =
+        state.userInput || '';
 
-        input.classList.add(
-            'flash-wrong'
-        );
+    // The wrapper controls the underline color.
+    setGapState(input, 'flash-wrong');
 
-        const wrap = input.closest('.gap-input-wrap');
-        if (wrap) wrap.classList.add('flash-wrong');
+    // The input controls the shake animation.
+    input.classList.add('flash-wrong');
 
-        state.inputLocked =
-            true;
+    state.inputLocked =
+        true;
 
         input.onanimationend = (e) => {
 
@@ -996,10 +1015,7 @@ if (state.status === 'correct') {
                 return;
             }
 
-            input.classList.remove(
-                'flash-wrong'
-            );
-            wrap?.classList.remove('flash-wrong');
+            setGapState(input, null);
 
             state.inputLocked =
                 false;
