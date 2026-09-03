@@ -280,11 +280,11 @@ Main App
         transition: var(--transition-normal);
     }
 
-    .speaker {
+    .mute-speaker {
         z-index: 2;
     }
 
-    .mute-speaker {
+    .speaker {
         position: absolute;
         opacity: 0;
         z-index: 3;
@@ -310,11 +310,11 @@ Main App
 }
 
     /* Use general sibling (~) selectors inside the label so structure is robust */
-    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
+    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
         opacity: 0;
     }
 
-    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
         opacity: 1;
     }
     .toggleSwitch > input[type="checkbox"]:checked ~ .speaker,
