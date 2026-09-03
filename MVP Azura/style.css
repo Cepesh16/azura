@@ -3,6 +3,7 @@
 ========================= */
 
 :root {
+/*COLORS*/
     /* BACKGROUND */
     --bg-main: #f5f7fa;
     /*--bg-main: rgba(172, 225, 175, 0.6);*/
@@ -27,8 +28,8 @@
     /* TOGGLE */
     --toggle-bg-off: #ccc;
     --toggle-bg-on: rgba(217, 119, 6, 0.85);
-    --toggle-knob-off: #ffffff;
-    --toggle-knob-on: #ffffff;
+    --toggle-knob-off: #e8e8e8;
+    --toggle-knob-on: #e8e8e8;
 
     /* STATES */
     --correct: #03C03C;
@@ -45,13 +46,18 @@
     --level-empty: #ccc;
 
     /* SHADOWS */
-    --shadow-soft: 0 4px 18px #e2e8f0;
-    /*--shadow-soft: 0 4px 18px var(--bg-main);*/
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.08);;
+    --shadow-medium: 0 4px 18px #e2e8f0;
     --shadow-strong: 0 10px 30px rgba(0,0,0,0.12);
 
-    /* SIZES */
-    --radius: 12px;
+
+/* SIZES */
+    --radius-circle: 50%;
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
     --radius-sm: 8px;
+    --radius-xs: 4px;
 
     /* FONT */
     --font-xl: 24px;
@@ -61,19 +67,28 @@
     --font-xs: 12px;
 
     /* SPACING */
-    --space-xs: 6px;
-    --space-sm: 10px;
-    --space-md: 16px;
-    --space-lg: 28px;
     --space-xl: 42px;
+    --space-lg: 28px;
+    --space-md: 16px;
+    --space-sm: 10px;
+    --space-xs: 6px;
+
+    /*ICONS*/
+    --icon-xl: 32px;
+    --icon-lg: 28px;
+    --icon-md: 24px;
+    --icon-sm: 20px;
+    --icon-xs: 16px;
+
 
     /* TOGGLE SIZE */
     --toggle-width: calc(var(--toggle-height) * 1.8);
-    --toggle-height: 16px; /* only change height */
+    --toggle-height: var(--icon-xl); /* only change height */
     --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
-    --toggle-padding: calc(var(--toggle-height) * 0.12);
+    --toggle-padding: calc(var(--toggle-height) * 0.1858); /*to regulate icons, knob size*/
 
-    /* TRANSITIONS */
+
+/* TRANSITIONS */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
     --transition-long: 0.5s ease;
@@ -128,16 +143,24 @@ button {
         transform: scale(0.96);
     }
 
-    .icon-wrapper {
-        display: flex;
-        align-items: center;
-    }
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-xl);
+    height: var(--icon-xl);
+}
+
     .icon-wrapper svg {
-        width: var(--font-lg);
-        height: var(--font-lg);
-        color: var(--text-muted);
-        transition: transform var(--transition-fast);
+        width: var(--icon-sm);
+        height: var(--icon-sm);
+        transition: transform var(--transition-fast), color var(--transition-fast);
     }
+
+svg {
+    color: var(--text-muted);
+}
+
 
 select {
     cursor: pointer;
@@ -171,7 +194,7 @@ Loading
     height: 40px;
     border: 4px solid var(--bg-card);
     border-top: 4px solid var(--accent);
-    border-radius: 50%;
+    border-radius: var(--radius-circle);
     animation: spin 1.25s linear infinite;
     margin-bottom: var(--space-lg);
 }
@@ -207,9 +230,9 @@ Main App
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
         padding: var(--space-xl) var(--space-lg);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-medium);
         background: var(--bg-card);
-        border-radius: var(--radius);  
+        border-radius: var(--radius-xl);  
         overflow: hidden;
         text-align: center;
     }
@@ -230,87 +253,208 @@ Main App
             gap: var(--space-md);
         }
 
-            .toggle-box {
-                display: flex;
-                align-items: center;
-                gap: var(--space-xs);
-            }
-                .toggle-box label {
-    /*                display: inline-flex;
-                    align-items: center;
-                    gap: 4px;*/
-                    cursor: pointer;
-                }
-
-                .toggle-box .icon-wrapper {
-                    display: flex;
-                    align-items: center;
-                    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-                }
-
-                .toggle-box svg {
-                    /*transition: var(--transition-fast);*/
-                }
-                .toggle-box:hover .icon-wrapper svg {
-                    transform: scale(1.1) translateY(-1px);
-                }
-
-                /* Toggle */
-
-                .switch {
-                    display: inline-block;
-                    position: relative;
-                    width: var(--toggle-width);
-                    height: var(--toggle-height);
-                }
 
 
-                    .slider {
-                        position: absolute;
-                        inset: 0;
-                        background-color: var(--toggle-bg-off);
-                        border-radius: var(--toggle-height);
-                        transition: none; /* No transition on page load */
-                    }
-
-                        .slider:before {
-                            content: "";
-                            position: absolute;
-                            height: var(--toggle-knob-size);
-                            width: var(--toggle-knob-size);
-
-                            left: var(--toggle-padding);
-                            top: var(--toggle-padding);
-                            background: var(--toggle-knob-off);
-                            border-radius: 50%;
-                            transition: none; /* No transition on page load */
-                        }
-                        /* FIX THE FAST CLICK: Apply the transition whenever the user HOVERS or FOCUSES the switch area */
-                        .toggle-box:hover .slider,
-                        .toggle-box:focus-within .slider,
-                        .toggle-box:hover .slider:before,
-                        .toggle-box:focus-within .slider:before {
-                            transition: var(--transition-fast);
-                        }
-
-                    .switch input {
-                        opacity: 0;
-                        width: 0;
-                        height: 0;
-                        position: absolute;
-                    }
-
-                    .switch input:checked + .slider {
-                        background-color: var(--toggle-bg-on);
-                    }
-
-                    .switch input:checked + .slider:before {
-                        /* MATH FIX: Automatically calculates exactly how far to slide */
-                        transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
-                        background: var(--toggle-knob-on);
-                    }
 
 
+
+
+/*SOUND TOGGLE*/
+/* The switch - the box around the speaker*/
+.toggleSwitch {
+    position: relative;
+    background: var(--bg-card);
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+    .toogle-box .toggleSwitch :is(.speaker, .mute-speake) {
+        color: var(--text-secondary);
+    }
+
+    .speaker,
+    .mute-speaker {
+        transition: var(--transition-normal);
+    }
+
+    .speaker {
+        z-index: 2;
+    }
+
+    .mute-speaker {
+        position: absolute;
+        opacity: 0;
+        z-index: 3;
+    }
+
+
+
+
+/* Hide native checkbox but keep it accessible to assistive tech */
+.toggleSwitch > input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+
+    transition-duration: var(--transition-fast);
+}
+
+    /* Use general sibling (~) selectors inside the label so structure is robust */
+    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
+        opacity: 0;
+    }
+
+    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+        opacity: 1;
+    }
+    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker,
+    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+        /*transform: rotate(360deg); */
+    }
+
+    .toggleSwitch:active {
+        transform: scale(0.90);
+    }
+
+    .toggleSwitch:hover {
+
+    }
+    .toggleSwitch:hover svg {
+        /*color: var(--text-secondary);*/
+    }
+
+
+
+
+
+
+/*THEME TOGGLE*/
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    cursor: pointer;
+}
+
+    .switch input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        inset: 0;
+        background-color: var(--bg-card);
+        transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
+        border-radius: calc(var(--toggle-height) / 2); /* fully rounded and auto-scaled */
+        display: block;
+        box-sizing: border-box;
+        border-radius: var(--toggle-width);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: var(--toggle-knob-size);
+        width: var(--toggle-knob-size);
+        border-radius: var(--radius-circle);
+        left: var(--toggle-padding);
+        top: var(--toggle-padding);
+        z-index: 3;
+        background-color: var(--toggle-knob-on);
+        transition: transform var(--transition-normal), background-color var(--transition-normal);
+        will-change: transform;
+        box-shadow: var(--shadow-soft);
+        box-sizing: border-box;
+    }
+
+    /* sun / moon icons: vertically centered and placed with padding */
+    .sun svg,
+    .moon svg {
+        width: var(--toggle-knob-size);
+        height: var(--toggle-knob-size);
+
+        /* center vertically inside track */
+        position: absolute;
+        top: 50%;
+
+        /* keep translateY in the "base" transform and include rotate(0) so animation composes cleanly */
+        transform: translateY(-50%) rotate(0deg);
+
+        /* rotate around the SVG center (important for inline SVGs) */
+        transform-origin: center center;
+        transform-box: fill-box; /* makes transform-origin behave well for SVG content */
+
+        z-index: 1; /* behind the knob */
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+
+    .sun svg {
+        right: var(--toggle-padding);
+    }
+
+    .moon svg {
+        left: var(--toggle-padding);
+    }
+
+/* trigger the animations on hover */
+.switch:hover .sun svg {
+    animation: rotate-icon 15s linear infinite;
+}
+
+.switch:hover .moon svg {
+    animation: tilt-icon 4s linear infinite;
+}
+
+    @keyframes rotate-icon {
+        from { transform: translateY(-50%) rotate(0deg); }
+        to   { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    @keyframes tilt-icon {
+        0%   { transform: translateY(-50%) rotate(0deg); }
+        25%  { transform: translateY(-50%) rotate(-10deg); }
+        75%  { transform: translateY(-50%) rotate(10deg); }
+        100% { transform: translateY(-50%) rotate(0deg); }
+    }
+
+#theme-toggle:checked + .slider {
+    background-color: var(--bg-card);
+}
+
+#theme-toggle:focus + .slider {
+    box-shadow: 0 0 1px var(--bg-card);
+        box-shadow: var(--shadow-soft);
+}
+
+#theme-toggle:checked + .slider:before {
+    transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
+}
 
 
 
@@ -345,34 +489,6 @@ Top Navigation
 
 
 
-/* --- Default States (Light Mode / Sound On) --- */
-/* Default theme: Show moon, hide sun */
-.shape-sun  { display: block;  }
-.shape-moon { display: none; }
-
-/* --- Checked States (Triggered by the inputs) --- */
-/* When theme checkbox is active: hide moon, show sun */
-#theme-toggle:checked,
-body:has(#theme-toggle:checked) .shape-moon   { display: block;  }
-body:has(#theme-toggle:checked) .shape-sun    { display: none; }
-/*body:has(#theme-toggle:checked) .theme-icon-wrap { transform: rotate(360deg); }*/
-/* Only trigger rotation if the body contains a checked toggle AND the user is interacting with it */
-body:has(#theme-toggle:checked):has(#theme-toggle:focus-within) .theme-icon-wrap { 
-  transform: rotate(360deg); 
-}
-
-/* Default sound: Show waves, hide mute slash */
-.mute-lines  { display: block;  }
-.sound-wave { display: none; }
-
-/* When sound checkbox is active: MUTE (hide waves, show slash) */
-#sound-toggle:checked,
-body:has(#sound-toggle:checked) .sound-wave { display: block;  }
-body:has(#sound-toggle:checked) .mute-lines  { display: none; }
-/*body:has(#sound-toggle:checked) .sound-icon-wrap { transform: rotate(360deg); }*/
-body:has(#sound-toggle:checked):has(#sound-toggle:focus-within) .sound-icon-wrap { 
-  transform: rotate(360deg); 
-}
 
 
 
@@ -399,7 +515,7 @@ body:has(#sound-toggle:checked):has(#sound-toggle:focus-within) .sound-icon-wrap
         height: var(--space-xs);
         flex: 1;
         background: var(--progress-bg);
-        border-radius: 4px;
+        border-radius: var(--radius-xs);
         overflow: hidden;
         position: relative;
     }
@@ -445,7 +561,7 @@ Options Modal
 .options-card {
     text-align: center;
     background: var(--bg-card);
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
     padding: 20px 22px;
     width: 280px;
     box-shadow: var(--shadow-strong);
@@ -724,7 +840,7 @@ Level Indicator
         .level-dot {
             width: 6px;
             height: 6px;
-            border-radius: 50%;
+            border-radius: var(--radius-circle);
             background: var(--level-empty);
         }
 
@@ -927,8 +1043,8 @@ Session summary
     --toggle-bg-off: #2a3942;
     --toggle-bg-on: #10b981;
     --toggle-bg-on: rgba(244, 196, 48, 0.7);
-    --toggle-knob-off: #ffffff;
-    --toggle-knob-on: #ffffff;
+    --toggle-knob-off: #e8e8e8;
+    --toggle-knob-on: #e8e8e8;
 
     --correct: #4ade80; /* green bright */
     --wrong: rgba(255, 99, 99, 0.6);
@@ -941,7 +1057,7 @@ Session summary
     --level-high: #7bd389;
     --level-empty: #68747f;
 
-    --shadow-soft: 0 6px 24px rgba(0,0,0,0.6);
+    --shadow-medium: 0 6px 24px rgba(0,0,0,0.6);
     --shadow-strong: 0 12px 36px rgba(0,0,0,0.7);
 
 
@@ -1004,7 +1120,7 @@ Session summary
     align-items: center;
     padding: var(--space-xs);
     /*border: 1px solid #e2e8f0;*/
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
 }
 .icon-card svg {
     width: var(--font-xl);

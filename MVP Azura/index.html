@@ -104,42 +104,36 @@
             </div>
 
             <div class="toggle-row">
+
+
+                <label class="switch">
+                    <!-- Theme SVG Wrapper for Animation -->
+                    <span class="sun">
+                        <!-- Sun Icon (Light Mode) -->
+                        <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                    </span>
+                    <span class="moon">
+                        <!-- Moon Icon (Dark Mode) -->
+                        <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
+                    </span>
+                    <input id="theme-toggle" type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                
+
                 <div class="toggle-box">
-                    <label class="icon-wrapper theme-icon-wrap" for="theme-toggle">
-                        <!-- Theme SVG Wrapper for Animation -->
-                        <span class="">
-                            <!-- Sun Icon (Light Mode) -->
-                            <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
-                            <!-- Moon Icon (Dark Mode) -->
-                            <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
-                        </span>
-                    </label>
-                    <label class="switch">
-                        <input type="checkbox" id="theme-toggle" aria-label="Toggle dark theme">
-                        <span class="slider"></span>
+                    <label class="toggleSwitch icon-wrapper" for="sound-toggle">
+                        <input id="sound-toggle" type="checkbox">
+                        <div class="icon-wrapper speaker">
+                            <!-- Sound SVG Wrapper for Animation -->
+                                <svg class="icon-sound-waves"><use href="assets/icons/sprite.svg#icon-sound-waves"></use></svg>
+                        </div>
+                        <div class="icon-wrapper mute-speaker">
+                                <svg class="icon-sound-mute"><use href="assets/icons/sprite.svg#icon-sound-mute"></use></svg>
+                        </div>
                     </label>
                 </div>
-                <div class="toggle-box">
-                    <label for="sound-toggle">
-                        <!-- Sound SVG Wrapper for Animation -->
-                        <span class="icon-wrapper sound-icon-wrap">
-                            <svg class="icon-sound" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-                                <!-- Regular sound waves -->
-                                <path class="sound-wave" d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                                <!-- Mute diagonal line (hidden by default) -->
-                                <g class="mute-lines">
-                                    <line x1="22" y1="9" x2="16" y2="15"></line>
-                                    <line x1="16" y1="9" x2="22" y2="15"></line>
-                                </g>
-                            </svg>
-                        </span>
-                    </label>
-                    <label class="switch">
-                        <input type="checkbox" id="sound-toggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
+                
             </div>   
 
                         
