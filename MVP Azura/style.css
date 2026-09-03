@@ -676,39 +676,35 @@ Translation Row
 
 #translation-row {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    column-gap: var(--space-md);
+    row-gap: var(--space-sm);
 }
 
 
-
-    #translation-group {
-        display: flex;
-        align-items: center;
-        gap: var(--space-md);
+    #translation {
+        font-size: var(--font-lg);
+        color: var(--text-secondary);
     }
 
-        #translation {
-            font-size: var(--font-lg);
-            color: var(--text-secondary);
-        }
 
-
-        #part-of-speech {
-            padding-top: 2px;
+    #part-of-speech {
+        padding-top: 2px;
+        font-size: var(--font-md);
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+    }
+        #part-of-speech::before {
+            content: '#';
             font-size: var(--font-md);
-            color: var(--text-muted);
-            letter-spacing: 0.5px;
         }
-            #part-of-speech::before {
-                content: '#';
-                font-size: var(--font-md);
-            }
 
-        .icon-hint:hover {
-            cursor: pointer;
-            transform: scale(1.1) translateY(-1px);
-        }
+    .icon-hint:hover {
+        cursor: pointer;
+        transform: scale(1.1) translateY(-1px);
+    }
 
 
 /* =========================
