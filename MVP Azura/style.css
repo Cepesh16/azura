@@ -229,6 +229,7 @@ Main App
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /*align-items: center;*/
     width: min(560px, 95%);
 
     opacity: 0;
@@ -246,7 +247,7 @@ Main App
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
         padding: var(--space-xl);
-        box-shadow: var(--shadow-soft);
+        box-shadow: var(--shadow-flat-lg);
         background: var(--bg-card);
         border-radius: var(--radius-xl);  
         overflow: hidden;
@@ -573,12 +574,10 @@ Learning Area
 
     #sentence {
         margin-bottom: var(--space-lg);
-        padding: 0 0 var(--space-lg);
+        /*padding: 0 0 var(--space-lg);*/
         /*border-top: 1px solid var(--progress-bg);*/
-        border-bottom: 1px solid var(--progress-bg);
-        /*outline: 1px solid var(--progress-bg);*/
-        /*border-radius: calc(var(--space-xl) - var(--radius-xl));*/
-        /*border-radius: var(--radius-xl);*/
+        /*border-bottom: 1px solid var(--progress-bg);*/
+
         font-size: var(--font-xl);
         line-height: 1.5;
     }
@@ -764,24 +763,28 @@ Translation Row
 }
 #translation-box {
     display: flex;
-    align-items: center;
+    /*flex-direction: column;*/
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     column-gap: var(--space-md);
-    row-gap: var(--space-sm);    margin-bottom: var(--space-lg);
+    row-gap: var(--space-sm);    
+    margin-bottom: -1px;
+    padding: var(--space-sm) var(--space-lg);
+    /*outline: 1px solid var(--progress-bg);*/
+    /*outline: 1px solid var(--border-light);*/
+    border-radius: var(--radius-sm)  var(--radius-sm) 0 0;
+    background: var(--bg-card);
+
+    box-shadow: var(--shadow-soft-center);
+
 }
 
     #translation {
-/*        padding: var(--space-xs) var(--space-sm);
-        border-radius: var(--radius-sm);
-        outline: 1px solid var(--border-light);*/
         font-size: var(--font-xl);
-        /*color: var(--bg-card);*/
-        /*background: var(--text-secondary);*/
-        /*box-shadow: var(--shadow-flat-lg);*/
-        padding: var(--space-xs) var(--space-sm);
-        border-radius: var(--radius-sm);
-        outline: 1px solid var(--border-light);
+        padding-right: var(--space-md);
+        border-right: 2px solid var(--progress-bg);
+        border-right: 2px solid var(--border-light);
     }
 
 
@@ -805,12 +808,14 @@ Translation Row
 /* =========================
 Level Indicator
 ========================= */
+
+/* horizontal line both side */
 /*#level-indicator {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    width: 100%;  
-    margin-bottom: var(--space-sm);
+    width: 70%;  
+    gap: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #level-indicator::before,
@@ -825,7 +830,7 @@ Level Indicator
 
 
 #level-indicator {
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -850,18 +855,28 @@ Level Indicator
             width:  var(--dot-lg);
             height: var(--dot-lg);
             border-radius: var(--radius-circle);
-            background: var(--level-empty);
+            /*background: var(--level-empty);*/
+            outline: 1px solid var(--text-muted);
             /*box-shadow: var(--shadow-flat-sm);*/
         }
 
         .level-dot.level-0,
-        .level-dot.level-1 { background: var(--level-low); }
+        .level-dot.level-1 { 
+            background: var(--level-low);
+            outline-color: var(--level-low);
+        }
 
         .level-dot.level-2,
-        .level-dot.level-3 { background: var(--level-mid); }
+        .level-dot.level-3 { 
+            background: var(--level-mid);
+            outline-color: var(--level-low);
+        }
 
         .level-dot.level-4,
-        .level-dot.level-5 { background: var(--level-high); }
+        .level-dot.level-5 { 
+            background: var(--level-high);
+            outline-color: var(--level-low);
+        }
 
 /* =========================
 Helper
