@@ -13,7 +13,6 @@
     /* TEXT */
     --text-main: #0f172a;
     --text-secondary: #d97706;
-    /*--text-muted: #64748b;*/
     --text-muted: #8390a2;
 
     /* BORDERS */
@@ -40,18 +39,21 @@
     --hint: rgba(0, 0, 0, 0.3);
 
     /* LEVEL COLORS */
-    --level-low: #e57373;
-    --level-mid: #ffb74d;
     --level-high: #81c784;
+    --level-mid: #ffb74d;
+    --level-low: #e57373;
     --level-empty: #ccc;
 
     /* SHADOWS */
-    --shadow-soft: 0 1px 2px rgba(0,0,0,0.08);;
-    --shadow-medium: 0 4px 18px #e2e8f0;
     --shadow-strong: 0 10px 30px rgba(0,0,0,0.12);
+    --shadow-medium: 0 4px 18px #e2e8f0;
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.08);
+
+    --shadow-soft-center: 0 0 1px 1px rgba(0,0,0,0.08);
 
 
 /* SIZES */
+    /*RADIUS*/
     --radius-circle: 50%;
     --radius-xl: 20px;
     --radius-lg: 16px;
@@ -73,6 +75,13 @@
     --space-sm: 10px;
     --space-xs: 6px;
 
+    /*DOTS*/
+    --dot-xs: 3px;
+    --dot-sm: 4px;
+    --dot-md: 6px;
+    --dot-lg: 8px;
+    --dot-xl: 10px;
+
     /*ICONS*/
     --icon-xl: 32px;
     --icon-lg: 28px;
@@ -83,16 +92,16 @@
 
     /* TOGGLE SIZE */
     --toggle-width: calc(var(--toggle-height) * 1.8);
-    --toggle-height: var(--icon-xl); /* only change height */
+    --toggle-height: var(--icon-xl); /* only change height to ajust all toggle */
     --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
     --toggle-padding: calc(var(--toggle-height) * 0.1858); /*to regulate icons, knob size*/
 
 
 /* TRANSITIONS */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-long: 0.5s ease;
     --transition-test: 2s ease;
+    --transition-long: 0.5s ease;
+    --transition-normal: 0.3s ease;
+    --transition-fast: 0.15s ease;
 
 
 }
@@ -229,11 +238,12 @@ Main App
     #container {
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
-        padding: var(--space-xl) var(--space-lg);
-        box-shadow: var(--shadow-medium);
+        padding: var(--space-xl);
+        box-shadow: var(--shadow-soft);
         background: var(--bg-card);
         border-radius: var(--radius-xl);  
         overflow: hidden;
+        text-align: left;
         text-align: center;
     }
 
@@ -544,60 +554,6 @@ Top Navigation
     }
 
 
-/* =========================
-Options Modal
-========================= */
-/*
-#options-modal {
-    position: fixed;
-    inset: 0;
-    background: var(--bg-overlay);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.options-card {
-    text-align: center;
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    padding: 20px 22px;
-    width: 280px;
-    box-shadow: var(--shadow-strong);
-    transform: translateY(10px);
-    opacity: 0;
-    animation: modalFadeIn var(--transition-fast) forwards;
-}
-
-@keyframes modalFadeIn {
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.options-title {
-    margin-top: 0;
-    font-size: var(--font-md);
-    font-weight: 600;
-    text-align: center;
-}
-
-.setting-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--space-md);
-    font-size: var(--font-sm);
-}
-
-#session-select {
-    padding: 4px 6px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-light);
-}
-*/
 
 
 /* =========================
@@ -610,8 +566,12 @@ Learning Area
 
     #sentence {
         margin-bottom: var(--space-lg);
-        padding-bottom: var(--space-lg);
+        padding: var(--space-lg) 0;
         border-bottom: 1px solid var(--progress-bg);
+        border-top: 1px solid var(--progress-bg);
+        /*outline: 1px solid var(--progress-bg);*/
+        /*border-radius: calc(var(--space-xl) - var(--radius-xl));*/
+        /*border-radius: var(--radius-xl);*/
         font-size: var(--font-xl);
         line-height: 1.5;
     }
@@ -793,6 +753,7 @@ Translation Row
 #translation-row {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     justify-content: center;
     flex-wrap: wrap;
     column-gap: var(--space-md);
@@ -826,21 +787,49 @@ Translation Row
 /* =========================
 Level Indicator
 ========================= */
+/*#level-indicator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    width: 100%;  
+    margin-bottom: var(--space-sm);
+}
+
+#level-indicator::before,
+#level-indicator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid var(--progress-bg);
+}*/
+
+
+
+
 
 #level-indicator {
-    /*margin-bottom: var(--space-lg);*/
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-lg);
 }
 
     .level-dots {
         display: flex;
-        gap: 4px;
+        gap: var(--dot-sm);
         justify-content: center;
+        /*padding: var(--space-xs);*/
+        /*padding: var(--space-xs) var(--space-sm);*/
+/*        border-radius: var(--radius-xl);
+        background: var(--bg-card);
+        box-shadow: var(--shadow-soft-center);*/
     }
 
+
         .level-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: var(--radius-circle);
+            width: var(--dot-xl);
+            height: var(--dot-sm);
+            width: var(--space-md);
+            height: var(--dot-md);
+            border-radius: var(--radius-xs);
             background: var(--level-empty);
         }
 
@@ -1030,8 +1019,8 @@ Session summary
 
     --text-main: #e6eef6;
     --text-secondary: #F4C430;
-    /*--text-muted: #9fb0be;*/
     --text-muted: #68747f;
+    /*--text-muted: #88949f;*/
 
     --border-light: #1f2a33;
     --border-default: #23303b;
@@ -1057,9 +1046,10 @@ Session summary
     --level-high: #7bd389;
     --level-empty: #68747f;
 
-    --shadow-medium: 0 6px 24px rgba(0,0,0,0.6);
-    --shadow-strong: 0 12px 36px rgba(0,0,0,0.7);
 
+    --shadow-soft: 0 1px 2px rgba(0,0,0,0.08);;
+    --shadow-medium: 0 4px 18px rgba(0,0,0,0.6);
+    --shadow-strong: 0 10px 30px rgba(0,0,0,0.7);
 
 }
 
