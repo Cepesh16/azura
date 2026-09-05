@@ -80,7 +80,7 @@
     --space-xs: 6px;
 
     /*DOTS*/
-    --dot-xs: 3px;
+    --dot-xs: 2px;
     --dot-sm: 4px;
     --dot-md: 6px;
     --dot-lg: 8px;
@@ -486,13 +486,6 @@ Main App
 Top Navigation
 ========================= */
 
-
-#content {
-
-}
-
-
-
 .stats-row {
     display: flex;
     align-items: center;
@@ -573,18 +566,16 @@ Top Navigation
 /* =========================
 Learning Area
 ========================= */
+#content {
+
+}
 
 #card {
-    /*margin-bottom: var(--space-lg);*/
+
 }
 
     #sentence {
-        padding-left: var(--space-md);
         margin-bottom: var(--space-md);
-        /*padding: 0 0 var(--space-lg);*/
-        /*border-top: 1px solid var(--progress-bg);*/
-        /*border-bottom: 1px solid var(--progress-bg);*/
-
         font-size: var(--font-xl);
         line-height: 1.5;
     }
@@ -607,7 +598,7 @@ Learning Area
     vertical-align: baseline;
 }
 
-    .gap-input-wrap::after {
+/*    .gap-input-wrap::after {
         content: "";
         position: absolute;
         left: 0;
@@ -615,7 +606,7 @@ Learning Area
         bottom: 3px;
         height: 1px;
         background: var(--text-secondary);
-    }
+    }*/
 
 
 /* =========================
@@ -658,6 +649,13 @@ input.gap {
 
     -webkit-appearance: none;
     appearance: none;
+
+
+    line-height: 1;
+    margin: 0 var(--dot-xs);
+    outline: 1px solid var(--border-light);
+    outline-offset: 1px;
+    border-radius: var(--radius-xs);
 }
 
 
@@ -840,7 +838,7 @@ Level Indicator
     justify-content: center;
     align-items: center;
     margin-bottom: var(--space-md);
-    padding-left: var(--space-md);
+    padding: 0 var(--space-md);
 }
 
 /*#level-indicator::before {
