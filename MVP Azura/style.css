@@ -146,13 +146,14 @@ button {
     #save-options:hover {
         /*transform: translateY(-1px) translateX(-1px);*/
         /*transform: scale(1.1);*/
-        font-size: var(--font-lg);
+        /*font-size: var(--font-lg);*/
+        transform: scale(1.2);
         background: var(--button-hover);
         color: var(--text-main);
     }
 
     button:focus {
-      outline: 3px solid var(--text-secondary); /* Changes the outer ring color */
+      outline: 3px solid var(--text-muted); /* Changes the outer ring color */
     }
 
     button:active {
@@ -501,7 +502,7 @@ Top Navigation
             }
 
             #total-completed-counter {
-                color: var(--text-secondary);
+                color: var(--text-muted);
             }
 
 
@@ -542,6 +543,7 @@ Top Navigation
             position: absolute;
             inset: 0;
             background: var(--accent);
+            background: var(--text-muted);
             transform: scaleX(0);
             transform-origin: left;
             transition: transform var(--transition-long);
@@ -975,10 +977,11 @@ Session summary
 /* =========================
  ANIMATION 
 ========================= */
+#translation-row,
 #sentence-area,
 #session-state,
 #progress-row {
-    transition: opacity var(--transition-normal), transform var(--transition-normal);
+    transition: opacity var(--transition-long), transform var(--transition-long);
 }
 
 .fade-hidden {
@@ -991,6 +994,7 @@ Session summary
     opacity: 1;
     transform: translateY(0);
 }
+
 
 
 

@@ -7,7 +7,7 @@ import { render } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
 import { updateWord } from './api.js';
-import { fadeIn, fadeOut } from './anim.js';
+import { fadeIn,fadeOut,fadeOutAndHide } from './anim.js';
 
 
 function normalize(str) {
@@ -63,7 +63,7 @@ if (state.autoSubmitTimer) {
     clearTimeout(state.autoSubmitTimer);
     state.autoSubmitTimer = null;
 }
-
+    const translationRow = document.getElementById('translation-row');
     const sentenceArea = document.getElementById('sentence-area');
     if (!sentenceArea) return;
 
@@ -75,10 +75,11 @@ if (state.autoSubmitTimer) {
 
         state.status = 'finished';
 
-        await Promise.all([
-            fadeOut(sentenceArea),
-            fadeOut(progressRow)
-        ]);
+    await Promise.all([
+        fadeOutAndHide(sentenceArea),
+        translationRow ? fadeOut(translationRow) : Promise.resolve(),
+        progressRow ? fadeOut(progressRow) : Promise.resolve()
+    ]);
 
         render();
 
@@ -88,7 +89,10 @@ if (state.autoSubmitTimer) {
         return;
     }
 
-    await fadeOut(sentenceArea);
+    await Promise.all([ 
+        sentenceArea ? fadeOut(sentenceArea) : Promise.resolve(),
+        translationRow ? fadeOut(translationRow) : Promise.resolve()
+    ]);
 
     // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
     state.current = state.sentences[state.queue[state.queueIndex]];
@@ -103,7 +107,11 @@ state.inputLocked = false;
     render();
 
     const newSentenceArea = document.getElementById('sentence-area');
-    await fadeIn(newSentenceArea);
+    const newTranslationRow  = document.getElementById('translation-row');
+    await Promise.all([
+        newSentenceArea ? fadeIn(newSentenceArea) : Promise.resolve(),
+        newTranslationRow ? fadeIn(newTranslationRow) : Promise.resolve()
+    ]);
 }
 
 // =========================
@@ -283,14 +291,16 @@ state.inputLocked = false;
     const summary = document.getElementById('session-state');
     const progressRow = document.getElementById('progress-row');
 
-    await fadeOut(summary);
+    await fadeOutAndHide(summary);
 
     render();
 
     const sentenceArea = document.getElementById('sentence-area');
+    const translationRow= document.getElementById('translation-row');
 
     await Promise.all([
         fadeIn(sentenceArea),
+        fadeIn(translationRow),
         fadeIn(progressRow)
     ]);
 }

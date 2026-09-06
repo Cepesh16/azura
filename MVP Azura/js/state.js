@@ -24,7 +24,7 @@ answerComplete: false,
     soundEnabled: true,
 
     // Session control
-    sessionLimit: 10,
+    sessionLimit: 3,
     sessionCount: 0,
     completedCount: 0,
     totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0,
