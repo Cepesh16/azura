@@ -65,6 +65,7 @@ if (state.autoSubmitTimer) {
 }
     const translationRow = document.getElementById('translation-row');
     const sentenceArea = document.getElementById('sentence-area');
+
     if (!sentenceArea) return;
 
     state.queueIndex++;
@@ -74,7 +75,7 @@ if (state.autoSubmitTimer) {
         const progressRow = document.getElementById('progress-row');
 
         state.status = 'finished';
-
+// fade out elemnts after session is finished
     await Promise.all([
         fadeOutAndHide(sentenceArea),
         translationRow ? fadeOut(translationRow) : Promise.resolve(),
@@ -88,7 +89,7 @@ if (state.autoSubmitTimer) {
 
         return;
     }
-
+// fade out elements after answer
     await Promise.all([ 
         sentenceArea ? fadeOut(sentenceArea) : Promise.resolve(),
         translationRow ? fadeOut(translationRow) : Promise.resolve()
@@ -105,7 +106,7 @@ state.answerComplete = false;
 state.inputLocked = false;
 
     render();
-
+// fade in elements before new sentence
     const newSentenceArea = document.getElementById('sentence-area');
     const newTranslationRow  = document.getElementById('translation-row');
     await Promise.all([
