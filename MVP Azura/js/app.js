@@ -1,7 +1,7 @@
 import { fetchSentences } from './api.js';
 import { state } from './state.js';
 import { buildSessionQueue } from './logic.js';
-import { render } from './ui.js';
+import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
 const version = '1.3';
@@ -64,6 +64,8 @@ async function startApp() {
 
         setTimeout(() => {
             app.classList.add('visible');
+            // initialize cached element references once
+            initEls();
             render();
             initOptions();
         }, 10);

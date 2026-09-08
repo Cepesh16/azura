@@ -35,3 +35,11 @@ answerComplete: false,
     sessionCorrect: 0,
     sessionWrong: 0,
 };
+
+// state.js (module scope)
+export function clearAutoSubmit() {
+  if (state.autoSubmitTimer) {
+    clearTimeout(state.autoSubmitTimer);
+    state.autoSubmitTimer = null;
+  }
+}

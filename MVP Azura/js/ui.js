@@ -4,6 +4,24 @@ import { submitAnswer, startNewSession } from './logic.js';
 let hasUserFocused = false;
 
 
+// ui.js — add at module scope (near top, after imports)
+export const els = {}; // will hold cached element references
+
+export function initEls() {
+  // Cache once at app startup — these are the top-level, mostly-static elements
+  els.sessionStateEl   = document.getElementById('session-state');
+  els.sentenceAreaEl   = document.getElementById('sentence-area');
+  els.sentenceEl       = document.getElementById('sentence');
+  els.translationEl    = document.getElementById('translation');
+  els.posEl            = document.getElementById('part-of-speech');
+  els.levelEl          = document.getElementById('level-indicator');
+  els.progressBarEl    = document.getElementById('progress-bar');
+  els.totalCompletedEl = document.getElementById('total-completed-counter');
+  els.progressCounter  = document.getElementById('progress-counter');
+  els.helperEl         = document.getElementById('helper');
+}
+
+
 // ============================================================
 // MEASURE TEXT
 // ============================================================
@@ -385,11 +403,8 @@ clearAutoSubmit();
 
 export function render() {
 
-    const sessionStateEl =
-        document.getElementById('session-state');
-
-    const sentenceAreaEl =
-        document.getElementById('sentence-area');
+const sessionStateEl = els.sessionStateEl || document.getElementById('session-state');
+const sentenceAreaEl  = els.sentenceAreaEl  || document.getElementById('sentence-area');
 
     if (
         !sentenceAreaEl ||
@@ -398,33 +413,16 @@ export function render() {
         return;
     }
 
-    const sentenceEl =
-        document.getElementById('sentence');
+const sentenceEl      = els.sentenceEl      || document.getElementById('sentence');
+const translationEl   = els.translationEl   || document.getElementById('translation');
+const posEl           = els.posEl           || document.getElementById('part-of-speech');
+const levelEl         = els.levelEl         || document.getElementById('level-indicator');
 
-    const translationEl =
-        document.getElementById('translation');
+const progressBar     = els.progressBarEl   || document.getElementById('progress-bar');
+const totalCompletedEl= els.totalCompletedEl|| document.getElementById('total-completed-counter');
+const progressCounter = els.progressCounter || document.getElementById('progress-counter');
+const helperEl        = els.helperEl        || document.getElementById('helper');
 
-    const posEl =
-        document.getElementById('part-of-speech');
-
-    const levelEl =
-        document.getElementById('level-indicator');
-
-    const progressBar =
-        document.getElementById('progress-bar');
-
-    const totalCompletedEl =
-        document.getElementById(
-            'total-completed-counter'
-        );
-
-    const progressCounter =
-        document.getElementById(
-            'progress-counter'
-        );
-
-    const helperEl =
-        document.getElementById('helper');
 
     const current =
         state.current;
