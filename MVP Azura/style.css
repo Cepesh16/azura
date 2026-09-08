@@ -620,6 +620,7 @@ input.gap {
 
     width: 0;
     min-width: 4ch;
+    max-width: none;
     box-sizing: border-box;
 
     margin: 0;
@@ -661,6 +662,7 @@ input.gap {
 }
 
 
+
 /* =========================
    Hint Overlay
    ========================= */
@@ -686,7 +688,7 @@ input.gap {
 .gap-input-wrap .overlay .hint {
     position: absolute;
 
-    top: 1px;
+    top: 0px;
 
     color: var(--hint);
 

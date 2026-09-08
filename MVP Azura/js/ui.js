@@ -13,7 +13,7 @@ export function initEls() {
   els.sentenceAreaEl   = document.getElementById('sentence-area');
   els.sentenceEl       = document.getElementById('sentence');
   els.translationEl    = document.getElementById('translation');
-  els.posEl            = document.getElementById('part-of-speech');
+  els.posEl            = document.getElementById('part-of-speech') || null;
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
   els.totalCompletedEl = document.getElementById('total-completed-counter');
@@ -577,8 +577,15 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
         if (btn) {
 
-            btn.onclick = () =>
+            btn.onclick = () => {
+
+                // remove focus BEFORE UI changes
+                if (document.activeElement === btn) {
+                    btn.blur();
+                }
+
                 startNewSession();
+            };
         }
 
         return;
