@@ -8,38 +8,27 @@ let hasUserFocused = false;
 // MEASURE TEXT
 // ============================================================
 
+// put this at top-level of ui.js (module scope)
+const __measurer = (() => {
+  const el = document.createElement('span');
+  el.style.position = 'absolute';
+  el.style.visibility = 'hidden';
+  el.style.whiteSpace = 'pre';
+  document.body.appendChild(el);
+  return el;
+})();
+
 function measureText(input, text) {
-
-    if (!text) {
-        return 0;
-    }
-
-    const cs =
-        window.getComputedStyle(input);
-
-    const meas =
-        document.createElement('span');
-
-    meas.style.position = 'absolute';
-    meas.style.visibility = 'hidden';
-    meas.style.whiteSpace = 'pre';
-
-    meas.style.fontFamily = cs.fontFamily;
-    meas.style.fontSize = cs.fontSize;
-    meas.style.fontWeight = cs.fontWeight;
-    meas.style.letterSpacing = cs.letterSpacing;
-    meas.style.lineHeight = cs.lineHeight;
-
-    meas.textContent = text;
-
-    document.body.appendChild(meas);
-
-    const width =
-        meas.getBoundingClientRect().width;
-
-    meas.remove();
-
-    return width;
+  if (!text) return 0;
+  const cs = window.getComputedStyle(input);
+  const meas = __measurer;
+  meas.style.fontFamily = cs.fontFamily;
+  meas.style.fontSize   = cs.fontSize;
+  meas.style.fontWeight = cs.fontWeight;
+  meas.style.letterSpacing = cs.letterSpacing;
+  meas.style.lineHeight = cs.lineHeight;
+  meas.textContent = text;
+  return meas.getBoundingClientRect().width;
 }
 
 
@@ -83,62 +72,25 @@ function setCaret(input, position) {
 // ============================================================
 
 function adjustGapWidth(input, current) {
-
-    if (!input || !current) {
-        return;
-    }
-
-    const answer =
-        (
-            current.formattedAnswer ||
-            current.answer ||
-            ''
-        ).trim();
-
-    if (!answer) {
-        return;
-    }
-
-    const answerWidth =
-        measureText(
-            input,
-            answer
-        );
-
-    const typedRaw =
-        state.userInput || '';
-
-    const typed =
-        current.isFirstWord && typedRaw.length > 0
-            ? typedRaw.charAt(0).toUpperCase() +
-              typedRaw.slice(1)
-            : typedRaw;
-
-    const typedWidth =
-        measureText(
-            input,
-            typed
-        );
-
-const WIDTH_BUFFER = 10;
-
-const finalWidth =
-    Math.max(
-        answerWidth,
-        typedWidth
-    ) + WIDTH_BUFFER;
-
-input.style.minWidth =
-    (answerWidth + WIDTH_BUFFER) + 'px';
-
-input.style.width =
-    finalWidth + 'px';
-
-    input.style.maxWidth =
-        'none';
-
-    input.style.whiteSpace =
-        'nowrap';
+  if (!input || !current) return;
+  const answer = (current.formattedAnswer || current.answer || '').trim();
+  if (!answer) return;
+  const answerWidth = measureText(input, answer);
+  const typedRaw = state.userInput || '';
+  const typed = current.isFirstWord && typedRaw.length > 0
+    ? typedRaw.charAt(0).toUpperCase() + typedRaw.slice(1)
+    : typedRaw;
+  const typedWidth = measureText(input, typed);
+  const WIDTH_BUFFER = 10;
+  const finalWidth = Math.max(answerWidth, typedWidth) + WIDTH_BUFFER;
+  // only apply changes if different to avoid layout thrash
+  if (parseFloat(input.style.width) !== finalWidth) {
+    input.style.width = finalWidth + 'px';
+  }
+  const minW = answerWidth + WIDTH_BUFFER;
+  if (parseFloat(input.style.minWidth) !== minW) {
+    input.style.minWidth = minW + 'px';
+  }
 }
 
 
