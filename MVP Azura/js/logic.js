@@ -2,7 +2,7 @@ console.log('🚨 LOGIC.JS LOADED');
 
 const version = '1.3';
 
-import { state } from './state.js';
+import { state, clearAutoSubmit  } from './state.js';
 import { render } from './ui.js';
 import { speak } from './speech.js';
 import { playCorrect, playWrong, playWordAudio } from './sound.js';
@@ -23,11 +23,12 @@ function normalize(str) {
 const recentHistory = [];
 const HISTORY_LIMIT = 5;
 
-function getWeight(memoryLevel) {
-    const weights = [10, 8, 6, 4, 2, 1];
-    const level = Number(memoryLevel) || 0;
-    return weights[Math.min(level, 5)];
-}
+// currently not used, maybe in future so keep for time being
+// function getWeight(memoryLevel) {
+//     const weights = [10, 8, 6, 4, 2, 1];
+//     const level = Number(memoryLevel) || 0;
+//     return weights[Math.min(level, 5)];
+// }
 
 export function buildSessionQueue() {
     const total = state.sentences.length;
@@ -59,10 +60,7 @@ export function buildSessionQueue() {
 // NEXT SENTENCE
 // =========================
 async function nextSentence() {
-if (state.autoSubmitTimer) {
-    clearTimeout(state.autoSubmitTimer);
-    state.autoSubmitTimer = null;
-}
+clearAutoSubmit();
     const translationRow = document.getElementById('translation-row');
     const sentenceArea = document.getElementById('sentence-area');
 
@@ -171,10 +169,7 @@ function finishWord(current, immediateCorrect) {
 // =========================
 export function submitAnswer() {
     console.log('SUBMIT CALLED');
-if (state.autoSubmitTimer) {
-    clearTimeout(state.autoSubmitTimer);
-    state.autoSubmitTimer = null;
-}
+clearAutoSubmit();
 
     // 🔒 HARD LOCK (fix for mobile double fire)
     if (state.isSubmitting) {
@@ -257,10 +252,7 @@ if (input === '') {
 
 
 export async function startNewSession() {
-if (state.autoSubmitTimer) {
-    clearTimeout(state.autoSubmitTimer);
-    state.autoSubmitTimer = null;
-}
+clearAutoSubmit();
 
     state.sessionCount = 0;
     state.sessionCorrect = 0;

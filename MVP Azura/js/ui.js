@@ -1,4 +1,4 @@
-import { state } from './state.js';
+import { state, clearAutoSubmit } from './state.js';
 import { submitAnswer, startNewSession } from './logic.js';
 
 let hasUserFocused = false;
@@ -315,14 +315,7 @@ function createGapSentence(sentenceObj) {
 
 function scheduleAutoSubmit(input, current) {
 
-    if (state.autoSubmitTimer) {
-
-        clearTimeout(
-            state.autoSubmitTimer
-        );
-
-        state.autoSubmitTimer = null;
-    }
+clearAutoSubmit();
 
     if (state.isComposing) {
         return;
@@ -766,8 +759,6 @@ export function render() {
     input.disabled =
         false;
 
-    input.dataset.wordId =
-        String(current.id);
 
 
     // ========================================================
@@ -1018,15 +1009,7 @@ if (state.status === 'wrongFlash') {
 
     input.oncompositionstart = () => {
 
-        if (state.autoSubmitTimer) {
-
-            clearTimeout(
-                state.autoSubmitTimer
-            );
-
-            state.autoSubmitTimer =
-                null;
-        }
+clearAutoSubmit();
 
         state.isComposing =
             true;
@@ -1079,15 +1062,7 @@ if (state.status === 'wrongFlash') {
             return;
         }
 
-        if (state.autoSubmitTimer) {
-
-            clearTimeout(
-                state.autoSubmitTimer
-            );
-
-            state.autoSubmitTimer =
-                null;
-        }
+clearAutoSubmit();
 
         if (state.isComposing) {
             return;
