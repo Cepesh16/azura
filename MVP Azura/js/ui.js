@@ -1203,45 +1203,24 @@ input.onbeforeinput = (e) => {
         }
 
         // ---------- multi-character (swipe) ----------
-        // We will prevent the default insertion and either accept whole
-        // incoming (if it exactly matches the expected prefix) or treat
-        // it as a wrong answer (option B).
         e.preventDefault();
 
-        const expectedRemaining =
-            (current.answer || '').slice(state.userInput.length);
-
-        const incomingLower = incoming.toLowerCase();
-        const expectedSlice = expectedRemaining.slice(0, incoming.length).toLowerCase();
-
-        // If the swipe exactly matches the expected prefix -> accept it fully.
-        if (incomingLower === expectedSlice) {
-
-            state.userInput = (state.userInput || '') + incoming;
-            input.value = state.userInput;
-
-            adjustGapWidth(input, current);
-            renderHint(input, current);
-            scheduleAutoSubmit(input, current);
-            setCaret(input, state.userInput.length);
-
-            return;
-        }
-
-        // Otherwise: treat as WRONG, but DON'T show the swiped word
+        // Wrong swipe.
+        // Do NOT put the swiped word into the input.
         state.userInput = '';
         input.value = '';
 
-        // 🔥 CRITICAL FIX: reset caret + internal typing position
-        setCaret(input, 0);
-
-        // 🔥 also reset any "last typed" assumptions
         state.lastTypedCorrect = true;
 
+        // Cancel the mobile keyboard / IME state.
+        // This is important because preventDefault() alone does not
+        // necessarily clear the keyboard's composition/suggestion buffer.
+        input.blur();
 
-        // small delay ensures UI + state fully sync before submit
         setTimeout(() => {
+
             submitAnswer();
+
         }, 0);
 
         return;
