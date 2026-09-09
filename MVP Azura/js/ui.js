@@ -1137,7 +1137,6 @@ input.onbeforeinput = (e) => {
     // Prevent inserting a SPACE when the expected answer is single-word
     // (allow space if the correct answer contains spaces).
     if (e.inputType === 'insertText' && e.data) {
-        // treat NBSP as space too
         const isWhitespaceChar = e.data === ' ' || e.data === '\u00A0' || /^\s$/.test(e.data);
         if (isWhitespaceChar) {
             const answerHasSpace = (current.answer || '').includes(' ');
@@ -1163,7 +1162,7 @@ input.onbeforeinput = (e) => {
         e.data
     ) {
 
-        const incoming = e.data; // could be 1 char (normal typing) or many chars (swipe)
+        const incoming = e.data; // could be 1 char (typing) or many chars (swipe)
 
         // ---------- single character (existing behavior) ----------
         if (incoming.length === 1) {
@@ -1199,51 +1198,39 @@ input.onbeforeinput = (e) => {
         }
 
         // ---------- multi-character (swipe) ----------
-        // We prevent the default insertion and only accept the prefix
-        // of the incoming string that matches the expected remaining letters.
+        // We will prevent the default insertion and either accept whole
+        // incoming (if it exactly matches the expected prefix) or treat
+        // it as a wrong answer (option B).
         e.preventDefault();
 
         const expectedRemaining =
             (current.answer || '').slice(state.userInput.length);
 
-        let allowed = ''; // matched prefix from incoming
+        const incomingLower = incoming.toLowerCase();
+        const expectedSlice = expectedRemaining.slice(0, incoming.length).toLowerCase();
 
-        for (let i = 0; i < incoming.length; i++) {
-            const ch = incoming[i];
-            if (ch.toLowerCase() === (expectedRemaining[allowed.length] || '').toLowerCase()) {
-                allowed += ch;
-            } else {
-                break;
-            }
-        }
+        // If the swipe exactly matches the expected prefix -> accept it fully.
+        if (incomingLower === expectedSlice) {
 
-        if (allowed.length > 0) {
-            // Insert only the allowed (matching) prefix
-            state.userInput = (state.userInput || '') + allowed;
+            state.userInput = (state.userInput || '') + incoming;
             input.value = state.userInput;
 
-            // update UI helpers
             adjustGapWidth(input, current);
             renderHint(input, current);
             scheduleAutoSubmit(input, current);
-
-            // keep caret at end
             setCaret(input, state.userInput.length);
+
             return;
         }
 
-        // If nothing matched, show the wrong-letter flash and ignore
-        input.classList.remove('flash-wrong-letter');
-        void input.offsetWidth;
-        input.classList.add('flash-wrong-letter');
+        // Otherwise: treat the whole swipe as a WRONG answer (option B).
+        // We'll set the user's input to the incoming swipe and submit.
+        state.userInput = incoming;
+        input.value = state.userInput;
 
-        // OPTIONAL: if you prefer to treat any multi-word swipe with zero
-        // matching letters as a full wrong answer, you can call submitAnswer()
-        // here instead of (or in addition to) the flash:
-        //
-        // e.g. uncomment the next lines to auto-submit as wrong:
-        // state.userInput = incoming; // or '' if you prefer
-        // submitAnswer();
+        // Immediately evaluate it as an answer (submitAnswer will mark it wrong).
+        // submitAnswer is imported at the top of ui.js already in your project.
+        submitAnswer();
 
         return;
     }
