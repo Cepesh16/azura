@@ -969,7 +969,13 @@ if (state.status === 'correct') {
     input.value =
         current.formattedAnswer;
 
-    // Input controls text/caret appearance.
+    // Recalculate width AFTER putting the complete
+    // formatted answer into the input.
+    adjustGapWidth(
+        input,
+        current
+    );
+
     input.classList.add(
         'correct',
         'correct-pop'
