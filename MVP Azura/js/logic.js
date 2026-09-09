@@ -11,8 +11,9 @@ import { fadeIn,fadeOut,fadeOutAndHide } from './anim.js';
 
 
 function normalize(str) {
-    return str
+  return String(str || '')
     .replace(/\u00A0/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
 }

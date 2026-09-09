@@ -22,6 +22,18 @@ export function initEls() {
 }
 
 
+
+// helper to normalize for comparisons in UI-level autosubmit
+function cleanCompareStr(s) {
+  return (s || '')
+    .replace(/\u00A0/g, ' ')       // NBSP -> space
+    .replace(/\s+/g, ' ')          // collapse repeated whitespace
+    .trim()
+    .toLowerCase();
+}
+
+
+
 // ============================================================
 // MEASURE TEXT
 // ============================================================
@@ -350,14 +362,11 @@ clearAutoSubmit();
         return;
     }
 
-    const value =
-        (state.userInput || '').toLowerCase();
-
-    const answer =
-        current.answer.toLowerCase();
+    const value = cleanCompareStr(state.userInput);
+    const answer = cleanCompareStr(current.answer);
 
     if (value !== answer) {
-        return;
+      return;
     }
 
     state.autoSubmitTimer =
@@ -380,17 +389,14 @@ clearAutoSubmit();
                 return;
             }
 
-            const latestValue =
-                (state.userInput || '').toLowerCase();
-
-            const latestAnswer =
-                current.answer.toLowerCase();
+            const latestValue = cleanCompareStr(state.userInput);
+            const latestAnswer = cleanCompareStr(current.answer);
 
             if (
-                latestValue === latestAnswer &&
-                latestValue.length === latestAnswer.length
+              latestValue === latestAnswer &&
+              latestValue.length === latestAnswer.length
             ) {
-                submitAnswer();
+              submitAnswer();
             }
 
         }, 350);
@@ -746,6 +752,15 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
     if (!input) {
         return;
     }
+
+     // enforce max length equal to exact answer length (prevents extra letters)
+    try {
+      // some answers may contain spaces; use .length on the raw answer string
+      input.maxLength = Number(current.answer.length) || 100; // fallback safe cap
+    } catch (err) {
+      // ignore if anything goes wrong (defensive)
+      input.removeAttribute('maxlength');
+    }   
 
 
     // ========================================================
@@ -1177,6 +1192,32 @@ clearAutoSubmit();
             input,
             current
         );
+
+        // ---------- IMMEDIATE ACCEPT WHEN MATCH ----------
+        // If user's typed text already equals the answer (after cleaning),
+        // submit immediately instead of waiting for the auto-timer.
+        try {
+            const typedClean = cleanCompareStr(state.userInput);
+            const answerClean = cleanCompareStr(current.answer);
+
+            if (
+                typedClean &&
+                answerClean &&
+                typedClean === answerClean &&
+                !state.isComposing &&     // don't submit during IME composition
+                !state.inputLocked &&
+                !state.isSubmitting
+            ) {
+                // prevent any pending auto timer and submit right now
+                clearAutoSubmit();
+                submitAnswer();
+                return; // avoid further UI updates in this input handler
+            }
+        } catch (err) {
+            // defensive: if something goes wrong, ignore and continue
+            console.error('Immediate accept check error:', err);
+        }
+        // -------------------------------------------------
 
         setCaret(
             input,
