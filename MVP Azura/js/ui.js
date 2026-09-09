@@ -1204,74 +1204,113 @@ input.onbeforeinput = (e) => {
 
 
 
+
         // ---------- multi-character (swipe) ----------
         if (incoming.length > 1) {
 
-            // normalize incoming: replace NBSP, collapse whitespace, trim
             const incomingNormalized = incoming
                 .replace(/\u00A0/g, ' ')
                 .replace(/\s+/g, ' ')
                 .trim();
 
-            // nothing left after trim => treat as wrong swipe
-            if (!incomingNormalized) {
-                e.preventDefault();
-
-                input.classList.remove('flash-wrong-letter');
-                void input.offsetWidth;
-                input.classList.add('flash-wrong-letter');
-
-                // restore clean editing session so next typed letter is accepted
-                setTimeout(() => {
-                    if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
-                        input.blur();
-                        setTimeout(() => {
-                            if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
-                                input.focus();
-                                setCaret(input, state.userInput.length);
-                            }
-                        }, 0);
-                    }
-                }, 0);
-
-                return;
-            }
-
             const expectedRemaining =
                 (current.answer || '').slice(state.userInput.length);
 
-            const incomingLower = incomingNormalized.toLowerCase();
-            const expectedLower = expectedRemaining.toLowerCase();
+            const incomingLower =
+                incomingNormalized.toLowerCase();
 
-            console.log('SWIPE raw:', JSON.stringify(incoming), 'norm:', JSON.stringify(incomingNormalized), 'expectedRem:', expectedRemaining);
+            const expectedLower =
+                expectedRemaining.toLowerCase();
 
-            // If the swipe exactly matches the expected prefix -> allow insertion.
-            if (incomingLower === expectedLower.slice(0, incomingLower.length)) {
-                // allow the browser to insert the (normalized) swipe as usual
-                // (we don't manually insert here; returning allows default behavior)
+            console.log(
+                'SWIPE raw:',
+                JSON.stringify(incoming),
+                'norm:',
+                JSON.stringify(incomingNormalized),
+                'expectedRem:',
+                JSON.stringify(expectedRemaining)
+            );
+
+            // ========================================================
+            // CORRECT SWIPE
+            // ========================================================
+
+            if (
+                incomingNormalized &&
+                incomingLower ===
+                expectedLower.slice(0, incomingLower.length)
+            ) {
+
+                // Prevent the keyboard from inserting the raw value
+                // (which may contain a leading space).
+                e.preventDefault();
+
+                // Insert the cleaned swipe ourselves.
+                state.userInput =
+                    (state.userInput || '') +
+                    incomingNormalized;
+
+                input.value =
+                    state.userInput;
+
+                // Run the same normal input processing.
+                input.oninput();
+
                 return;
             }
 
-            // WRONG swipe: prevent insertion, show small wrong-letter flash only,
-            // and reset IME buffer so the keyboard doesn't keep the rejected swipe.
+            // ========================================================
+            // WRONG SWIPE
+            // ========================================================
+
             e.preventDefault();
 
-            input.classList.remove('flash-wrong-letter');
-            void input.offsetWidth;
-            input.classList.add('flash-wrong-letter');
+            // Do NOT change state.userInput.
+            // Do NOT call submitAnswer().
+            // Do NOT enter wrongFlash.
 
-            // Reset keyboard composition buffer then restore focus so the next real
-            // typed letter is accepted immediately.
+            input.classList.remove(
+                'flash-wrong-letter'
+            );
+
+            void input.offsetWidth;
+
+            input.classList.add(
+                'flash-wrong-letter'
+            );
+
+            // Clear the keyboard's pending swipe/composition.
             setTimeout(() => {
-                if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
-                    input.blur();
-                    setTimeout(() => {
-                        if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
-                            input.focus();
-                            setCaret(input, state.userInput.length);
-                        }
-                    }, 0);
+
+                if (
+                    state.inputLocked ||
+                    state.isSubmitting ||
+                    input.disabled
+                ) {
+                    return;
                 }
+
+                input.blur();
+
+                setTimeout(() => {
+
+                    if (
+                        state.inputLocked ||
+                        state.isSubmitting ||
+                        input.disabled
+                    ) {
+                        return;
+                    }
+
+                    input.focus();
+
+                    setCaret(
+                        input,
+                        state.userInput.length
+                    );
+
+                }, 0);
+
             }, 0);
 
             return;
