@@ -1117,69 +1117,58 @@ clearAutoSubmit();
     //   Only accept the next correct character.
     // ========================================================
 
-    input.onbeforeinput = (e) => {
+input.onbeforeinput = (e) => {
 
-        if (
-            state.inputLocked ||
-            state.answerComplete ||
-            state.isSubmitting
-        ) {
-            e.preventDefault();
-            return;
-        }
+    if (
+        state.inputLocked ||
+        state.answerComplete ||
+        state.isSubmitting
+    ) {
+        e.preventDefault();
+        return;
+    }
 
-clearAutoSubmit();
+    clearAutoSubmit();
 
-        if (state.isComposing) {
-            return;
-        }
+    if (state.isComposing) {
+        return;
+    }
 
-        // Prevent inserting a SPACE when the expected answer is a single word
-        // (allow space if the correct answer contains spaces).
-        if (e.inputType === 'insertText' && e.data) {
-          // treat NBSP as space too
-          const isWhitespaceChar = e.data === ' ' || e.data === '\u00A0' || /^\s$/.test(e.data);
-          if (isWhitespaceChar) {
+    // Prevent inserting a SPACE when the expected answer is single-word
+    // (allow space if the correct answer contains spaces).
+    if (e.inputType === 'insertText' && e.data) {
+        // treat NBSP as space too
+        const isWhitespaceChar = e.data === ' ' || e.data === '\u00A0' || /^\s$/.test(e.data);
+        if (isWhitespaceChar) {
             const answerHasSpace = (current.answer || '').includes(' ');
             if (!answerHasSpace) {
-              // Block the space — user shouldn't waste a slot on it.
-              e.preventDefault();
-
-              // small UX hint (optional): temporarily flash the input to show invalid char
-              // input.classList.remove('flash-wrong-letter');
-              // void input.offsetWidth;
-              // input.classList.add('flash-wrong-letter');
-
-              return;
-            }
-          }
-        }
-
-        // -----------------------------------------------
-        // BEFORE HINT
-        // -----------------------------------------------
-
-        if (!state.answeredWithHint) {
-            return;
-        }
-
-        // -----------------------------------------------
-        // HINT PHASE
-        // -----------------------------------------------
-
-        if (
-            e.inputType === 'insertText' &&
-            e.data
-        ) {
-
-            const text =
-                e.data.toLowerCase();
-
-            // For regular typing we handle one
-            // character at a time.
-            if (text.length !== 1) {
+                e.preventDefault();
                 return;
             }
+        }
+    }
+
+    // -----------------------------------------------
+    // BEFORE HINT
+    // -----------------------------------------------
+    if (!state.answeredWithHint) {
+        return;
+    }
+
+    // -----------------------------------------------
+    // HINT PHASE
+    // -----------------------------------------------
+    if (
+        e.inputType === 'insertText' &&
+        e.data
+    ) {
+
+        const incoming = e.data; // could be 1 char (normal typing) or many chars (swipe)
+
+        // ---------- single character (existing behavior) ----------
+        if (incoming.length === 1) {
+
+            const text = incoming.toLowerCase();
 
             const nextIndex =
                 state.userInput.length;
@@ -1205,21 +1194,70 @@ clearAutoSubmit();
                 return;
             }
 
+            // allow single correct char to go through
             return;
         }
 
+        // ---------- multi-character (swipe) ----------
+        // We prevent the default insertion and only accept the prefix
+        // of the incoming string that matches the expected remaining letters.
+        e.preventDefault();
 
-        // -----------------------------------------------
-        // BACKSPACE
-        // -----------------------------------------------
+        const expectedRemaining =
+            (current.answer || '').slice(state.userInput.length);
 
-        if (
-            e.inputType ===
-            'deleteContentBackward'
-        ) {
+        let allowed = ''; // matched prefix from incoming
+
+        for (let i = 0; i < incoming.length; i++) {
+            const ch = incoming[i];
+            if (ch.toLowerCase() === (expectedRemaining[allowed.length] || '').toLowerCase()) {
+                allowed += ch;
+            } else {
+                break;
+            }
+        }
+
+        if (allowed.length > 0) {
+            // Insert only the allowed (matching) prefix
+            state.userInput = (state.userInput || '') + allowed;
+            input.value = state.userInput;
+
+            // update UI helpers
+            adjustGapWidth(input, current);
+            renderHint(input, current);
+            scheduleAutoSubmit(input, current);
+
+            // keep caret at end
+            setCaret(input, state.userInput.length);
             return;
         }
-    };
+
+        // If nothing matched, show the wrong-letter flash and ignore
+        input.classList.remove('flash-wrong-letter');
+        void input.offsetWidth;
+        input.classList.add('flash-wrong-letter');
+
+        // OPTIONAL: if you prefer to treat any multi-word swipe with zero
+        // matching letters as a full wrong answer, you can call submitAnswer()
+        // here instead of (or in addition to) the flash:
+        //
+        // e.g. uncomment the next lines to auto-submit as wrong:
+        // state.userInput = incoming; // or '' if you prefer
+        // submitAnswer();
+
+        return;
+    }
+
+    // -----------------------------------------------
+    // BACKSPACE
+    // -----------------------------------------------
+    if (
+        e.inputType ===
+        'deleteContentBackward'
+    ) {
+        return;
+    }
+};
 
 
     // ========================================================
