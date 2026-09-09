@@ -889,6 +889,14 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
     // ========================================================
 
     input.onkeydown = (e) => {
+        // Block Space key if current answer is single-word
+        if (e.key === ' ' || e.code === 'Space') {
+          const answerHasSpace = (current.answer || '').includes(' ');
+          if (!answerHasSpace) {
+            e.preventDefault();
+            return;
+          }
+        }
 
         if (e.key !== 'Enter') {
             return;
@@ -1086,6 +1094,27 @@ clearAutoSubmit();
 
         if (state.isComposing) {
             return;
+        }
+
+        // Prevent inserting a SPACE when the expected answer is a single word
+        // (allow space if the correct answer contains spaces).
+        if (e.inputType === 'insertText' && e.data) {
+          // treat NBSP as space too
+          const isWhitespaceChar = e.data === ' ' || e.data === '\u00A0' || /^\s$/.test(e.data);
+          if (isWhitespaceChar) {
+            const answerHasSpace = (current.answer || '').includes(' ');
+            if (!answerHasSpace) {
+              // Block the space — user shouldn't waste a slot on it.
+              e.preventDefault();
+
+              // small UX hint (optional): temporarily flash the input to show invalid char
+              // input.classList.remove('flash-wrong-letter');
+              // void input.offsetWidth;
+              // input.classList.add('flash-wrong-letter');
+
+              return;
+            }
+          }
         }
 
         // -----------------------------------------------
