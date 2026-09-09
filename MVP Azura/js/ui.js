@@ -1203,27 +1203,90 @@ input.onbeforeinput = (e) => {
         }
 
         // ---------- multi-character (swipe) ----------
-        e.preventDefault();
+        if (incoming.length > 1) {
 
-        // Wrong swipe.
-        // Do NOT put the swiped word into the input.
-        state.userInput = '';
-        input.value = '';
+            const expectedRemaining =
+                (current.answer || '').slice(state.userInput.length);
 
-        state.lastTypedCorrect = true;
+            const incomingLower =
+                incoming.toLowerCase();
 
-        // Cancel the mobile keyboard / IME state.
-        // This is important because preventDefault() alone does not
-        // necessarily clear the keyboard's composition/suggestion buffer.
-        input.blur();
+            const expectedLower =
+                expectedRemaining.toLowerCase();
 
-        setTimeout(() => {
+            // ============================================
+            // CORRECT SWIPE
+            // ============================================
 
-            submitAnswer();
+            if (
+                incomingLower ===
+                expectedLower.slice(0, incomingLower.length)
+            ) {
+                // Correct swipe → allow browser to insert it.
+                return;
+            }
 
-        }, 0);
+            // ============================================
+            // WRONG SWIPE
+            // ============================================
 
-        return;
+            e.preventDefault();
+
+            // Do NOT change state.userInput.
+            // Do NOT call submitAnswer().
+            // Do NOT enter wrongFlash.
+
+            input.classList.remove(
+                'flash-wrong-letter'
+            );
+
+            void input.offsetWidth;
+
+            input.classList.add(
+                'flash-wrong-letter'
+            );
+
+            // Mobile keyboards can keep the rejected swipe
+            // inside their IME/composition buffer.
+            //
+            // Reset the editing session, then immediately
+            // restore focus so the next real letter is accepted.
+            setTimeout(() => {
+
+                if (
+                    state.inputLocked ||
+                    state.isSubmitting ||
+                    input.disabled
+                ) {
+                    return;
+                }
+
+                input.blur();
+
+                setTimeout(() => {
+
+                    if (
+                        state.inputLocked ||
+                        state.isSubmitting ||
+                        input.disabled
+                    ) {
+                        return;
+                    }
+
+                    input.focus();
+
+                    setCaret(
+                        input,
+                        state.userInput.length
+                    );
+
+                }, 0);
+
+            }, 0);
+
+            return;
+        }
+        
     }
 
     // -----------------------------------------------
