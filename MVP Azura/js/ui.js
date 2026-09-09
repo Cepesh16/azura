@@ -1202,91 +1202,83 @@ input.onbeforeinput = (e) => {
             return;
         }
 
+
+
         // ---------- multi-character (swipe) ----------
         if (incoming.length > 1) {
+
+            // normalize incoming: replace NBSP, collapse whitespace, trim
+            const incomingNormalized = incoming
+                .replace(/\u00A0/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            // nothing left after trim => treat as wrong swipe
+            if (!incomingNormalized) {
+                e.preventDefault();
+
+                input.classList.remove('flash-wrong-letter');
+                void input.offsetWidth;
+                input.classList.add('flash-wrong-letter');
+
+                // restore clean editing session so next typed letter is accepted
+                setTimeout(() => {
+                    if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
+                        input.blur();
+                        setTimeout(() => {
+                            if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
+                                input.focus();
+                                setCaret(input, state.userInput.length);
+                            }
+                        }, 0);
+                    }
+                }, 0);
+
+                return;
+            }
 
             const expectedRemaining =
                 (current.answer || '').slice(state.userInput.length);
 
-            const incomingLower =
-                incoming.toLowerCase();
+            const incomingLower = incomingNormalized.toLowerCase();
+            const expectedLower = expectedRemaining.toLowerCase();
 
-            const expectedLower =
-                expectedRemaining.toLowerCase();
-
-            // ============================================
-            // CORRECT SWIPE
-            // ============================================
-
-            if (
-                incomingLower ===
-                expectedLower.slice(0, incomingLower.length)
-            ) {
-                // Correct swipe → allow browser to insert it.
+            // If the swipe exactly matches the expected prefix -> allow insertion.
+            if (incomingLower === expectedLower.slice(0, incomingLower.length)) {
+                // allow the browser to insert the (normalized) swipe as usual
+                // (we don't manually insert here; returning allows default behavior)
                 return;
             }
 
-            // ============================================
-            // WRONG SWIPE
-            // ============================================
-
+            // WRONG swipe: prevent insertion, show small wrong-letter flash only,
+            // and reset IME buffer so the keyboard doesn't keep the rejected swipe.
             e.preventDefault();
 
-            // Do NOT change state.userInput.
-            // Do NOT call submitAnswer().
-            // Do NOT enter wrongFlash.
-
-            input.classList.remove(
-                'flash-wrong-letter'
-            );
-
+            input.classList.remove('flash-wrong-letter');
             void input.offsetWidth;
+            input.classList.add('flash-wrong-letter');
 
-            input.classList.add(
-                'flash-wrong-letter'
-            );
-
-            // Mobile keyboards can keep the rejected swipe
-            // inside their IME/composition buffer.
-            //
-            // Reset the editing session, then immediately
-            // restore focus so the next real letter is accepted.
+            // Reset keyboard composition buffer then restore focus so the next real
+            // typed letter is accepted immediately.
             setTimeout(() => {
-
-                if (
-                    state.inputLocked ||
-                    state.isSubmitting ||
-                    input.disabled
-                ) {
-                    return;
+                if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
+                    input.blur();
+                    setTimeout(() => {
+                        if (!state.inputLocked && !state.isSubmitting && !input.disabled) {
+                            input.focus();
+                            setCaret(input, state.userInput.length);
+                        }
+                    }, 0);
                 }
-
-                input.blur();
-
-                setTimeout(() => {
-
-                    if (
-                        state.inputLocked ||
-                        state.isSubmitting ||
-                        input.disabled
-                    ) {
-                        return;
-                    }
-
-                    input.focus();
-
-                    setCaret(
-                        input,
-                        state.userInput.length
-                    );
-
-                }, 0);
-
             }, 0);
 
             return;
         }
-        
+
+
+
+
+
     }
 
     // -----------------------------------------------
