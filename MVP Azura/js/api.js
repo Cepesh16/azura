@@ -37,6 +37,7 @@ export async function fetchSentences() {
                 id: row.id,
                 sentence,
                 answer,
+                explanation: row.explanation,
                 translation: row.translation,
                 audioUrl: row.audioUrl,
                 partOfSpeech: row.partOfSpeech,

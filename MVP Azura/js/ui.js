@@ -12,7 +12,11 @@ export function initEls() {
   els.sessionStateEl   = document.getElementById('session-state');
   els.sentenceAreaEl   = document.getElementById('sentence-area');
   els.sentenceEl       = document.getElementById('sentence');
+
   els.translationEl    = document.getElementById('translation');
+  els.explanationEl    = document.getElementById('explanation');
+  els.toggleBtn        = document.getElementById('explanation-toggle');
+
   els.posEl            = document.getElementById('part-of-speech') || null;
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
@@ -420,7 +424,11 @@ const sentenceAreaEl  = els.sentenceAreaEl  || document.getElementById('sentence
     }
 
 const sentenceEl      = els.sentenceEl      || document.getElementById('sentence');
+
 const translationEl   = els.translationEl   || document.getElementById('translation');
+const explanationEl   = els.explanationEl   || document.getElementById('explanation');
+const toggleBtn       = els.toggleBtn       || document.getElementById('explanation-toggle');
+
 const posEl           = els.posEl           || document.getElementById('part-of-speech');
 const levelEl         = els.levelEl         || document.getElementById('level-indicator');
 
@@ -735,8 +743,38 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
             );
     }
 
-    translationEl.innerText =
-        current.translation;
+translationEl.innerText =
+    current.translation || '';
+
+if (explanationEl && toggleBtn) {
+
+    const toggleExplanation = () => {
+        const isOpen =
+            explanationEl.classList.contains('show');
+
+        if (isOpen) {
+            explanationEl.classList.remove('show');
+            toggleBtn.innerText = '+';
+        } else {
+            explanationEl.classList.add('show');
+            toggleBtn.innerText = '−';
+        }
+    };
+
+    // reset text every render
+    explanationEl.innerText = current.explanation || '';
+    explanationEl.classList.remove('show');
+    toggleBtn.innerText = '+';
+
+    // CLICK on +
+    toggleBtn.onclick = toggleExplanation;
+
+    // CLICK on translation text ALSO triggers it
+    if (translationEl) {
+        translationEl.style.cursor = 'pointer';
+        translationEl.onclick = toggleExplanation;
+    }
+}
 
     if (posEl) {
 
