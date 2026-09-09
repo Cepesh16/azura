@@ -1243,6 +1243,8 @@ input.onbeforeinput = (e) => {
             const incomingLower = incomingNormalized.toLowerCase();
             const expectedLower = expectedRemaining.toLowerCase();
 
+            console.log('SWIPE raw:', JSON.stringify(incoming), 'norm:', JSON.stringify(incomingNormalized), 'expectedRem:', expectedRemaining);
+
             // If the swipe exactly matches the expected prefix -> allow insertion.
             if (incomingLower === expectedLower.slice(0, incomingLower.length)) {
                 // allow the browser to insert the (normalized) swipe as usual
