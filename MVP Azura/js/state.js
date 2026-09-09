@@ -11,6 +11,7 @@ inputLocked: false,   // used to temporarily block input while animations run
 isComposing: false,   // tracks IME composition state
 autoSubmitTimer: null,
 answerComplete: false,
+ignoreNextInput: false,
 
     status: 'loading',
 

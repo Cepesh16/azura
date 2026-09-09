@@ -518,7 +518,7 @@ Top Navigation
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: var(--space-lg);
+    margin-bottom: calc(var(--space-xl) * 1.5);
     padding: 0px var(--space-lg);
 }
 
@@ -770,7 +770,6 @@ Translation Row
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: var(--space-xl);
     margin-bottom: var(--space-lg);
 }
 
@@ -1078,11 +1077,12 @@ Session summary
 
     #progress-row {
        padding: 0 var(--space-xl);
+       margin-bottom: var(--space-xl);
     }
 
 
     #container {
-        padding: var(--space-xl) var(--space-md);
+        padding: var(--space-lg) var(--space-md);
     }
 
     #card {
