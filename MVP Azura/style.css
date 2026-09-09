@@ -591,6 +591,7 @@ Learning Area
     display: inline-block;
     line-height: inherit;
     vertical-align: baseline;
+    margin: 0 var(--dot-xs);
 }
 
 .gap-input-wrap {
@@ -655,7 +656,6 @@ input.gap {
 
 
     line-height: 1;
-    margin: 0 var(--dot-xs);
     outline: 1px solid var(--border-light);
     outline-offset: 1px;
     border-radius: var(--radius-xs);
