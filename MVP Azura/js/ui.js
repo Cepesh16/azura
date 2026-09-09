@@ -1223,13 +1223,15 @@ input.onbeforeinput = (e) => {
             return;
         }
 
-        // Otherwise: treat the whole swipe as a WRONG answer (option B).
-        // We'll set the user's input to the incoming swipe and submit.
-        state.userInput = incoming;
-        input.value = state.userInput;
+        // Otherwise: treat as WRONG, but DON'T show the swiped word
+        state.userInput = '';
+        input.value = '';
 
-        // Immediately evaluate it as an answer (submitAnswer will mark it wrong).
-        // submitAnswer is imported at the top of ui.js already in your project.
+        // Optional: small visual feedback before submit
+        input.classList.remove('flash-wrong-letter');
+        void input.offsetWidth;
+        input.classList.add('flash-wrong-letter');
+
         submitAnswer();
 
         return;
