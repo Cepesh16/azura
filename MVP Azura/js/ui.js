@@ -327,17 +327,18 @@ function createGapSentence(sentenceObj) {
                 <input
                     id="gap-input"
                     type="text"
-                    data-word-id="${sentenceObj.id}"
                     class="gap"
                     inputmode="text"
-                    autocomplete="one-time-code"
+                    autocomplete="off"
                     autocorrect="off"
                     autocapitalize="off"
                     spellcheck="false"
                     enterkeyhint="done"
                     aria-label="Type missing word"
-                    name="vocabulary-answer"
->
+                    name="answer"
+                    data-form-type="other"
+                    data-lpignore="true"
+                >
             </span>
         </span>
     ${after}`;
