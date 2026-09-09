@@ -1227,12 +1227,21 @@ input.onbeforeinput = (e) => {
         state.userInput = '';
         input.value = '';
 
-        // Optional: small visual feedback before submit
+        // 🔥 CRITICAL FIX: reset caret + internal typing position
+        setCaret(input, 0);
+
+        // 🔥 also reset any "last typed" assumptions
+        state.lastTypedCorrect = true;
+
+        // optional visual feedback
         input.classList.remove('flash-wrong-letter');
         void input.offsetWidth;
         input.classList.add('flash-wrong-letter');
 
-        submitAnswer();
+        // small delay ensures UI + state fully sync before submit
+        setTimeout(() => {
+            submitAnswer();
+        }, 0);
 
         return;
     }
