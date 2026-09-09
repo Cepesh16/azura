@@ -1009,46 +1009,51 @@ if (state.status === 'wrongFlash') {
     input.value =
         state.userInput || '';
 
-    // The wrapper controls the underline color.
     setGapState(input, 'flash-wrong');
 
-    // The input controls the shake animation.
     input.classList.add('flash-wrong');
 
     state.inputLocked =
         true;
 
-        input.onanimationend = (e) => {
+    input.onanimationend = (e) => {
 
-            if (e.target !== input) {
-                return;
-            }
+        if (e.target !== input) {
+            return;
+        }
 
-            setGapState(input, null);
+        // IMPORTANT:
+        // Only the main wrong-answer shake should finish
+        // the wrongFlash state.
+        if (e.animationName !== 'wrongShake') {
+            return;
+        }
 
-            state.inputLocked =
-                false;
+        setGapState(input, null);
 
-            state.status =
-                'wrong';
+        state.inputLocked =
+            false;
 
-            state.userInput =
-                '';
+        state.status =
+            'wrong';
 
-            input.value =
-                '';
+        state.userInput =
+            '';
 
-            state.isSubmitting =
-                false;
+        input.value =
+            '';
 
-            state.answeredWithHint =
-                true;
+        state.isSubmitting =
+            false;
 
-            render();
-        };
+        state.answeredWithHint =
+            true;
 
-        return;
-    }
+        render();
+    };
+
+    return;
+}
 
 
     // ========================================================
@@ -1233,10 +1238,6 @@ input.onbeforeinput = (e) => {
         // 🔥 also reset any "last typed" assumptions
         state.lastTypedCorrect = true;
 
-        // optional visual feedback
-        input.classList.remove('flash-wrong-letter');
-        void input.offsetWidth;
-        input.classList.add('flash-wrong-letter');
 
         // small delay ensures UI + state fully sync before submit
         setTimeout(() => {
