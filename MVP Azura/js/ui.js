@@ -326,7 +326,7 @@ function createGapSentence(sentenceObj) {
             <span class="gap-input-wrap">
                 <input
                     id="gap-input"
-                    type="text"
+                    type="search"
                     data-word-id="${sentenceObj.id}"
                     class="gap"
                     inputmode="text"
@@ -340,56 +340,6 @@ function createGapSentence(sentenceObj) {
             </span>
         </span>
     ${after}`;
-
-
-    // after you create/insert the <input id="gap-input"> into the DOM:
-    const input = document.getElementById('gap-input');
-
-    if (input) {
-      // baseline attributes (keep original healthy settings)
-      input.setAttribute('autocomplete', 'off');
-      input.setAttribute('autocorrect', 'off');
-      input.setAttribute('autocapitalize', 'off');
-      input.setAttribute('spellcheck', 'false');
-      input.inputMode = 'text';
-
-      // -------------- make it a 'game field' --------------
-      input.readOnly = true; // prevent early autofill suggestions
-
-      // helper that enables input when the user intentionally touches it
-      function enableInputForReal() {
-        if (!input) return;
-
-        // give it a fresh random name to defeat autofill heuristics
-        input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-
-        // remove readonly so keyboard opens normally
-        input.readOnly = false;
-        // clear long autocompletion popup hints by briefly changing name then restore
-const oldName = input.name;
-input.name = 'g_block_' + Math.random().toString(36).slice(2);
-setTimeout(() => { input.name = oldName; }, 50);
-
-        // focus + ensure caret at end
-        setTimeout(() => {
-          try { input.focus(); } catch (err) {}
-          setCaret(input, (input.value || '').length);
-        }, 0);
-
-        // remove the one-time listeners
-        input.removeEventListener('touchstart', enableInputForReal);
-        input.removeEventListener('mousedown', enableInputForReal);
-        input.removeEventListener('pointerdown', enableInputForReal);
-      }
-
-      // Use pointer + touch + mouse events so it works across platforms.
-      input.addEventListener('touchstart', enableInputForReal, { passive: true });
-      input.addEventListener('mousedown', enableInputForReal);
-      input.addEventListener('pointerdown', enableInputForReal);
-
-      // Optional: in case you programmatically re-render the input, ensure
-      // it is readOnly again on new sentence by resetting it in render()
-    }
 }
 
 
@@ -840,67 +790,6 @@ if (explanationEl && toggleBtn) {
     if (!input) {
         return;
     }
-
-
-
-    // ----------------------
-// Make the gap a "game field"
-// (prevent autofill UI until user intentionally touches it)
-// ----------------------
-if (!canReuseInput) {
-  try {
-    // start readonly so browsers/password managers don't treat it as a typical form field
-    input.readOnly = true;
-
-    // mark this element so we know we've initialised game-field behaviour
-    input.dataset.gameField = '1';
-
-    // Ensure there's a unique name to defeat some autofill heuristics
-    input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-
-    // One-time enable function
-    const enableInputForReal = function enableInputForReal(e) {
-      // defend against duplicate calls
-      if (!input || !input.dataset.gameField) return;
-
-      // Remove the marker (so we don't re-run)
-      delete input.dataset.gameField;
-
-      // Give it a fresh name again (extra safety)
-      input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-
-      // Make editable and focus
-      input.readOnly = false;
-
-      // Focus and place caret at end
-      setTimeout(() => {
-        try {
-          input.focus();
-          setCaret(input, (input.value || '').length);
-        } catch (err) {
-          // ignore focus errors
-        }
-      }, 0);
-
-      // Remove listeners (one-time)
-      input.removeEventListener('touchstart', enableInputForReal, { passive: true });
-      input.removeEventListener('mousedown', enableInputForReal);
-      input.removeEventListener('pointerdown', enableInputForReal);
-    };
-
-    // Attach one-time listeners (touch + mouse + pointer for cross-device)
-    input.addEventListener('touchstart', enableInputForReal, { passive: true });
-    input.addEventListener('mousedown', enableInputForReal);
-    input.addEventListener('pointerdown', enableInputForReal);
-
-  } catch (err) {
-    // defensive: if anything fails, ensure input is editable
-    input.readOnly = false;
-  }
-}
-
-
-
 
      // enforce max length equal to exact answer length (prevents extra letters)
     try {

