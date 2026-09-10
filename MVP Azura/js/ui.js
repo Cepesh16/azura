@@ -324,19 +324,21 @@ function createGapSentence(sentenceObj) {
     return `${before}
         <span class="gap-wrapper">
             <span class="gap-input-wrap">
-                <input
-                    id="gap-input"
-                    type="text"
-                    data-word-id="${sentenceObj.id}"
-                    class="gap"
-                    inputmode="text"
-                    autocomplete="one-time-code"
-                    autocorrect="off"
-                    autocapitalize="off"
-                    spellcheck="false"
-                    enterkeyhint="done"
-                    aria-label="Type missing word"
-                >
+                <form>
+                    <input
+                        id="gap-input"
+                        type="text"
+                        data-word-id="${sentenceObj.id}"
+                        class="gap"
+                        inputmode="text"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        enterkeyhint="done"
+                        aria-label="Type missing word"
+                    >
+                </form>
             </span>
         </span>
     ${after}`;
