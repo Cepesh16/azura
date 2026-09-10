@@ -330,7 +330,7 @@ function createGapSentence(sentenceObj) {
                     data-word-id="${sentenceObj.id}"
                     class="gap"
                     inputmode="text"
-                    autocomplete="off"
+                    autocomplete="one-time-code"
                     autocorrect="off"
                     autocapitalize="off"
                     spellcheck="false"
