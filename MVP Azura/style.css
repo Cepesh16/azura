@@ -160,6 +160,14 @@ button {
         transform: scale(0.96);
     }
 
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none; 
+}
+
+
+
 .icon-wrapper {
     display: flex;
     align-items: center;
