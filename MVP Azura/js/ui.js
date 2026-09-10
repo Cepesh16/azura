@@ -837,6 +837,67 @@ if (explanationEl && toggleBtn) {
         return;
     }
 
+
+
+    // ----------------------
+// Make the gap a "game field"
+// (prevent autofill UI until user intentionally touches it)
+// ----------------------
+if (!canReuseInput) {
+  try {
+    // start readonly so browsers/password managers don't treat it as a typical form field
+    input.readOnly = true;
+
+    // mark this element so we know we've initialised game-field behaviour
+    input.dataset.gameField = '1';
+
+    // Ensure there's a unique name to defeat some autofill heuristics
+    input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+
+    // One-time enable function
+    const enableInputForReal = function enableInputForReal(e) {
+      // defend against duplicate calls
+      if (!input || !input.dataset.gameField) return;
+
+      // Remove the marker (so we don't re-run)
+      delete input.dataset.gameField;
+
+      // Give it a fresh name again (extra safety)
+      input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+
+      // Make editable and focus
+      input.readOnly = false;
+
+      // Focus and place caret at end
+      setTimeout(() => {
+        try {
+          input.focus();
+          setCaret(input, (input.value || '').length);
+        } catch (err) {
+          // ignore focus errors
+        }
+      }, 0);
+
+      // Remove listeners (one-time)
+      input.removeEventListener('touchstart', enableInputForReal, { passive: true });
+      input.removeEventListener('mousedown', enableInputForReal);
+      input.removeEventListener('pointerdown', enableInputForReal);
+    };
+
+    // Attach one-time listeners (touch + mouse + pointer for cross-device)
+    input.addEventListener('touchstart', enableInputForReal, { passive: true });
+    input.addEventListener('mousedown', enableInputForReal);
+    input.addEventListener('pointerdown', enableInputForReal);
+
+  } catch (err) {
+    // defensive: if anything fails, ensure input is editable
+    input.readOnly = false;
+  }
+}
+
+
+
+
      // enforce max length equal to exact answer length (prevents extra letters)
     try {
       // some answers may contain spaces; use .length on the raw answer string
