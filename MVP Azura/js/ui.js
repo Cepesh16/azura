@@ -324,21 +324,19 @@ function createGapSentence(sentenceObj) {
     return `${before}
         <span class="gap-wrapper">
             <span class="gap-input-wrap">
-                <form>
-                    <input
-                        id="gap-input"
-                        type="text"
-                        data-word-id="${sentenceObj.id}"
-                        class="gap"
-                        inputmode="text"
-                        autocomplete="off"
-                        autocorrect="off"
-                        autocapitalize="off"
-                        spellcheck="false"
-                        enterkeyhint="done"
-                        aria-label="Type missing word"
-                    >
-                </form>
+                <input
+                    id="gap-input"
+                    type="text"
+                    data-word-id="${sentenceObj.id}"
+                    class="gap"
+                    inputmode="text"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    enterkeyhint="done"
+                    aria-label="Type missing word"
+                >
             </span>
         </span>
     ${after}`;
@@ -367,6 +365,10 @@ function createGapSentence(sentenceObj) {
 
         // remove readonly so keyboard opens normally
         input.readOnly = false;
+        // clear long autocompletion popup hints by briefly changing name then restore
+const oldName = input.name;
+input.name = 'g_block_' + Math.random().toString(36).slice(2);
+setTimeout(() => { input.name = oldName; }, 50);
 
         // focus + ensure caret at end
         setTimeout(() => {
