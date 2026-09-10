@@ -340,6 +340,52 @@ function createGapSentence(sentenceObj) {
             </span>
         </span>
     ${after}`;
+
+
+    // after you create/insert the <input id="gap-input"> into the DOM:
+    const input = document.getElementById('gap-input');
+
+    if (input) {
+      // baseline attributes (keep original healthy settings)
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('autocorrect', 'off');
+      input.setAttribute('autocapitalize', 'off');
+      input.setAttribute('spellcheck', 'false');
+      input.inputMode = 'text';
+
+      // -------------- make it a 'game field' --------------
+      input.readOnly = true; // prevent early autofill suggestions
+
+      // helper that enables input when the user intentionally touches it
+      function enableInputForReal() {
+        if (!input) return;
+
+        // give it a fresh random name to defeat autofill heuristics
+        input.name = 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+
+        // remove readonly so keyboard opens normally
+        input.readOnly = false;
+
+        // focus + ensure caret at end
+        setTimeout(() => {
+          try { input.focus(); } catch (err) {}
+          setCaret(input, (input.value || '').length);
+        }, 0);
+
+        // remove the one-time listeners
+        input.removeEventListener('touchstart', enableInputForReal);
+        input.removeEventListener('mousedown', enableInputForReal);
+        input.removeEventListener('pointerdown', enableInputForReal);
+      }
+
+      // Use pointer + touch + mouse events so it works across platforms.
+      input.addEventListener('touchstart', enableInputForReal, { passive: true });
+      input.addEventListener('mousedown', enableInputForReal);
+      input.addEventListener('pointerdown', enableInputForReal);
+
+      // Optional: in case you programmatically re-render the input, ensure
+      // it is readOnly again on new sentence by resetting it in render()
+    }
 }
 
 
