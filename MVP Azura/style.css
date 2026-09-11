@@ -526,7 +526,7 @@ Top Navigation
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: calc(var(--space-xl) * 1.5);
+    margin-bottom: calc(var(--space-xl) * 1);
     padding: 0px var(--space-lg);
 }
 
@@ -1070,7 +1070,10 @@ Session summary
 @media (max-width: 480px) {
     body {
         margin-top: var(--space-lg);
+
+        margin: var(--space-md) var(--space-md) 0 var(--space-md);
     }
+
     #option-row,
     #progress-row {
         /*margin-bottom: var(--space-sm);*/
