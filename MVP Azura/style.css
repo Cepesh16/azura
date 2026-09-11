@@ -319,7 +319,7 @@ Layout
 ========================= */
 
 #header {
-    margin-bottom: calc(var(--space-xl) * 1);
+    margin-bottom: calc(var(--space-lg) * 1);
     padding: 0 var(--space-lg);
 }
 
@@ -668,27 +668,31 @@ Top Navigation
 
 
 #progress-row {
-    min-height: var(--space-sm); /* the same height as content to stabilize container*/
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: var(--space-lg);
+    min-height: var(--space-sm); /* the same height as content to stabilize container*/
 }
 
 #progress-bar {
     display: flex;
-    gap: 6px;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--dot-md); /* spacing between segments */
     flex: 1;
-    width: fit-content;   /* 👈 prevents stretching forever */
+    width: min(420px, 85%); /* <-- stable width: adjust max to your design (420px is an example) */
 }
 
     .progress-segment {
         position: relative;
+        overflow: hidden;
+        /*flex: 1;*/
+        flex: 1 1 0;
+        min-width: 8px; /* prevents segments collapsing too thin */
         height: var(--space-xs);
-        flex: 1;
         background: var(--progress-bg);
         border-radius: var(--radius-xs);
-        overflow: hidden;
     }
 
         .progress-segment::after {
