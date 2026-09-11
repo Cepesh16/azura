@@ -394,9 +394,10 @@ Main App
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
         padding: var(--space-lg);
+        /*border: 1px solid var(--progress-bg);*/
+        border-radius: var(--radius-xl);  
         box-shadow: var(--shadow-flat-md);
         background: var(--bg-card);
-        border-radius: var(--radius-xl);  
         overflow: hidden;
         text-align: left;
         /*text-align: center;*/
@@ -683,12 +684,12 @@ Top Navigation
 }
 
     .progress-segment {
+        position: relative;
         height: var(--space-xs);
         flex: 1;
         background: var(--progress-bg);
         border-radius: var(--radius-xs);
         overflow: hidden;
-        position: relative;
     }
 
         .progress-segment::after {
@@ -878,42 +879,10 @@ input.gap.correct {
 
 input.gap.flash-wrong {
     color: var(--wrong);
-    animation: wrongShake 0.25s ease;
+    animation: wrongShake var(--transition-normal);
 }
 
 
-/* =========================
-   Correct Pop
-   ========================= */
-
-input.gap.correct-pop {
-    animation: correctPop 0.22s ease;
-}
-
-@keyframes correctPop {
-    50% {
-        transform: scale(1.08);
-    }
-}
-
-
-/* =========================
-   Wrong Letter
-   ========================= */
-
-.flash-wrong-letter {
-    animation: wrongFlash 0.2s;
-}
-
-@keyframes wrongFlash {
-    0% {
-        background: rgba(231, 76, 60, 0.2);
-    }
-
-    100% {
-        background: transparent;
-    }
-}
 
 /* =========================
 Translation Row
@@ -1102,18 +1071,24 @@ Helper
 States
 ========================= */
 
+/*correct answer*/
+.gap.correct-pop {
+    animation: correctPop var(--transition-long);
+}
+
+@keyframes correctPop {
+    50% { 
+            /*font-size: var(--font-lg);*/
+            transform: scale(1.08);
+            /*transform: scale(0.92);*/
+         }
+}
+
+/*wrong answer*/
 @keyframes wrongShake {
     25% { transform: translateX(-4px); }
     50% { transform: translateX(4px); }
     75% { transform: translateX(-3px); }
-}
-
-.gap.correct-pop {
-    animation: correctPop 0.22s ease;
-}
-
-@keyframes correctPop {
-    50% { transform: scale(1.08); }
 }
 
 .hint {
@@ -1122,8 +1097,9 @@ States
 }
 
 
+/*wrong letter*/
 .flash-wrong-letter {
-    animation: wrongFlash 0.2s;
+    animation: wrongFlash var(--transition-normal);
 }
 
 @keyframes wrongFlash {
