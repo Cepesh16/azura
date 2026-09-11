@@ -245,7 +245,6 @@ body {
     align-items: center;
     flex-direction: column;
     padding-top: calc(var(--space-xl) * 2);
-    /*margin-top: clamp(100px, 10vh, 100px);*/
     background: var(--bg-main);
     color: var(--text-main);
 }
@@ -1176,6 +1175,7 @@ Session summary
 
 @media (max-width: 480px) {
     body {
+    padding-top: var(--space-lg);
 /*        margin-top: var(--space-lg);
         margin: var(--space-md) var(--space-md) 0 var(--space-md);*/
     }
