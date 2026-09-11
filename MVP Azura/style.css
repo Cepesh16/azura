@@ -22,7 +22,7 @@
     /* UI COLORS */
     --accent: #48bb78;
     --progress-bg: #e2e8f0;
-    --button-hover: #f5f5f5;
+    --button-hover: var(--bg-main);
 
     /* TOGGLE */
     --toggle-bg-off: #ccc;
@@ -262,23 +262,19 @@ button {
     box-shadow: var(--shadow-flat-md);
 }
 
-    button:hover,
-    #options-btn:hover,
-    #save-options:hover {
-        /*transform: translateY(-1px) translateX(-1px);*/
-        /*transform: scale(1.1);*/
-        /*font-size: var(--font-lg);*/
-        transform: scale(1.2);
+    button:hover {
         background: var(--button-hover);
+        background: var(--bg-main);
         color: var(--text-main);
+        transform: scale(1.05);
     }
 
     button:focus {
-      outline: 3px solid var(--text-muted); /* Changes the outer ring color */
+        transform: scale(1.05);
     }
 
     button:active {
-        transform: scale(0.96);
+        transform: scale(0.90);
     }
 
 
@@ -398,7 +394,7 @@ Main App
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
         padding: var(--space-lg);
-        box-shadow: var(--shadow-flat-lg);
+        box-shadow: var(--shadow-flat-md);
         background: var(--bg-card);
         border-radius: var(--radius-xl);  
         overflow: hidden;
@@ -439,10 +435,11 @@ Main App
     cursor: pointer;
     transition: var(--transition-normal);
     box-shadow: var(--shadow-soft);
+    box-shadow: var(--shadow-flat-md);
     overflow: hidden;
 }
 
-    .toogle-box .toggleSwitch :is(.speaker, .mute-speake) {
+    .toggle-box .toggleSwitch :is(.speaker, .mute-speake) {
         color: var(--text-secondary);
     }
 
@@ -477,7 +474,7 @@ Main App
     overflow: hidden;
     white-space: nowrap;
 
-    transition-duration: var(--transition-fast);
+    transition-duration: var(--transition-normal);
 }
 
     /* Use general sibling (~) selectors inside the label so structure is robust */
@@ -500,6 +497,7 @@ Main App
     .toggleSwitch:hover {
 
     }
+
     .toggleSwitch:hover svg {
         /*color: var(--text-secondary);*/
     }
@@ -545,7 +543,8 @@ Main App
         display: block;
         box-sizing: border-box;
         border-radius: var(--toggle-width);
-        box-shadow: var(--shadow-soft);
+        /*box-shadow: var(--shadow-soft);*/
+        box-shadow: var(--shadow-flat-md);
     }
 
     .slider:before {
@@ -626,6 +625,11 @@ Main App
 
 #theme-toggle:checked + .slider:before {
     transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
+}
+
+
+.switch:hover {
+
 }
 
 .switch:active {
@@ -808,6 +812,7 @@ input.gap {
     outline: 1px solid var(--border-light);
     outline-offset: 1px;
     border-radius: var(--radius-xs);
+    box-shadow: var(--shadow-flat-md);
 }
 
 
@@ -1022,25 +1027,6 @@ Translation Row
 Level Indicator
 ========================= */
 
-/* horizontal line both side */
-/*#level-indicator {
-    width: 70%;  
-    gap: var(--space-lg);
-    margin-bottom: var(--space-lg);
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#level-indicator::before,
-#level-indicator::after {
-    content: "";
-    flex: 1;
-    border-bottom: 1px solid var(--progress-bg);
-}*/
-
-
-
-
 
 #level-indicator {
     display: flex;
@@ -1072,7 +1058,7 @@ Level Indicator
             border-radius: var(--radius-circle);
             /*background: var(--level-empty);*/
             outline: 1px solid var(--text-muted);
-            /*box-shadow: var(--shadow-flat-sm);*/
+            box-shadow: var(--shadow-flat-md);
         }
 
         .level-dot.level-0,
@@ -1084,13 +1070,13 @@ Level Indicator
         .level-dot.level-2,
         .level-dot.level-3 { 
             background: var(--level-mid);
-            outline-color: var(--level-low);
+            outline-color: var(--level-mid);
         }
 
         .level-dot.level-4,
         .level-dot.level-5 { 
             background: var(--level-high);
-            outline-color: var(--level-low);
+            outline-color: var(--level-high);
         }
 
 /* =========================
@@ -1284,7 +1270,7 @@ Session summary
 
     --accent: #7bd389;
     --progress-bg: rgba(255,255,255,0.04);
-    --button-hover: rgba(244, 196, 48, 0.5);
+    --button-hover: var(--bg-main);
 
     --toggle-bg-off: #2a3942;
     --toggle-bg-on: #10b981;
@@ -1322,6 +1308,12 @@ Session summary
     border-color: var(--border-light);
     /*border-color: var(--button-hover);*/
 }
+[data-theme="dark"] button:hover {
+    background: var(--button-hover);
+    /*color: var(--text-main);*/
+    /*border-color: var(--border-light);*/
+}
+
 
 [data-theme="dark"] .options-card {
     background: var(--bg-card);
