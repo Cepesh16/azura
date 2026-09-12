@@ -812,7 +812,9 @@ input.gap {
     box-shadow: var(--shadow-flat);
 }
 
-
+input.gap:hover {
+    outline: 2px solid var(--outline-main);
+}
 
 
 
@@ -970,6 +972,7 @@ Translation Row
         }
         
         #translation:hover {
+            outline: 2px solid var(--outline-main);
             /*color: var(--text-accent);*/
         }
 

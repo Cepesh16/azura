@@ -1693,23 +1693,23 @@ input.oninput = () => {
     // FOCUS
     // ========================================================
 
-//6. One important thing: remove the keyboard hide/show code
-    
-    // setTimeout(() => {
+// keyboard hide/show code
 
-    //     if (
-    //         !state.isSubmitting &&
-    //         !state.inputLocked &&
-    //         !input.disabled
-    //     ) {
+    setTimeout(() => {
 
-    //         input.focus();
+        if (
+            !state.isSubmitting &&
+            !state.inputLocked &&
+            !input.disabled
+        ) {
 
-    //         setCaret(
-    //             input,
-    //             state.userInput.length
-    //         );
-    //     }
+            input.focus();
 
-    // }, 0);
+            setCaret(
+                input,
+                state.userInput.length
+            );
+        }
+
+    }, 0);
 }
