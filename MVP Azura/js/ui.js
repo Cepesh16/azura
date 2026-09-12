@@ -131,68 +131,144 @@ function adjustGapWidth(input, current) {
 // Purpose: block wrong letters when hint-mode is ON and flash animation instead.
 // Allows deletions/backspace always, allows any typing when not in hint-mode,
 // updates state.userInput and calls renderHint / scheduleAutoSubmit.
+// --- REPLACE or ADD this function in js/ui.js ---
 function attachGapInputHandlers(input, current) {
   if (!input || !current) return;
 
-  // Small helper to trigger the existing wrong-letter animation on the wrapper
+  // idempotency: don't attach twice to same DOM element
+  if (input.dataset.handlersAttached === '1') {
+    // update maxLength if current changed
+    input.maxLength = (current.answer || '').length || 0;
+    return;
+  }
+
+  input.dataset.handlersAttached = '1';
+
+  // Ensure the visible gap doesn't grow — maxLength enforces typed chars limit too.
+  const answer = (current.formattedAnswer || current.answer || '');
+  if (answer) {
+    input.maxLength = answer.length;
+  } else {
+    input.removeAttribute('maxLength');
+  }
+
+  // small helper to flash wrong-letter animation (uses your CSS .flash-wrong-letter)
   function flashWrongLetter() {
     const wrap = input.closest('.gap-input-wrap');
     if (!wrap) return;
     wrap.classList.add('flash-wrong-letter');
-    // match your CSS animation duration (0.3s is a good default)
+    // match the CSS animation duration (adjust 300 -> your CSS length if different)
     setTimeout(() => wrap.classList.remove('flash-wrong-letter'), 300);
   }
 
-  // beforeinput gives us the intended content before it's inserted — perfect to block.
+  // Normalize helper: returns the lowercased, trimmed string used for comparisons.
+  function norm(s) {
+    return (s || '').replace(/\u00A0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  }
+
+  // BEFOREINPUT: best place to block incorrect insertions (covers typing + paste + drop)
   input.addEventListener('beforeinput', (ev) => {
-    // Respect composition (IME) and other global guards
+    // Allow composition/IME — don't interfere while composing.
     if (state.isComposing) return;
-    // Allow deletions/unsets
-    if (ev.inputType && ev.inputType.startsWith('delete')) {
+
+    // Allow deletions (backspace/delete/undo)
+    if (ev.inputType && ev.inputType.startsWith('delete')) return;
+
+    const answerNow = ( (state.current && (state.current.formattedAnswer || state.current.answer)) || answer || '' );
+    const answerNorm = norm(answerNow);
+
+    // If no answer, don't block anything.
+    if (!answerNow) return;
+
+    // Compute what the resulting value would be if we allow this input.
+    // Handle selection replacement correctly.
+    const selStart = typeof input.selectionStart === 'number' ? input.selectionStart : input.value.length;
+    const selEnd   = typeof input.selectionEnd   === 'number' ? input.selectionEnd   : selStart;
+    const insert = ev.data === null ? '' : ev.data; // data may be null for some inputTypes
+    const proposed = input.value.slice(0, selStart) + insert + input.value.slice(selEnd);
+
+    const proposedNorm = norm(proposed);
+
+    // 1) Enforce length: proposed must not exceed answer length.
+    if (proposedNorm.length > answerNorm.length) {
+      ev.preventDefault();
+      flashWrongLetter();
       return;
     }
 
-    // If hint mode not active, don't block anything here
-    if (!state.answeredWithHint) {
+    // 2) If hint-mode active, allow only prefix matches of the answer.
+    if (state.answeredWithHint) {
+      // allow the proposed value only if answer starts with proposed value
+      if (!answerNorm.startsWith(proposedNorm)) {
+        ev.preventDefault();
+        flashWrongLetter();
+      }
+      // else allow
       return;
     }
 
-    // Determine what the value would become after this input
-    const selStart = input.selectionStart || 0;
-    const selEnd = input.selectionEnd || selStart;
-    const data = ev.data || '';
-    const nextValue = input.value.slice(0, selStart) + data + input.value.slice(selEnd);
-
-    const answer = (current.formattedAnswer || current.answer || '');
-    // If the answer starts with the nextValue (prefix match), allow
-    if (answer.toLowerCase().startsWith(nextValue.toLowerCase())) {
-      return;
-    }
-
-    // Otherwise block the input and flash wrong-letter animation
-    ev.preventDefault();
-    flashWrongLetter();
+    // 3) Normal mode (hint not shown): allow anything up to length limit
+    // But also enforce length already done above. So just allow.
   }, { passive: false });
 
-  // Keep state and hint overlay in sync on real input events
+  // INPUT event: update state and UI overlays
   input.addEventListener('input', () => {
+    // Keep state.userInput up to date (actual DOM value)
     state.userInput = input.value || '';
-    // Keep gap width correct (we keep it answer-size but still update min/width)
-    adjustGapWidth(input, current);
-    // Re-render hint overlay: hint letters only disappear when typed characters are accepted
-    renderHint(input, current);
-    // schedule auto submit if the typed value matches the answer
-    scheduleAutoSubmit(input, current);
+
+    // adjust width (we keep visible width pinned to answer size in adjustGapWidth)
+    adjustGapWidth(input, state.current || current);
+
+    // re-render hint (no-op if not in hint-mode)
+    renderHint(input, state.current || current);
+
+    // schedule autosubmit (your existing logic compares normalized values)
+    scheduleAutoSubmit(input, state.current || current);
   });
 
-  // Ensure caret placement when focusing (optional, keeps UX stable)
+  // KEYDOWN fallback for older browsers where beforeinput is unreliable.
+  input.addEventListener('keydown', (ev) => {
+    if (state.isComposing) return;
+
+    // Only consider single-character printable keys
+    if (ev.key && ev.key.length === 1) {
+      const answerNow = ( (state.current && (state.current.formattedAnswer || state.current.answer)) || answer || '' );
+      const answerNorm = norm(answerNow);
+      if (!answerNow) return;
+
+      // get caret + selected range
+      const selStart = typeof input.selectionStart === 'number' ? input.selectionStart : input.value.length;
+      const selEnd   = typeof input.selectionEnd   === 'number' ? input.selectionEnd   : selStart;
+
+      // proposed after this key
+      const proposed = input.value.slice(0, selStart) + ev.key + input.value.slice(selEnd);
+      const proposedNorm = norm(proposed);
+
+      // enforce length
+      if (proposedNorm.length > answerNorm.length) {
+        ev.preventDefault();
+        flashWrongLetter();
+        return;
+      }
+
+      // if hint-mode active, require prefix match
+      if (state.answeredWithHint && !answerNorm.startsWith(proposedNorm)) {
+        ev.preventDefault();
+        flashWrongLetter();
+        return;
+      }
+    }
+  });
+
+  // Focus behavior: keep caret at end when focusing to avoid shifting keyboard hiccups
   input.addEventListener('focus', () => {
-    // move caret to end of current input value:
     try {
+      // place caret at end (safe)
       const len = input.value.length;
       input.setSelectionRange(len, len);
-    } catch (err) { /* ignore */ }
+    } catch (err) { /* ignore selection errors */ }
   });
+
 }
 
 
@@ -809,34 +885,38 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
       // create fresh HTML (old input will be removed from DOM so its listeners are cleaned up)
       sentenceEl.innerHTML = createGapSentence(current);
 
-      // After sentenceEl.innerHTML = createGapSentence(current)
-      const gapInput = document.getElementById('gap-input');
-      if (gapInput) {
-        // ensure gap always visually matches answer width
-        adjustGapWidth(gapInput, current);
+        // --- after sentenceEl.innerHTML = createGapSentence(current)
+        const gapInput = document.getElementById('gap-input');
+        if (gapInput) {
+          // 1) enforce typed-length limit to the correct answer length (prevents extra chars)
+          const answer = (current.formattedAnswer || current.answer || '') || '';
+          gapInput.maxLength = answer.length || 0;
 
-        // attach handlers only once per input element
-        if (!gapInput.dataset.handlersAttached) {
-          attachGapInputHandlers(gapInput, current);
-          gapInput.dataset.handlersAttached = '1';
+          // 2) visual width must match the answer (your adjustGapWidth pins it to answer width)
+          adjustGapWidth(gapInput, current);
+
+          // 3) attach handlers (idempotent check). If your attach function already sets
+          //    data-handlers-attached internally, this check is harmless; otherwise it prevents duplicates.
+          if (!gapInput.dataset.handlersAttached) {
+            attachGapInputHandlers(gapInput, current);
+            gapInput.dataset.handlersAttached = '1';
+          }
+
+          // 4) make sure hint overlay matches current state
+          renderHint(gapInput, current);
+
+          // 5) keep state.userInput synchronized with DOM value
+          state.userInput = gapInput.value || '';
         }
 
-        // keep any overlay hint in the proper state
-        renderHint(gapInput, current);
-
-        // keep internal state.userInput in sync with the DOM element
-        state.userInput = gapInput.value || '';
-      }
-
-    } else {
-      // we are reusing the DOM input for the same word id (avoid reattaching listeners)
-
-      // update layout/hint to reflect potentially changed 'current' or state
+    } else { // canReuseInput === true
+      // existingInput is still in the DOM for the same current.id — update layout & hint
+      const answer = (current.formattedAnswer || current.answer || '') || '';
+      existingInput.maxLength = answer.length || 0;
       adjustGapWidth(existingInput, current);
       renderHint(existingInput, current);
-
-      // ensure state.userInput matches what's in the input (important when resuming)
       state.userInput = existingInput.value || '';
+      // no attach/reattach here because listeners should already be present
     }
 
 // keep translation updated (this is fine where you had it)
