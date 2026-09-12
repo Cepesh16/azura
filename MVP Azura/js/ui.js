@@ -37,6 +37,84 @@ function cleanCompareStr(s) {
 }
 
 
+function getIncomingText(e) {
+    if (typeof e.data === 'string') {
+        return e.data;
+    }
+
+    if (e.inputType === 'insertFromPaste' && e.clipboardData) {
+        return e.clipboardData.getData('text') || '';
+    }
+
+    if (e.inputType === 'insertFromDrop' && e.dataTransfer) {
+        return e.dataTransfer.getData('text') || '';
+    }
+
+    return '';
+}
+
+
+function getProposedValue(input, e) {
+    const incoming = getIncomingText(e);
+
+    const start =
+        typeof input.selectionStart === 'number'
+            ? input.selectionStart
+            : input.value.length;
+
+    const end =
+        typeof input.selectionEnd === 'number'
+            ? input.selectionEnd
+            : start;
+
+    return (
+        input.value.slice(0, start) +
+        incoming +
+        input.value.slice(end)
+    );
+}
+
+
+function normalizeAnswer(value) {
+    return String(value || '')
+        .replace(/\u00A0/g, ' ')
+        .toLowerCase();
+}
+
+
+function isAllowedValue(value, current) {
+    const answer = normalizeAnswer(
+        current.formattedAnswer || current.answer || ''
+    );
+
+    const typed = normalizeAnswer(value);
+
+    // Never allow more characters than the answer.
+    if (typed.length > answer.length) {
+        return false;
+    }
+
+    // Normal mode:
+    // any text is allowed as long as it isn't too long.
+    if (!state.answeredWithHint) {
+        return true;
+    }
+
+    // Hint mode:
+    // only a prefix of the correct answer is allowed.
+    return answer.startsWith(typed);
+}
+
+
+function flashWrongLetter(input) {
+    input.classList.remove('flash-wrong-letter');
+
+    // Restart animation cleanly.
+    void input.offsetWidth;
+
+    input.classList.add('flash-wrong-letter');
+}
+
 
 // ============================================================
 // MEASURE TEXT
@@ -886,28 +964,19 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
       sentenceEl.innerHTML = createGapSentence(current);
 
         // --- after sentenceEl.innerHTML = createGapSentence(current)
-        const gapInput = document.getElementById('gap-input');
-        if (gapInput) {
-          // 1) enforce typed-length limit to the correct answer length (prevents extra chars)
-          const answer = (current.formattedAnswer || current.answer || '') || '';
-          gapInput.maxLength = answer.length || 0;
+const gapInput = document.getElementById('gap-input');
 
-          // 2) visual width must match the answer (your adjustGapWidth pins it to answer width)
-          adjustGapWidth(gapInput, current);
+if (gapInput) {
+    const answer = (current.formattedAnswer || current.answer || '') || '';
 
-          // 3) attach handlers (idempotent check). If your attach function already sets
-          //    data-handlers-attached internally, this check is harmless; otherwise it prevents duplicates.
-          if (!gapInput.dataset.handlersAttached) {
-            attachGapInputHandlers(gapInput, current);
-            gapInput.dataset.handlersAttached = '1';
-          }
+    gapInput.maxLength = answer.length;
 
-          // 4) make sure hint overlay matches current state
-          renderHint(gapInput, current);
+    adjustGapWidth(gapInput, current);
 
-          // 5) keep state.userInput synchronized with DOM value
-          state.userInput = gapInput.value || '';
-        }
+    renderHint(gapInput, current);
+
+    state.userInput = gapInput.value || '';
+}
 
     } else { // canReuseInput === true
       // existingInput is still in the DOM for the same current.id — update layout & hint
@@ -1102,19 +1171,13 @@ if (explanationEl && toggleBtn) {
     // ENTER
     // ========================================================
 
-    input.onkeydown = (e) => {
-        // Block Space key if current answer is single-word
-        if (e.key === ' ' || e.code === 'Space') {
-          const answerHasSpace = (current.answer || '').includes(' ');
-          if (!answerHasSpace) {
-            e.preventDefault();
-            return;
-          }
-        }
+input.onkeydown = (e) => {
 
-        if (e.key !== 'Enter') {
-            return;
-        }
+    // ========================================================
+    // ENTER
+    // ========================================================
+
+    if (e.key === 'Enter') {
 
         e.preventDefault();
         e.stopPropagation();
@@ -1124,7 +1187,72 @@ if (explanationEl && toggleBtn) {
         }
 
         submitAnswer();
-    };
+        return;
+    }
+
+    // ========================================================
+    // SPACE
+    // ========================================================
+
+    if (
+        e.key === ' ' ||
+        e.code === 'Space'
+    ) {
+
+        const answerHasSpace =
+            (current.answer || '').includes(' ');
+
+        if (!answerHasSpace) {
+            e.preventDefault();
+            return;
+        }
+    }
+
+    // ========================================================
+    // NORMAL/HINT LENGTH SAFETY
+    //
+    // Usually beforeinput handles this.
+    // This protects browsers/keyboards where it doesn't.
+    // ========================================================
+
+    if (
+        e.key &&
+        e.key.length === 1
+    ) {
+
+        const start =
+            typeof input.selectionStart === 'number'
+                ? input.selectionStart
+                : input.value.length;
+
+        const end =
+            typeof input.selectionEnd === 'number'
+                ? input.selectionEnd
+                : start;
+
+        const proposed =
+            input.value.slice(0, start) +
+            e.key +
+            input.value.slice(end);
+
+        if (
+            !isAllowedValue(
+                proposed,
+                current
+            )
+        ) {
+
+            e.preventDefault();
+
+            // Only hint mode flashes.
+            if (state.answeredWithHint) {
+                flashWrongLetter(input);
+            }
+
+            return;
+        }
+    }
+};
 
 
     // ========================================================
@@ -1317,200 +1445,78 @@ input.onbeforeinput = (e) => {
 
     clearAutoSubmit();
 
-    if (state.isComposing) {
+    // Let IME composition work normally.
+    if (
+        state.isComposing ||
+        e.inputType === 'insertCompositionText'
+    ) {
         return;
     }
 
-    // Prevent inserting a SPACE when the expected answer is single-word
-    // (allow space if the correct answer contains spaces).
-    if (e.inputType === 'insertText' && e.data) {
-        const isWhitespaceChar = e.data === ' ' || e.data === '\u00A0' || /^\s$/.test(e.data);
-        if (isWhitespaceChar) {
-            const answerHasSpace = (current.answer || '').includes(' ');
-            if (!answerHasSpace) {
-                e.preventDefault();
-                return;
-            }
-        }
+    // Deletions are always allowed.
+    if (
+        e.inputType &&
+        e.inputType.startsWith('delete')
+    ) {
+        return;
     }
 
-    // -----------------------------------------------
-    // BEFORE HINT
-    // -----------------------------------------------
+    const incoming = getIncomingText(e);
+
+    // Nothing we can validate.
+    if (!incoming) {
+        return;
+    }
+
+    const proposedValue =
+        getProposedValue(input, e);
+
+    const answer =
+        current.formattedAnswer ||
+        current.answer ||
+        '';
+
+    const proposedLength =
+        proposedValue.length;
+
+    // ========================================================
+    // NORMAL MODE
+    // ========================================================
+    //
+    // Only length matters.
+    // Wrong letters themselves are allowed.
+    // Too-long input is silently blocked.
+    //
     if (!state.answeredWithHint) {
+
+        if (proposedLength > answer.length) {
+            e.preventDefault();
+            return;
+        }
+
         return;
     }
 
-    // -----------------------------------------------
-    // HINT PHASE
-    // -----------------------------------------------
-    if (
-        e.inputType === 'insertText' &&
-        e.data
-    ) {
+    // ========================================================
+    // HINT MODE
+    // ========================================================
+    //
+    // Only a prefix of the correct answer is allowed.
+    //
+    const allowed =
+        isAllowedValue(
+            proposedValue,
+            current
+        );
 
-        const incoming = e.data; // could be 1 char (typing) or many chars (swipe)
+    if (!allowed) {
 
-        // ---------- single character (existing behavior) ----------
-        if (incoming.length === 1) {
+        e.preventDefault();
 
-            const text = incoming.toLowerCase();
+        // Wrong input in hint mode:
+        // block it completely and show flash.
+        flashWrongLetter(input);
 
-            const nextIndex =
-                state.userInput.length;
-
-            const expected =
-                current.answer[nextIndex]
-                    ?.toLowerCase();
-
-            if (text !== expected) {
-
-                e.preventDefault();
-
-                input.classList.remove(
-                    'flash-wrong-letter'
-                );
-
-                void input.offsetWidth;
-
-                input.classList.add(
-                    'flash-wrong-letter'
-                );
-
-                return;
-            }
-
-            // allow single correct char to go through
-            return;
-        }
-
-
-
-
-        // ---------- multi-character (swipe) ----------
-        if (incoming.length > 1) {
-
-            const incomingNormalized = incoming
-                .replace(/\u00A0/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            const expectedRemaining =
-                (current.answer || '').slice(state.userInput.length);
-
-            const incomingLower =
-                incomingNormalized.toLowerCase();
-
-            const expectedLower =
-                expectedRemaining.toLowerCase();
-
-            console.log(
-                'SWIPE raw:',
-                JSON.stringify(incoming),
-                'norm:',
-                JSON.stringify(incomingNormalized),
-                'expectedRem:',
-                JSON.stringify(expectedRemaining)
-            );
-
-            // ========================================================
-            // CORRECT SWIPE
-            // ========================================================
-
-            if (
-                incomingNormalized &&
-                incomingLower ===
-                expectedLower.slice(0, incomingLower.length)
-            ) {
-
-                // Prevent the keyboard from inserting the raw value
-                // (which may contain a leading space).
-                e.preventDefault();
-
-                // Insert the cleaned swipe ourselves.
-                state.userInput =
-                    (state.userInput || '') +
-                    incomingNormalized;
-
-                input.value =
-                    state.userInput;
-
-                // Run the same normal input processing.
-                input.oninput();
-
-                return;
-            }
-
-            // ========================================================
-            // WRONG SWIPE
-            // ========================================================
-
-            e.preventDefault();
-
-            // Do NOT change state.userInput.
-            // Do NOT call submitAnswer().
-            // Do NOT enter wrongFlash.
-
-            input.classList.remove(
-                'flash-wrong-letter'
-            );
-
-            void input.offsetWidth;
-
-            input.classList.add(
-                'flash-wrong-letter'
-            );
-
-            // Clear the keyboard's pending swipe/composition.
-            setTimeout(() => {
-
-                if (
-                    state.inputLocked ||
-                    state.isSubmitting ||
-                    input.disabled
-                ) {
-                    return;
-                }
-
-                input.blur();
-
-                setTimeout(() => {
-
-                    if (
-                        state.inputLocked ||
-                        state.isSubmitting ||
-                        input.disabled
-                    ) {
-                        return;
-                    }
-
-                    input.focus();
-
-                    setCaret(
-                        input,
-                        state.userInput.length
-                    );
-
-                }, 0);
-
-            }, 0);
-
-            return;
-        }
-
-
-
-
-
-    }
-
-    // -----------------------------------------------
-    // BACKSPACE
-    // -----------------------------------------------
-    if (
-        e.inputType ===
-        'deleteContentBackward'
-    ) {
         return;
     }
 };
@@ -1520,71 +1526,114 @@ input.onbeforeinput = (e) => {
     // INPUT EVENT
     // ========================================================
 
-    input.oninput = () => {
+input.oninput = () => {
 
-        if (
-            state.inputLocked ||
-            state.isSubmitting
-        ) {
-            return;
+    if (
+        state.inputLocked ||
+        state.isSubmitting
+    ) {
+        return;
+    }
+
+    if (state.isComposing) {
+        return;
+    }
+
+    const actualValue =
+        input.value || '';
+
+    // ========================================================
+    // SAFETY CHECK
+    //
+    // beforeinput should normally prevent invalid input.
+    // This is a second line of defense for mobile keyboards
+    // that sometimes bypass beforeinput.
+    // ========================================================
+
+    if (!isAllowedValue(actualValue, current)) {
+
+        // NORMAL MODE:
+        // silently restore the previous valid value.
+        if (!state.answeredWithHint) {
+
+            input.value =
+                state.userInput || '';
+
+        } else {
+
+            // HINT MODE:
+            // restore previous value + flash.
+            input.value =
+                state.userInput || '';
+
+            flashWrongLetter(input);
         }
-
-        if (state.isComposing) {
-            return;
-        }
-
-        state.userInput =
-            input.value;
-
-        state.lastTypedCorrect =
-            true;
-
-        adjustGapWidth(
-            input,
-            current
-        );
-
-        renderHint(
-            input,
-            current
-        );
-
-        scheduleAutoSubmit(
-            input,
-            current
-        );
-
-        // ---------- IMMEDIATE ACCEPT WHEN MATCH ----------
-        // If user's typed text already equals the answer (after cleaning),
-        // submit immediately instead of waiting for the auto-timer.
-        try {
-            const typedClean = cleanCompareStr(state.userInput);
-            const answerClean = cleanCompareStr(current.answer);
-
-            if (
-                typedClean &&
-                answerClean &&
-                typedClean === answerClean &&
-                !state.isComposing &&     // don't submit during IME composition
-                !state.inputLocked &&
-                !state.isSubmitting
-            ) {
-                // prevent any pending auto timer and submit right now
-                clearAutoSubmit();
-                submitAnswer();
-                return; // avoid further UI updates in this input handler
-            }
-        } catch (err) {
-            // defensive: if something goes wrong, ignore and continue
-            console.error('Immediate accept check error:', err);
-        }
-        // -------------------------------------------------
 
         setCaret(
             input,
-            state.userInput.length
+            input.value.length
         );
-    };
+
+        return;
+    }
+
+    // ========================================================
+    // ACCEPT VALID INPUT
+    // ========================================================
+
+    state.userInput =
+        input.value;
+
+    state.lastTypedCorrect =
+        true;
+
+    adjustGapWidth(
+        input,
+        current
+    );
+
+    renderHint(
+        input,
+        current
+    );
+
+    scheduleAutoSubmit(
+        input,
+        current
+    );
+
+    // ========================================================
+    // IMMEDIATE ACCEPT
+    // ========================================================
+
+    const typedClean =
+        cleanCompareStr(state.userInput);
+
+    const answerClean =
+        cleanCompareStr(current.answer);
+
+    if (
+        typedClean &&
+        answerClean &&
+        typedClean === answerClean &&
+        typedClean.length === answerClean.length &&
+        !state.isComposing &&
+        !state.inputLocked &&
+        !state.isSubmitting
+    ) {
+
+        clearAutoSubmit();
+
+        submitAnswer();
+
+        return;
+    }
+
+    setCaret(
+        input,
+        state.userInput.length
+    );
+};
 
 
     // ========================================================
