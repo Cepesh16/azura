@@ -105,18 +105,17 @@ function setCaret(input, position) {
 // Actual width = max(answer width, typed text width)
 // ============================================================
 
+// REPLACE the old adjustGapWidth(...) with this version
 function adjustGapWidth(input, current) {
   if (!input || !current) return;
   const answer = (current.formattedAnswer || current.answer || '').trim();
   if (!answer) return;
+
+  // We want the visible gap to match the answer width — do NOT grow with typed text.
   const answerWidth = measureText(input, answer);
-  const typedRaw = state.userInput || '';
-  const typed = current.isFirstWord && typedRaw.length > 0
-    ? typedRaw.charAt(0).toUpperCase() + typedRaw.slice(1)
-    : typedRaw;
-  const typedWidth = measureText(input, typed);
   const WIDTH_BUFFER = 10;
-  const finalWidth = Math.max(answerWidth, typedWidth) + WIDTH_BUFFER;
+  const finalWidth = answerWidth + WIDTH_BUFFER;
+
   // only apply changes if different to avoid layout thrash
   if (parseFloat(input.style.width) !== finalWidth) {
     input.style.width = finalWidth + 'px';
@@ -126,6 +125,77 @@ function adjustGapWidth(input, current) {
     input.style.minWidth = minW + 'px';
   }
 }
+
+
+// Call: attachGapInputHandlers(inputEl, current)
+// Purpose: block wrong letters when hint-mode is ON and flash animation instead.
+// Allows deletions/backspace always, allows any typing when not in hint-mode,
+// updates state.userInput and calls renderHint / scheduleAutoSubmit.
+function attachGapInputHandlers(input, current) {
+  if (!input || !current) return;
+
+  // Small helper to trigger the existing wrong-letter animation on the wrapper
+  function flashWrongLetter() {
+    const wrap = input.closest('.gap-input-wrap');
+    if (!wrap) return;
+    wrap.classList.add('flash-wrong-letter');
+    // match your CSS animation duration (0.3s is a good default)
+    setTimeout(() => wrap.classList.remove('flash-wrong-letter'), 300);
+  }
+
+  // beforeinput gives us the intended content before it's inserted — perfect to block.
+  input.addEventListener('beforeinput', (ev) => {
+    // Respect composition (IME) and other global guards
+    if (state.isComposing) return;
+    // Allow deletions/unsets
+    if (ev.inputType && ev.inputType.startsWith('delete')) {
+      return;
+    }
+
+    // If hint mode not active, don't block anything here
+    if (!state.answeredWithHint) {
+      return;
+    }
+
+    // Determine what the value would become after this input
+    const selStart = input.selectionStart || 0;
+    const selEnd = input.selectionEnd || selStart;
+    const data = ev.data || '';
+    const nextValue = input.value.slice(0, selStart) + data + input.value.slice(selEnd);
+
+    const answer = (current.formattedAnswer || current.answer || '');
+    // If the answer starts with the nextValue (prefix match), allow
+    if (answer.toLowerCase().startsWith(nextValue.toLowerCase())) {
+      return;
+    }
+
+    // Otherwise block the input and flash wrong-letter animation
+    ev.preventDefault();
+    flashWrongLetter();
+  }, { passive: false });
+
+  // Keep state and hint overlay in sync on real input events
+  input.addEventListener('input', () => {
+    state.userInput = input.value || '';
+    // Keep gap width correct (we keep it answer-size but still update min/width)
+    adjustGapWidth(input, current);
+    // Re-render hint overlay: hint letters only disappear when typed characters are accepted
+    renderHint(input, current);
+    // schedule auto submit if the typed value matches the answer
+    scheduleAutoSubmit(input, current);
+  });
+
+  // Ensure caret placement when focusing (optional, keeps UX stable)
+  input.addEventListener('focus', () => {
+    // move caret to end of current input value:
+    try {
+      const len = input.value.length;
+      input.setSelectionRange(len, len);
+    } catch (err) { /* ignore */ }
+  });
+}
+
+
 
 
 function setGapState(input, stateName) {
@@ -727,24 +797,50 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
     // SENTENCE
     // ========================================================
 
-    const existingInput =
-        document.getElementById('gap-input');
+    // --- in render() where you build the sentence ---
+    const existingInput = document.getElementById('gap-input');
 
     const canReuseInput =
-        existingInput &&
-        existingInput.dataset.wordId ===
-            String(current.id);
+      existingInput &&
+      existingInput.dataset.wordId === String(current.id);
 
     if (!canReuseInput) {
 
-        sentenceEl.innerHTML =
-            createGapSentence(
-                current
-            );
+      // create fresh HTML (old input will be removed from DOM so its listeners are cleaned up)
+      sentenceEl.innerHTML = createGapSentence(current);
+
+      // After sentenceEl.innerHTML = createGapSentence(current)
+      const gapInput = document.getElementById('gap-input');
+      if (gapInput) {
+        // ensure gap always visually matches answer width
+        adjustGapWidth(gapInput, current);
+
+        // attach handlers only once per input element
+        if (!gapInput.dataset.handlersAttached) {
+          attachGapInputHandlers(gapInput, current);
+          gapInput.dataset.handlersAttached = '1';
+        }
+
+        // keep any overlay hint in the proper state
+        renderHint(gapInput, current);
+
+        // keep internal state.userInput in sync with the DOM element
+        state.userInput = gapInput.value || '';
+      }
+
+    } else {
+      // we are reusing the DOM input for the same word id (avoid reattaching listeners)
+
+      // update layout/hint to reflect potentially changed 'current' or state
+      adjustGapWidth(existingInput, current);
+      renderHint(existingInput, current);
+
+      // ensure state.userInput matches what's in the input (important when resuming)
+      state.userInput = existingInput.value || '';
     }
 
-translationEl.innerText =
-    current.translation || '';
+// keep translation updated (this is fine where you had it)
+translationEl.innerText = current.translation || '';
 
 if (explanationEl && toggleBtn) {
 
