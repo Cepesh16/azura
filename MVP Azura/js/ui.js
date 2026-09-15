@@ -1693,7 +1693,7 @@ input.oninput = () => {
     // FOCUS
     // ========================================================
 
-// keyboard hide/show code
+// keyboard hide/show code (maybe this is for autofocus)
 
     setTimeout(() => {
 

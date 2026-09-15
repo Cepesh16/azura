@@ -1,0 +1,32 @@
+I want you to help me with developing app. Just look at my project, and then I will ask you to do something.
+
+
+==================================================
+English trainer app
+==================================================
+
+This app is an interactive English vocabulary trainer designed for sentence-based learning:
+
+Gap-Fill Exercises: Displays sentences with missing target words for users to type in.
+
+Instant Feedback & Hints: Evaluates answers in real time, provides spelling hints, and highlights errors.
+
+Audio & Pronunciation: Plays voice audio for target words to aid listening comprehension.
+
+Progress Tracking: Tracks memory levels, correct/wrong counts, and session accuracy, saving progress locally.
+
+==================================================
+Project Structure
+==================================================
+1. index.html:
+2. style.css:
+3. assets/json/vocabulary.json:
+4. js/state.js:
+5. js/api.js:
+6. js/audio.js
+7. js/speech.js
+8. js/animations.js
+9. js/ui.js
+10. js/options.js
+11. js/game.js
+12. app.js

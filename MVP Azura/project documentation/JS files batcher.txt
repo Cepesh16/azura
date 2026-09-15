@@ -1,0 +1,1 @@
+Sort this file from bigger (longer) and unite them in one file. before each one you should write its path (js/) in js folder.
