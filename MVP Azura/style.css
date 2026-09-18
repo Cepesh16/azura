@@ -1,9 +1,27 @@
 /* =========================
-🎨 THEME VARIABLES
+🅰️ FONTS
 ========================= */
 
 
+@font-face {
+  font-family: 'Raleway';
+  src: url('assets/fonts/Raleway-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* =========================
+🎨 THEME VARIABLES
+========================= */
+
 :root {
+
+/*FONTS*/
+    --font-main: 'Raleway', Arial, sans-serif;
+
+
 /*COLORS*/
     /* BACKGROUND */
     --bg-main: #f5f7fa;
@@ -50,13 +68,6 @@
 
 
 /* SIZES */
-    /*RADIUS*/
-    --radius-circle: 50%;
-    --radius-xl: 20px;
-    --radius-lg: 16px;
-    --radius-md: 12px;
-    --radius-sm: 8px;
-    --radius-xs: 4px;
 
     /* FONT */
     --font-xxl: 26px;
@@ -66,20 +77,6 @@
     --font-sm: 14px;
     --font-xs: 12px;
 
-    /* SPACING */
-    --space-xl: 42px;
-    --space-lg: 24px;
-    --space-md: 16px;
-    --space-sm: 10px;
-    --space-xs: 6px;
-
-    /*DOTS*/
-    --dot-xs: 2px;
-    --dot-sm: 4px;
-    --dot-md: 6px;
-    --dot-lg: 8px;
-    --dot-xl: 10px;
-
     /*ICONS*/
     --icon-xl: 32px;
     --icon-lg: 28px;
@@ -88,11 +85,38 @@
     --icon-xs: 16px;
 
 
+    /* SPACING */
+    --space-xl: 42px;
+    --space-lg: 24px;
+    --space-md: 16px;
+    --space-sm: 10px;
+    --space-xs: 6px;
+
+
+    /*RADIUS*/
+    --radius-circle: 50%;
+    --radius-xl: 20px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 4px;
+
+
+    /*DOTS*/
+    --dot-xs: 2px;
+    --dot-sm: 4px;
+    --dot-md: 6px;
+    --dot-lg: 8px;
+    --dot-xl: 10px;
+
+
+
     /* TOGGLE SIZE */
     --toggle-width: calc(var(--toggle-height) * 1.8);
     --toggle-height: var(--icon-xl); /* only change height to ajust all toggle */
     --toggle-knob-size: calc(var(--toggle-height) - (var(--toggle-padding) * 2));
     --toggle-padding: calc(var(--toggle-height) * 0.1858); /*to regulate icons, knob size*/
+
 
 
 /* TRANSITIONS */
@@ -234,6 +258,7 @@ html, body {
 
 body {
     font-family: Arial, sans-serif;
+    font-family: Raleway, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
