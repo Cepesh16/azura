@@ -83,124 +83,176 @@
  -->
 
 
+<!-- SCREENS -->
+    <div id="screen-container">
 
-    <div id="loading">
-        <div class="spinner"></div>
-        <div id="loading-text">Loading your words...</div>
-    </div>
+        <div id="profile-screen" class="screen active">
 
- 
+            <img
+            src="./assets/images/meduza.png"
+            class="profile-image"
+            alt="visual progress"
+            >
 
-    <div id="app" style="display: none;">
+            <div class="profile-statuses">
+                <div class="profile-status">
+                  <span class="status-icon">♙</span>
+                  <span>age: child</span>
+              </div>
 
-        <div id="header">
+              <div class="profile-status">
+                  <span class="status-icon">🎓</span>
+                  <span>education: primary school</span>
+              </div>
 
-            <div id="option-row">
+              <div class="profile-status">
+                  <span class="status-icon">🪙</span>
+                  <span>financial: allowance</span>
+              </div>
+            </div>
 
-                <div class="stats-row">
-                    
-                        <div class="counter-box">
-                            <span class="icon-wrapper">
-                                <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
-                            </span>
-                            <div id="total-completed-counter"></div>
+            <button id="profile-start" class="profile-button">
+            Start
+            </button>
+
+            <button id="profile-progress" class="profile-button">
+                Progress
+            </button>
+
+        </div>
+
+        <div id="trainer-screen" class="screen">
+
+            <div id="loading">
+                <div class="spinner"></div>
+                <div id="loading-text">Loading your words...</div>
+            </div>
+
+         
+
+            <div id="app" style="display: none;">
+
+                <div id="header">
+
+                    <div id="option-row">
+
+                        <div class="stats-row">
+                            
+                                <div class="counter-box">
+                                    <span class="icon-wrapper">
+                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                                    </span>
+                                    <div id="total-completed-counter"></div>
+                                </div>
+                                
+
                         </div>
-                        
 
+                        <div class="toggle-row">
+
+
+                            <label class="switch">
+                                <!-- Theme SVG Wrapper for Animation -->
+                                <span class="sun">
+                                    <!-- Sun Icon (Light Mode) -->
+                                    <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                                </span>
+                                <span class="moon">
+                                    <!-- Moon Icon (Dark Mode) -->
+                                    <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
+                                </span>
+                                <input id="theme-toggle" type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                            
+
+                            <div class="toggle-box">
+                                <label class="toggleSwitch icon-wrapper" for="sound-toggle">
+                                    <input id="sound-toggle" type="checkbox">
+                                    <span class="icon-wrapper speaker">
+                                        <!-- Sound SVG Wrapper for Animation -->
+                                            <svg class="icon-sound-waves"><use href="assets/icons/sprite.svg#icon-sound-waves"></use></svg>
+                                    </span>
+                                    <span class="icon-wrapper mute-speaker">
+                                            <svg class="icon-sound-mute"><use href="assets/icons/sprite.svg#icon-sound-mute"></use></svg>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <!-- Back button-->
+                            <button id="trainer-back" class="back-button">Back</button>
+                            
+                        </div>   
+
+
+                    </div>  
+
+                    <div id="progress-row">
+
+                        <div id="progress-bar"></div>
+
+                        <div id="progress-counter"></div>
+                    </div> 
+                    
                 </div>
 
-                <div class="toggle-row">
+
+                
 
 
-                    <label class="switch">
-                        <!-- Theme SVG Wrapper for Animation -->
-                        <span class="sun">
-                            <!-- Sun Icon (Light Mode) -->
-                            <svg class="shape-sun"><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
-                        </span>
-                        <span class="moon">
-                            <!-- Moon Icon (Dark Mode) -->
-                            <svg class="shape-moon"><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
-                        </span>
-                        <input id="theme-toggle" type="checkbox">
-                        <span class="slider"></span>
-                    </label>
+
+                
+                <main id="container">
+
+
+
+                    <div id="content">
+
+                        <div id="card">
                     
+                            <div id="session-state" class="session-state fade-hidden"></div>
 
-                    <div class="toggle-box">
-                        <label class="toggleSwitch icon-wrapper" for="sound-toggle">
-                            <input id="sound-toggle" type="checkbox">
-                            <span class="icon-wrapper speaker">
-                                <!-- Sound SVG Wrapper for Animation -->
-                                    <svg class="icon-sound-waves"><use href="assets/icons/sprite.svg#icon-sound-waves"></use></svg>
-                            </span>
-                            <span class="icon-wrapper mute-speaker">
-                                    <svg class="icon-sound-mute"><use href="assets/icons/sprite.svg#icon-sound-mute"></use></svg>
-                            </span>
-                        </label>
+                            <div id="sentence-area">
+                                <div id="level-indicator"></div>  
+                                <div id="sentence"></div>
+
+                                <div id="helper"></div>
+                            </div>
+                        </div>
+
                     </div>
-                    
-                </div>   
+
+                </main>
 
 
-            </div>  
+                <div id="translation-row">
 
-            <div id="progress-row">
-
-                <div id="progress-bar"></div>
-
-                <div id="progress-counter"></div>
-            </div> 
-            
-        </div>
-
-
-        
-
-
-
-        
-        <main id="container">
-
-
-
-            <div id="content">
-
-                <div id="card">
-            
-                    <div id="session-state" class="session-state fade-hidden"></div>
-
-                    <div id="sentence-area">
-                        <div id="level-indicator"></div>  
-                        <div id="sentence"></div>
-
-                        <div id="helper"></div>
+                    <div id="translation-box">
+                        <span id="explanation-toggle">+</span>
+                        <div id="translation"></div>
+                        <!-- <div id="part-of-speech"></div> -->
                     </div>
+
+                    <div id="explanation"></div>
+
                 </div>
 
             </div>
 
-        </main>
-
-
-        <div id="translation-row">
-
-            <div id="translation-box">
-                <span id="explanation-toggle">+</span>
-                <div id="translation"></div>
-                <!-- <div id="part-of-speech"></div> -->
-            </div>
-
-            <div id="explanation"></div>
-
         </div>
+
+        <div id="progress-screen" class="screen">
+            ...
+        </div>
+
+        <!-- future screens can be added here -->
 
     </div>
 
 
-<footer id="footer">
-    <div class="version">build 50 stable</div>
-</footer>
+    <footer id="footer">
+        <div class="version">build 51 neew screens, back button</div>
+    </footer>
 
 
 

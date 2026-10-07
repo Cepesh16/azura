@@ -7,6 +7,48 @@ import { initOptions } from './options.js';
 const version = '1.3';
 console.log('VERSION:', version);
 
+
+let screenHistory = [];
+
+function showScreen(screenId) {
+    const currentScreen = document.querySelector('.screen.active');
+
+    if (currentScreen && currentScreen.id !== screenId) {
+        screenHistory.push(currentScreen.id);
+    }
+
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+
+    document.getElementById(screenId).classList.add('active');
+}
+
+document.getElementById('profile-start').addEventListener('click', () => {
+    showScreen('trainer-screen');
+});
+
+
+
+function goBack() {
+    const previousScreen = screenHistory.pop();
+
+    if (!previousScreen) return;
+
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
+
+    document.getElementById(previousScreen).classList.add('active');
+}
+
+
+document.getElementById('trainer-back').addEventListener('click', () => {
+    goBack();
+});
+
+
+
 async function startApp() {
     try {
 

@@ -1,7 +1,7 @@
-My project structure 
-root files: index.html, style.css.
-folder 'assets': - folder icons (sprite.svg), folder json (vocabulary.json). folder sounds.
-folder 'js': anim.js, api.js, app.js, logic.js, options.js, sound.js, speech.js, state.js, ui.js.
+My project structure: 
+Root files: index.html, style.css.
+The 'assets' folder contains such folders: - icons (sprite.svg), folder json (vocabulary.json), sounds.
+The 'js' folder contains such files: anim.js, api.js, app.js, logic.js, options.js, sound.js, speech.js, state.js, ui.js.
 
 
 Here is the list of all files:
@@ -20,7 +20,14 @@ Here is the list of all files:
 
 
 
-Make one file out of the files I will provide to you. I will provide you in two steps, so don't do anything after this first prompt, wait until the second. This one file will be used for chatpgt, and make the entire file as plain text (make sure to put doctype from index file, because often AI ignored it because of markdown or editor, and make sure all files are being provided fully). The first file will be index, and the second one is style, the rest file will go from the bigger to the smaller, only exception is the vocabulary it will be the last. Here is the structure of the beginning of the file:
+Make one file from the files I will provide to you. I will provide you with files in two steps, so don't do anything after this first prompt; wait until the second one. This single file will be used for ChatGPT. Format the entire file as plain text (making sure to include the DOCTYPE from the index file, because AIs often ignored it due to markdown or editors, and ensuring all files are provided in full). 
+In the final file, the order of the files will be: 
+the first file will be index.html,
+the second one is style.css, 
+and the remaining files will go from the longest to the shortest (sorted by number of characters in them). 
+The only exception is the vocabulary.json, which will be last. 
+
+Here is the structure of the beginning of the file:
 
 
 [SYSTEM INSTRUCTION FOR CHATGPT]
