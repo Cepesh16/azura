@@ -62,9 +62,14 @@
     --level-low: #e57373;
 
     /* SHADOWS */
-    --shadow-flat: 1px 2px 0px #e2e4e6;
-    --shadow-soft: 1px 1px 1px #ccc;
-    --shadow-soft-hover: 1px 1px 1px #afb9c5;
+    --color-shadow-flat: #e2e4e6;
+    --color-shadow-soft: #ccc;
+    --color-shadow-hover: #afb9c5;
+
+
+    --shadow-flat: 1px 2px 0px var(--color-shadow-flat);
+    --shadow-soft: 1px 1px 1px var(--color-shadow-soft);
+    --shadow-soft-hover: 1px 1px 1px var(--color-shadow-hover);
 
 
 /* SIZES */
@@ -281,10 +286,12 @@ button {
 }
 
     button:hover {
-        background: var(--button-hover);
-        background: var(--bg-main);
+        /*background: var(--button-hover);*/
         color: var(--text-main);
         transform: scale(1.05);
+        /*outline: 1px solid var(--text-muted);*/
+        outline: 1px solid var(--outline-main);
+
     }
 
     button:focus {
@@ -379,22 +386,30 @@ Layout 1: Start screen
 .profile-status {
     display: flex;
     align-items: center;
-    gap: 20px;
-    font-size: var(--font-lg);
-    margin: 18px 0;
+    /*gap: 20px;*/
+    margin: var(--space-sm) 0;
+    font-size: var(--font-md);
+}
+
+.status-item {
+
 }
 
 .status-icon {
-    width: 60px;
+    width: 40px;
     text-align: center;
+}
+.status-value {
+    /*margin-left: auto;*/
 }
 
 .profile-button {
     width: 80%;
     max-width: 250px;
-    height: 40px;
-    margin-top: var(--space-lg);
+    height: 50px;
+    margin-top: var(--space-md);
     /*font-size: var(--font-xl);*/
+    /*font-weight: bold;*/
     /*background: white;*/
     /*border: 3px solid black;*/
     /*border-radius: 18px;*/
