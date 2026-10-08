@@ -431,6 +431,7 @@ Loading
 #footer {
     display: flex;
     flex-direction: column;
+    align-items: center;
     padding-bottom: var(--space-xl);
     color: var(--text-muted);
 }
@@ -494,7 +495,7 @@ Main App
         /*width: min(500px, 90vw);*/
         margin-bottom: var(--space-lg);
         padding: var(--space-lg);
-        /*border: 1px solid var(--progress-bg);*/
+        outline: 1px solid var(--progress-bg);
         border-radius: var(--radius-xl);  
         box-shadow: var(--shadow-flat);
         background: var(--bg-secondary);
@@ -521,97 +522,6 @@ Main App
             align-items: center;
             gap: var(--space-md);
         }
-
-
-
-
-
-
-
-/*SOUND TOGGLE*/
-/* The switch - the box around the speaker*/
-.toggleSwitch {
-    position: relative;
-    background: var(--toggle-bg-on);
-    border-radius: var(--radius-circle);
-    cursor: pointer;
-    transition: transform var(--transition-normal);
-    box-shadow: var(--shadow-flat);
-    /*overflow: hidden;*/
-}
-
-    .toggle-box .toggleSwitch :is(.speaker, .mute-speake) {
-        color: var(--text-accent);
-    }
-
-    .speaker,
-    .mute-speaker {
-        transition: var(--transition-normal);
-        border-radius: var(--radius-circle);
-    }
-
-    .mute-speaker {
-        z-index: 2;
-    }
-
-    .speaker {
-        position: absolute;
-        opacity: 0;
-        z-index: 3;
-    }
-
-
-
-
-/* Hide native checkbox but keep it accessible to assistive tech */
-.toggleSwitch > input[type="checkbox"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    /*overflow: hidden;*/
-    white-space: nowrap;
-
-    transition-duration: var(--transition-normal);
-}
-
-    /* Use general sibling (~) selectors inside the label so structure is robust */
-    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
-        opacity: 0;
-    }
-
-    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
-        opacity: 1;
-    }
-    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker,
-    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
-        /*transform: rotate(360deg); */
-    }
-
-    .toggleSwitch:active {
-        transform: scale(0.90);
-    }
-
-    .toggleSwitch:hover {
-        /*background: var(--toggle-bg-hover);*/
-        outline: 1px solid var(--outline-main);
-    }
-
-    .toggleSwitch:hover svg {
-        /*color: var(--toggle-knob-on);*/
-    }
-
-    
-    #sound-toggle:focus + span  {
-        outline: 1px solid var(--text-accent);
-    }       
-    #sound-toggle:focus:not(:focus-visible) + span  {
-        outline: none;
-    }    
 
 
 
@@ -754,17 +664,113 @@ Main App
 
 
 
+
+
+
+/*SOUND TOGGLE*/
+/* The switch - the box around the speaker*/
+.toggleSwitch {
+    position: relative;
+    background: var(--toggle-bg-on);
+    border-radius: var(--radius-circle);
+    cursor: pointer;
+    transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-flat);
+    /*overflow: hidden;*/
+}
+
+    .toggle-box .toggleSwitch :is(.speaker, .mute-speake) {
+        color: var(--text-accent);
+    }
+
+    .speaker,
+    .mute-speaker {
+        transition: var(--transition-normal);
+        border-radius: var(--radius-circle);
+    }
+
+    .mute-speaker {
+        z-index: 2;
+    }
+
+    .speaker {
+        position: absolute;
+        opacity: 0;
+        z-index: 3;
+    }
+
+
+
+
+/* Hide native checkbox but keep it accessible to assistive tech */
+.toggleSwitch > input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    /*overflow: hidden;*/
+    white-space: nowrap;
+
+    transition-duration: var(--transition-normal);
+}
+
+    /* Use general sibling (~) selectors inside the label so structure is robust */
+    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+        opacity: 0;
+    }
+
+    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
+        opacity: 1;
+    }
+    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker,
+    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+        /*transform: rotate(360deg); */
+    }
+
+    .toggleSwitch:active {
+        transform: scale(0.90);
+    }
+
+    .toggleSwitch:hover {
+        /*background: var(--toggle-bg-hover);*/
+        outline: 1px solid var(--outline-main);
+    }
+
+    .toggleSwitch:hover svg {
+        /*color: var(--toggle-knob-on);*/
+    }
+
+    
+    #sound-toggle:focus + span  {
+        outline: 1px solid var(--text-accent);
+    }       
+    #sound-toggle:focus:not(:focus-visible) + span  {
+        outline: none;
+    }    
+
+
+
+
+
+
 /* =========================
 Back button
 ========================= */
 .back-button {
-    padding: var(--space-xs) var(--space-md);
-    height: var(--icon-xl);
-    font-size: var(--font-sm);
-    border: 1px solid var(--outline-main);
-    border-radius: var(--radius-sm);
-    background: var(--bg-secondary);
+    padding: 0;
+    border-radius: var(--radius-circle);
+    background: var(--toggle-bg-on);
+    transition: transform var(--transition-normal);
     box-shadow: var(--shadow-flat);
+    cursor: pointer;
+}
+
+.back-button:hover {
+    outline: 1px solid var(--outline-main);
 }
 
 

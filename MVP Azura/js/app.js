@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.3';
+const version = '1.0';
 console.log('VERSION:', version);
 
 
@@ -29,7 +29,7 @@ document.getElementById('profile-start').addEventListener('click', () => {
 });
 
 
-
+// button back to the previous screen
 function goBack() {
     const previousScreen = screenHistory.pop();
 
@@ -48,9 +48,25 @@ document.getElementById('trainer-back').addEventListener('click', () => {
 });
 
 
+// update every icon version in sprite
+function updateSpriteVersions() {
+    document.querySelectorAll('use[href*="sprite.svg"]').forEach(use => {
+        const href = use.getAttribute('href');
+
+        const [spritePath, iconId] = href.split('#');
+
+        use.setAttribute(
+            'href',
+            `${spritePath.split('?')[0]}?v=${version}#${iconId}`
+        );
+    });
+}
+
 
 async function startApp() {
     try {
+
+        updateSpriteVersions();
 
         // 🔥 VERSION CHECK (after modules loaded)
         const savedVersion = localStorage.getItem('appVersion');
