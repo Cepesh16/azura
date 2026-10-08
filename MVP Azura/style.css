@@ -280,6 +280,7 @@ button {
     background: var(--bg-secondary);
     font-size: var(--font-md);
     font-weight: 500;
+    height: 50px;
     cursor: pointer;
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-flat);
@@ -290,7 +291,7 @@ button {
         color: var(--text-main);
         transform: scale(1.05);
         /*outline: 1px solid var(--text-muted);*/
-        outline: 1px solid var(--outline-main);
+        outline: 2px solid var(--outline-main);
 
     }
 
@@ -406,7 +407,6 @@ Layout 1: Start screen
 .profile-button {
     width: 80%;
     max-width: 250px;
-    height: 50px;
     margin-top: var(--space-md);
     /*font-size: var(--font-xl);*/
     /*font-weight: bold;*/
