@@ -30,9 +30,14 @@ history.pushState({ appScreen: screenId }, '');
 
 }
 
+// Connect buttons with screens they open
 document.getElementById('profile-start').addEventListener('click', () => {
 showScreen('trainer-screen');
 });
+document.getElementById('profile-progress').addEventListener('click', () => {
+    showScreen('progress-screen');
+});
+
 
 // Return to the previous screen
 function goBack() {

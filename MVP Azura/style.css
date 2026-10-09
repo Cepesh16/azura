@@ -343,7 +343,7 @@ select {
 
 
 /* =========================
-Screens
+Screen common styles
 ========================= */
 #screen-container {
     width: 100%;
@@ -359,18 +359,27 @@ Screens
 }
 
 .screen.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
+
+
+/*#profile-screen.active,
+#trainer-screen.active,
+#progress-screen.active  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}*/
 
 
 
 /* =========================
 Layout 1: Start screen
 ========================= */
-#profile-screen.active {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#profile-screen {
+
 }
 
 .profile-image {
@@ -425,19 +434,15 @@ Layout 1: Start screen
 /* =========================
 Layout 2: Trainer screen
 ========================= */
+#trainer-screen {
 
+}
 
 #header {
     margin-bottom: calc(var(--space-lg) * 1);
     padding: 0 var(--space-lg);
 }
 
-
-#trainer-screen.active {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 /* =========================
 Loading
