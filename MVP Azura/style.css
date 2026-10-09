@@ -413,10 +413,15 @@ Layout 1: Start screen
     /*margin-left: auto;*/
 }
 
-.profile-button {
+.profile-nav {
     width: 80%;
     max-width: 250px;
-    margin-top: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+.profile-button {
+    width: 100%;
+    margin-bottom: var(--space-md);
     /*font-size: var(--font-xl);*/
     /*font-weight: bold;*/
     /*background: white;*/
