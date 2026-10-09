@@ -11,41 +11,65 @@ console.log('VERSION:', version);
 let screenHistory = [];
 
 function showScreen(screenId) {
-    const currentScreen = document.querySelector('.screen.active');
+const currentScreen = document.querySelector('.screen.active');
 
-    if (currentScreen && currentScreen.id !== screenId) {
-        screenHistory.push(currentScreen.id);
-    }
 
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
+if (currentScreen && currentScreen.id !== screenId) {
+    screenHistory.push(currentScreen.id);
+}
 
-    document.getElementById(screenId).classList.add('active');
+document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+});
+
+document.getElementById(screenId).classList.add('active');
+
+// Create a browser history entry for Android/browser Back
+history.pushState({ appScreen: screenId }, '');
+
+
 }
 
 document.getElementById('profile-start').addEventListener('click', () => {
-    showScreen('trainer-screen');
+showScreen('trainer-screen');
 });
 
-
-// button back to the previous screen
+// Return to the previous screen
 function goBack() {
-    const previousScreen = screenHistory.pop();
+const previousScreen = screenHistory.pop();
 
-    if (!previousScreen) return;
 
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
+if (!previousScreen) return;
 
-    document.getElementById(previousScreen).classList.add('active');
+document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+});
+
+document.getElementById(previousScreen).classList.add('active');
+
+
 }
 
-
+// Your on-screen Back button
 document.getElementById('trainer-back').addEventListener('click', () => {
-    goBack();
+goBack();
 });
+
+// Handle Android/browser Back button
+history.replaceState({ appScreen: 'profile-screen' }, '');
+history.pushState({ appScreen: 'profile-screen' }, '');
+
+window.addEventListener('popstate', () => {
+goBack();
+
+
+// Keep a history entry so Back can be handled again
+history.pushState({ appScreen: 'current' }, '');
+
+
+});
+
+
 
 
 // update every icon version in sprite
