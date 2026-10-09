@@ -56,8 +56,10 @@ document.getElementById(previousScreen).classList.add('active');
 }
 
 // Your on-screen Back button
-document.getElementById('trainer-back').addEventListener('click', () => {
-goBack();
+document.querySelectorAll('.back-button').forEach(button => {
+    button.addEventListener('click', () => {
+        goBack();
+    });
 });
 
 // Handle Android/browser Back button
