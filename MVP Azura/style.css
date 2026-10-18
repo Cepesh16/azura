@@ -32,6 +32,8 @@
     --text-muted: #8390a2;
     --text-accent: #d97706;
 
+    /* ICONS */
+    --icon-color: #0f172a;
 
     /* BORDERS */
     --outline-main: #cbd5e1;
@@ -382,10 +384,172 @@ Layout 1: Start screen
 
 }
 
+.header-profile {
+    width: 80%;
+    max-width: 250px;
+    margin-bottom: var(--space-lg);
+}
+
+.option-profile {
+    display: flex;
+}
+
+/*THEME TOGGLE*/
+.switch {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+    .switch input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        inset: 0;
+        display: block;
+        box-sizing: border-box;
+        background-color: var(--toggle-bg-on);
+        /*transition: background-color var(--transition-normal), box-shadow var(--transition-normal);*/
+        border-radius: calc(var(--toggle-height) / 2); /* fully rounded and auto-scaled */
+        border-radius: var(--toggle-width);
+        box-shadow: var(--shadow-flat);
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: var(--toggle-knob-size);
+        width: var(--toggle-knob-size);
+        border-radius: var(--radius-circle);
+        left: var(--toggle-padding);
+        top: var(--toggle-padding);
+        z-index: 3;
+        background-color: var(--toggle-knob-on);
+        transition: transform var(--transition-normal), background-color var(--transition-normal);
+        will-change: transform;
+        box-shadow: var(--shadow-soft);
+        box-sizing: border-box;
+    }
+
+    /* sun / moon icons: vertically centered and placed with padding */
+    .sun svg,
+    .moon svg {
+        width: var(--toggle-knob-size);
+        height: var(--toggle-knob-size);
+
+        /* center vertically inside track */
+        position: absolute;
+        top: 50%;
+
+        /* keep translateY in the "base" transform and include rotate(0) so animation composes cleanly */
+        transform: translateY(-50%) rotate(0deg);
+
+        /* rotate around the SVG center (important for inline SVGs) */
+        transform-origin: center center;
+        transform-box: fill-box; /* makes transform-origin behave well for SVG content */
+
+        z-index: 1; /* behind the knob */
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+
+    .sun svg {
+        right: var(--toggle-padding);
+    }
+
+    .moon svg {
+        left: var(--toggle-padding);
+    }
+
+/* trigger the animations on hover */
+/*.switch:hover .sun svg {
+    animation: rotate-icon 15s linear infinite;
+}
+
+.switch:hover .moon svg {
+    animation: tilt-icon 4s linear infinite;
+}
+*/
+.switch .sun svg {
+    animation: rotate-icon 15s linear infinite;
+}
+
+.switch .moon svg {
+    animation: tilt-icon 4s linear infinite;
+}
+
+    @keyframes rotate-icon {
+        from { transform: translateY(-50%) rotate(0deg); }
+        to   { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    @keyframes tilt-icon {
+        0%   { transform: translateY(-50%) rotate(0deg); }
+        25%  { transform: translateY(-50%) rotate(-10deg); }
+        75%  { transform: translateY(-50%) rotate(10deg); }
+        100% { transform: translateY(-50%) rotate(0deg); }
+    }
+
+#theme-toggle:checked + .slider {
+    background-color: var(--toggle-bg-on);
+}
+
+#theme-toggle:focus + .slider {
+    /*outline: 1px solid var(--text-accent);*/
+}
+
+#theme-toggle:focus:not(:focus-visible) + .slider {
+    outline: none;
+}
+
+
+#theme-toggle:checked + .slider:before {
+    transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
+}
+
+.switch:hover .slider {
+    outline: 1px solid var(--outline-main);
+}
+
+.switch:hover .slider::before {
+    background: var(--toggle-knob-hover);
+    box-shadow: var(--shadow-soft-hover);
+}
+
+.switch:active {
+    transform: scale(0.90);
+}
+
+
+
+
 .profile-image {
     width: 200px;
     max-width: 80%;
+    height: auto;
+    color: var(--icon-color);
+
 }
+
 
 .profile-statuses {
     /*width: 80%;*/
@@ -443,7 +607,7 @@ Layout 2: Trainer screen
 
 }
 
-#header {
+.header-trainer {
     margin-bottom: calc(var(--space-lg) * 1);
     padding: 0 var(--space-lg);
 }
@@ -547,146 +711,6 @@ Main App
             align-items: center;
             gap: var(--space-md);
         }
-
-
-
-
-/*THEME TOGGLE*/
-.switch {
-    position: relative;
-    display: inline-block;
-    width: var(--toggle-width);
-    height: var(--toggle-height);
-    cursor: pointer;
-    transition: var(--transition-normal);
-}
-
-    .switch input {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        border: 0;
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        overflow: hidden;
-        white-space: nowrap;
-    }
-
-    .slider {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        inset: 0;
-        display: block;
-        box-sizing: border-box;
-        background-color: var(--toggle-bg-on);
-        /*transition: background-color var(--transition-normal), box-shadow var(--transition-normal);*/
-        border-radius: calc(var(--toggle-height) / 2); /* fully rounded and auto-scaled */
-        border-radius: var(--toggle-width);
-        box-shadow: var(--shadow-flat);
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: var(--toggle-knob-size);
-        width: var(--toggle-knob-size);
-        border-radius: var(--radius-circle);
-        left: var(--toggle-padding);
-        top: var(--toggle-padding);
-        z-index: 3;
-        background-color: var(--toggle-knob-on);
-        transition: transform var(--transition-normal), background-color var(--transition-normal);
-        will-change: transform;
-        box-shadow: var(--shadow-soft);
-        box-sizing: border-box;
-    }
-
-    /* sun / moon icons: vertically centered and placed with padding */
-    .sun svg,
-    .moon svg {
-        width: var(--toggle-knob-size);
-        height: var(--toggle-knob-size);
-
-        /* center vertically inside track */
-        position: absolute;
-        top: 50%;
-
-        /* keep translateY in the "base" transform and include rotate(0) so animation composes cleanly */
-        transform: translateY(-50%) rotate(0deg);
-
-        /* rotate around the SVG center (important for inline SVGs) */
-        transform-origin: center center;
-        transform-box: fill-box; /* makes transform-origin behave well for SVG content */
-
-        z-index: 1; /* behind the knob */
-        will-change: transform;
-        backface-visibility: hidden;
-    }
-
-    .sun svg {
-        right: var(--toggle-padding);
-    }
-
-    .moon svg {
-        left: var(--toggle-padding);
-    }
-
-/* trigger the animations on hover */
-.switch:hover .sun svg {
-    animation: rotate-icon 15s linear infinite;
-}
-
-.switch:hover .moon svg {
-    animation: tilt-icon 4s linear infinite;
-}
-
-    @keyframes rotate-icon {
-        from { transform: translateY(-50%) rotate(0deg); }
-        to   { transform: translateY(-50%) rotate(360deg); }
-    }
-
-    @keyframes tilt-icon {
-        0%   { transform: translateY(-50%) rotate(0deg); }
-        25%  { transform: translateY(-50%) rotate(-10deg); }
-        75%  { transform: translateY(-50%) rotate(10deg); }
-        100% { transform: translateY(-50%) rotate(0deg); }
-    }
-
-#theme-toggle:checked + .slider {
-    background-color: var(--toggle-bg-on);
-}
-
-#theme-toggle:focus + .slider {
-    /*outline: 1px solid var(--text-accent);*/
-}
-
-#theme-toggle:focus:not(:focus-visible) + .slider {
-    outline: none;
-}
-
-
-#theme-toggle:checked + .slider:before {
-    transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
-}
-
-.switch:hover .slider {
-    outline: 1px solid var(--outline-main);
-}
-
-.switch:hover .slider::before {
-    background: var(--toggle-knob-hover);
-    box-shadow: var(--shadow-soft-hover);
-}
-
-.switch:active {
-    transform: scale(0.90);
-}
-
 
 
 
@@ -1403,6 +1427,8 @@ Session summary
     --text-accent: #F4C430;
     --text-muted: #78848f;
     /*--text-muted: #88949f;*/
+
+    --icon-color: #88949f;
 
     --outline-main: #1f2a33;
 
