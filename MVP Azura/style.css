@@ -923,6 +923,7 @@ Learning Area
         margin-bottom: var(--space-md);
         font-size: var(--font-xl);
         line-height: 1.5;
+        text-align: center;
     }
 
 
