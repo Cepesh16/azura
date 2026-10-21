@@ -540,6 +540,26 @@ Layout 1: Start screen
 }
 
 
+.profile-title {
+    font-size: var(--font-lg);
+}
+    .profile-title::first-letter {
+        display: inline-block;
+        font-size: var(--font-xxl);
+        margin-right: var(--dot-xs);
+        padding: 0px var(--dot-lg);
+        font-weight: bold;
+        color: var(--bg-secondary);
+        background: var(--color-shadow-soft);
+
+        /*background: #ffe5b4;*/
+        /*background: #f5deb3;*/
+
+        /*background: var(--toggle-knob-hover);*/
+        border-radius: 6px;
+        box-shadow: var(--shadow-flat);
+    }
+
 
 
 .profile-image {
