@@ -26,6 +26,7 @@
     /* BACKGROUND */
     --bg-main: #f5f7fa;
     --bg-secondary: #ffffff;
+    --bg-neutral: #ccc;
 
     /* TEXT */
     --text-main: #0f172a;
@@ -376,6 +377,17 @@ Screen common styles
 }*/
 
 
+.screen-header {
+    width: 80%;
+    max-width: 250px;
+    margin-bottom: var(--space-lg);
+}
+
+    .header-option {
+        display: flex;
+    }
+
+
 
 /* =========================
 Layout 1: Start screen
@@ -384,15 +396,6 @@ Layout 1: Start screen
 
 }
 
-.header-profile {
-    width: 80%;
-    max-width: 250px;
-    margin-bottom: var(--space-lg);
-}
-
-.option-profile {
-    display: flex;
-}
 
 /*THEME TOGGLE*/
 .switch {
@@ -550,7 +553,7 @@ Layout 1: Start screen
         padding: 0px var(--dot-lg);
         font-weight: bold;
         color: var(--bg-secondary);
-        background: var(--color-shadow-soft);
+        background: var(--bg-neutral);
 
         /*background: #ffe5b4;*/
         /*background: #f5deb3;*/
@@ -567,7 +570,6 @@ Layout 1: Start screen
     max-width: 80%;
     height: auto;
     color: var(--icon-color);
-
 }
 
 
@@ -830,6 +832,7 @@ Main App
 Back button
 ========================= */
 .back-button {
+    margin-left: auto;
     padding: 0;
     border-radius: var(--radius-circle);
     background: var(--toggle-bg-on);
@@ -1443,11 +1446,11 @@ Session summary
 [data-theme="dark"] {
     --bg-main: #0b1116;
     --bg-secondary: #0f1620;
+    --bg-neutral: #7b8896;
 
     --text-main: #e6eef6;
     --text-accent: #F4C430;
     --text-muted: #78848f;
-    /*--text-muted: #88949f;*/
 
     --icon-color: #88949f;
 
