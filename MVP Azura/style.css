@@ -368,6 +368,11 @@ Screen common styles
 }
 
 
+.screen.hidden {
+    display: none;
+}
+
+
 /*#profile-screen.active,
 #trainer-screen.active,
 #progress-screen.active  {
@@ -543,22 +548,19 @@ Layout 1: Start screen
 }
 
 
-.profile-title {
+.screen-title {
     font-size: var(--font-lg);
 }
-    .profile-title::first-letter {
+    .screen-title::first-letter {
         display: inline-block;
-        font-size: var(--font-xxl);
         margin-right: var(--dot-xs);
-        padding: 0px var(--dot-lg);
+        padding: 0px var(--dot-lg) 0px var(--dot-lg);
+        padding: 0px var(--dot-md) 0px;
+
+        font-size: var(--font-xl);
         font-weight: bold;
         color: var(--bg-secondary);
         background: var(--bg-neutral);
-
-        /*background: #ffe5b4;*/
-        /*background: #f5deb3;*/
-
-        /*background: var(--toggle-knob-hover);*/
         border-radius: 6px;
         box-shadow: var(--shadow-flat);
     }
@@ -573,31 +575,6 @@ Layout 1: Start screen
 }
 
 
-.profile-statuses {
-    /*width: 80%;*/
-    /*max-width: 650px;*/
-    margin-top: var(--space-md);
-}
-
-.profile-status {
-    display: flex;
-    align-items: center;
-    /*gap: 20px;*/
-    margin: var(--space-sm) 0;
-    font-size: var(--font-md);
-}
-
-.status-item {
-
-}
-
-.status-icon {
-    width: 40px;
-    text-align: center;
-}
-.status-value {
-    /*margin-left: auto;*/
-}
 
 .profile-nav {
     width: 80%;
@@ -616,10 +593,55 @@ Layout 1: Start screen
 }
 
 
-.screen.hidden {
-    display: none;
+
+
+/* =========================
+Layout 3: Progress screen
+========================= */
+.profile-statuses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    width: 280px;
+    /*width: 80%;*/
+    /*max-width: 650px;*/
+    margin-top: var(--space-lg);
+    /*margin-bottom: var(--space-lg);*/
+    padding: var(--space-lg) var(--space-lg);
+
+
+    border-radius: var(--radius-xl);
+    outline: 1px solid var(--progress-bg);
+    box-shadow: var(--shadow-flat);
+    background: var(--bg-secondary);
 }
 
+.profile-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    width: 200px;
+    font-size: var(--font-md);
+    outline: 1px solid var(--progress-bg);
+    border-radius: var(--radius-xs);
+    background: var(--bg-main);
+}
+
+.status-item {
+    padding: var(--space-sm);
+    text-align: center;
+}
+
+.status-icon {
+    width: var(--space-xl);
+    background: var(--progress-bg);
+    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+
+.status-value {
+    /*margin-left: auto;*/
+}
 
 
 /* =========================
