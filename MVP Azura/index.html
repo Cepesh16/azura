@@ -88,6 +88,27 @@
                                     </span>
                                     <div id="total-completed-counter"></div>
                                 </div>
+
+                                <div class="counter-box">
+                                    <span class="icon-wrapper">
+                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                                    </span>
+                                    <div id="medium-level-counter"></div>
+                                </div>                            
+                                
+                                <div class="counter-box">
+                                    <span class="icon-wrapper">
+                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                                    </span>
+                                    <div id="learned-counter"></div>
+                                </div>
+                            
+                                <div class="counter-box">
+                                    <span class="icon-wrapper">
+                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                                    </span>
+                                    <div id="retained-counter"></div>
+                                </div>
                                 
 
                         </div>
@@ -209,7 +230,58 @@
                 </div>
             </div>
 
+
+            <button id="progress-view-words" class="profile-button">
+                View words
+            </button>
+
+
         </div>
+
+
+        <div id="words-screen" class="screen">
+
+            <header class="screen-header">
+                <div class="header-option">
+                    <div class="back-button">
+                        <span class="icon-wrapper">
+                            <svg class="icon-exit">
+                                <use href="assets/icons/sprite.svg?v=12111#icon-exit-rounded"></use>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </header>
+
+            <h1 class="screen-title">My words</h1>
+
+            <div class="words-controls">
+                <input
+                    id="words-search"
+                    type="search"
+                    placeholder="Search words..."
+                    autocomplete="off"
+                >
+
+                <select id="words-level-filter">
+                    <option value="all">All levels</option>
+                    <option value="0">Level 0 — New</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                    <option value="5">Level 5 — Learned</option>
+                </select>
+            </div>
+
+            <div id="words-count" class="words-count" aria-live="polite">
+                Words: 0
+            </div>
+
+            <div id="words-list" class="words-list"></div>
+
+        </div>
+
 
         <!-- future screens can be added here -->
 

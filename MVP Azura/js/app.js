@@ -38,6 +38,13 @@ document.getElementById('profile-progress').addEventListener('click', () => {
     showScreen('progress-screen');
 });
 
+document.getElementById('progress-view-words').addEventListener('click', () => {
+    renderWordsList();
+    showScreen('words-screen');
+});
+
+
+
 
 // Return to the previous screen
 function goBack() {
@@ -76,6 +83,93 @@ history.pushState({ appScreen: 'current' }, '');
 
 });
 
+
+
+function renderWordsList() {
+    const list = document.getElementById('words-list');
+    if (!list) return;
+
+    const searchInput = document.getElementById('words-search');
+    const levelFilter = document.getElementById('words-level-filter');
+
+    const search = searchInput.value.trim().toLowerCase();
+    const selectedLevel = levelFilter.value;
+
+    const words = [...state.sentences]
+        .filter(word => {
+            const matchesSearch = word.answer
+                .toLowerCase()
+                .includes(search);
+
+            const level = Number(word.memoryLevel) || 0;
+            const matchesLevel =
+                selectedLevel === 'all' ||
+                level === Number(selectedLevel);
+
+            return matchesSearch && matchesLevel;
+        })
+        .sort((a, b) => a.answer.localeCompare(b.answer));
+
+
+        const wordsCount = document.getElementById('words-count');
+
+        if (wordsCount) {
+            wordsCount.textContent = `Words: ${words.length}`;
+        }
+
+    list.replaceChildren();
+
+    if (words.length === 0) {
+        const empty = document.createElement('p');
+        empty.className = 'words-empty';
+        empty.textContent = 'No words found.';
+        list.appendChild(empty);
+        return;
+    }
+
+    words.forEach(word => {
+        const level = Math.max(
+            0,
+            Math.min(5, Number(word.memoryLevel) || 0)
+        );
+
+        const row = document.createElement('div');
+        row.className = 'word-row';
+
+        const name = document.createElement('span');
+        name.className = 'word-name';
+        name.textContent = word.answer;
+
+        const levelLabel = document.createElement('span');
+        levelLabel.className = 'word-level';
+        levelLabel.textContent = `${level}/5`;
+
+        const bar = document.createElement('div');
+        bar.className = 'word-level-bar';
+        bar.setAttribute('role', 'img');
+        bar.setAttribute('aria-label', `Level ${level} out of 5`);
+
+        for (let i = 1; i <= 5; i++) {
+            const segment = document.createElement('span');
+            segment.className =
+                i <= level
+                    ? 'word-level-segment filled'
+                    : 'word-level-segment';
+
+            bar.appendChild(segment);
+        }
+
+        const details = document.createElement('div');
+        details.className = 'word-details';
+        details.append(name, bar);
+
+        row.append(details, levelLabel);
+        list.appendChild(row);
+    });
+}
+
+document.getElementById('words-search').addEventListener('input', renderWordsList);
+document.getElementById('words-level-filter').addEventListener('change', renderWordsList);
 
 
 

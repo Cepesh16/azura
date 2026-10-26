@@ -21,6 +21,9 @@ export function initEls() {
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
   els.totalCompletedEl = document.getElementById('total-completed-counter');
+  els.mediumLevelEl = document.getElementById('medium-level-counter');
+  els.learnedEl = document.getElementById('learned-counter');
+  els.retainedEl = document.getElementById('retained-counter');
   els.progressCounter  = document.getElementById('progress-counter');
   els.helperEl         = document.getElementById('helper');
 }
@@ -658,6 +661,9 @@ const levelEl         = els.levelEl         || document.getElementById('level-in
 
 const progressBar     = els.progressBarEl   || document.getElementById('progress-bar');
 const totalCompletedEl= els.totalCompletedEl|| document.getElementById('total-completed-counter');
+const mediumLevelEl   = els.mediumLevelEl   || document.getElementById('medium-level-counter');
+const learnedEl       = els.learnedEl       || document.getElementById('learned-counter');
+const retainedEl      = els.retainedEl      || document.getElementById('retained-counter');
 const progressCounter = els.progressCounter || document.getElementById('progress-counter');
 const helperEl        = els.helperEl        || document.getElementById('helper');
 
@@ -708,15 +714,40 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
 
     // ========================================================
-    // GLOBAL COUNTER
+    // GLOBAL COUNTERS
     // ========================================================
 
-    if (totalCompletedEl) {
+    const words = state.sentences || [];
 
-        totalCompletedEl.innerText =
-            `${state.totalCompleted}`;
+    const mediumLevelCount = words.filter(
+      word => word.everReachedLevel3
+    ).length;
+
+    const learnedCount = words.filter(
+      word => word.everReachedLevel5
+    ).length;
+
+    const retainedCount = words.filter(
+      word =>
+        word.everReachedLevel5 &&
+        Number(word.memoryLevel) === 5
+    ).length;
+
+    if (totalCompletedEl) {
+      totalCompletedEl.innerText = `${state.totalCompleted}`;
     }
 
+    if (mediumLevelEl) {
+      mediumLevelEl.innerText = `${mediumLevelCount}`;
+    }
+
+    if (learnedEl) {
+      learnedEl.innerText = `${learnedCount}`;
+    }
+
+    if (retainedEl) {
+      retainedEl.innerText = `${retainedCount}`;
+    }
 
     // ========================================================
     // VISIBILITY

@@ -643,6 +643,117 @@ Layout 3: Progress screen
     /*margin-left: auto;*/
 }
 
+/*Layout 3a progress-view-words */
+
+/* =========================
+   Words screen
+========================= */
+
+#progress-view-words {
+    width: 280px;
+    margin-top: var(--space-lg);
+}
+
+.words-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    width: 280px;
+    max-width: 90%;
+    margin-top: var(--space-md);
+}
+
+#words-search,
+#words-level-filter {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--outline-main);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-main);
+    font: inherit;
+}
+
+
+.words-count {
+    width: 280px;
+    max-width: 90%;
+    margin-top: var(--space-md);
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+    text-align: right;
+}
+
+.words-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    width: 280px;
+    max-width: 90%;
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-top: var(--space-md);
+    padding: var(--space-xs);
+}
+
+.word-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--progress-bg);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+}
+
+.word-details {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--space-sm);
+    min-width: 0;
+}
+
+.word-name {
+    overflow-wrap: anywhere;
+    color: var(--text-main);
+    font-size: var(--font-md);
+}
+
+.word-level {
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+    font-weight: 500;
+}
+
+.word-level-bar {
+    display: flex;
+    gap: 3px;
+    width: 100%;
+}
+
+.word-level-segment {
+    flex: 1;
+    height: 5px;
+    border-radius: var(--radius-xs);
+    background: var(--progress-bg);
+}
+
+.word-level-segment.filled {
+    background: var(--text-muted);
+}
+
+.words-empty {
+    padding: var(--space-md);
+    color: var(--text-muted);
+    text-align: center;
+}
+
+
 
 /* =========================
 Layout 2: Trainer screen
@@ -886,13 +997,10 @@ Top Navigation
         display: flex;
         align-items: center;
         gap: var(--space-xs);
+                color: var(--text-muted);
     }
             .icon-counter {
 
-            }
-
-            #total-completed-counter {
-                color: var(--text-muted);
             }
 
 

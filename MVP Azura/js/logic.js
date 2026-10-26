@@ -117,53 +117,60 @@ state.inputLocked = false;
 // =========================
 // FINISH WORD
 // =========================
+
 function finishWord(current, immediateCorrect) {
-    state.sessionCount++;
-    state.completedCount++;
-    state.totalCompleted++;
-    localStorage.setItem('totalCompleted', state.totalCompleted);
-    render();
+  state.sessionCount++;
+  state.completedCount++;
+  state.totalCompleted++;
+  localStorage.setItem("totalCompleted", state.totalCompleted);
 
+  const currentLevel = Math.max(
+    0,
+    Math.min(5, Number(current.memoryLevel) || 0)
+  );
 
-    if (immediateCorrect) {
-        current.memoryLevel = Math.min(
-            (Number(current.memoryLevel) || 0) + 1,
-            5
-            );
-
-        current.correct = (Number(current.correct) || 0) + 1;
-        state.sessionCorrect++;
-    }
-
-    current.lastSeen = new Date();
-
-    if (immediateCorrect) {
-        updateWord(current.id, true);
-    }
-
-    state.status = 'correct';
-    render();
-
-    playCorrect();
-
-    // American or British pronunciation        
-    const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
-
-    (async () => {
-
-        // optional delay only if NOT immediate
-        if (!immediateCorrect) {
-            await new Promise(r => setTimeout(r, 600));
-        }
-
-        await playWordAudio(url);
-
-        nextSentence();
-
-    })();
-
-
+  if (immediateCorrect) {
+    // Correct without a hint: advance one level, up to level 5.
+    current.memoryLevel = Math.min(currentLevel + 1, 5);
+    current.correct = (Number(current.correct) || 0) + 1;
+    state.sessionCorrect++;
+} else {
+  // A hinted completion does not increase the level.
+  // If the word was at level 5, it drops to level 4.
+  current.memoryLevel = currentLevel === 0
+    ? 1
+    : Math.max(currentLevel - 1, 1);
 }
+
+  // These are historical milestones: once true, they stay true.
+  if (current.memoryLevel >= 3) {
+    current.everReachedLevel3 = true;
+  }
+  if (current.memoryLevel >= 5) {
+    current.everReachedLevel5 = true;
+  }
+
+  current.lastSeen = new Date();
+
+  // Save progress for both hinted and unhinted completions.
+  // A hinted completion does not increment correct or wrong totals.
+  updateWord(current, immediateCorrect ? true : null);
+
+  state.status = "correct";
+  render();
+  playCorrect();
+
+  const url = `https://ssl.gstatic.com/dictionary/static/sounds/oxford/${current.answer.toLowerCase()}--_us_1.mp3`;
+
+  (async () => {
+    if (!immediateCorrect) {
+      await new Promise(resolve => setTimeout(resolve, 600));
+    }
+    await playWordAudio(url);
+    nextSentence();
+  })();
+}
+
 
 // =========================
 // 🚨 FINAL FIXED SUBMIT
@@ -227,26 +234,31 @@ if (input === '') {
 // =========================
 // ❌ WRONG
 // =========================
-    state.sessionWrong++;
 
-    current.memoryLevel = Math.max(
-        (Number(current.memoryLevel) || 0) - 1,
-        0
-        );
+state.sessionWrong++;
 
-    current.wrong = (Number(current.wrong) || 0) + 1;
-    current.lastSeen = new Date();
+const currentLevel = Math.max(
+  0,
+  Math.min(5, Number(current.memoryLevel) || 0)
+);
 
-    updateWord(current.id, false);
+// Once a word has been introduced, wrong answers cannot push it
+// below level 1. A never-completed word can remain at level 0.
+current.memoryLevel =
+  currentLevel === 0 ? 0 : Math.max(currentLevel - 1, 1);
 
-    state.answeredWithHint = true;
+current.wrong = (Number(current.wrong) || 0) + 1;
+current.lastSeen = new Date();
 
-    playWrong();
+// Do not clear historical milestone flags when the level drops.
+updateWord(current, false);
 
-    state.status = 'wrongFlash';
-    state.flashWrong = true;
+state.answeredWithHint = true;
+playWrong();
+state.status = "wrongFlash";
+state.flashWrong = true;
+render();
 
-    render();
 
 
 }
