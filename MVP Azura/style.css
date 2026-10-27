@@ -361,6 +361,10 @@ Screen common/general styles
     display: none;
     width: 100%;
     max-width: 320px;
+    /*padding: var(--space-lg) var(--space-lg) var(--space-xl);*/
+
+    /*border-radius: var(--radius-sm);*/
+    /*outline: 1px solid var(--bg-neutral);*/
 }
 
 .screen.active {
@@ -388,6 +392,7 @@ Screen common/general styles
     width: 100%;
     /*max-width: 250px;*/
     margin-bottom: var(--space-lg);
+
 }
 
     .header-option {
@@ -552,7 +557,7 @@ Screen 1: Start screen
 
 .screen-title {
     font-size: var(--font-lg);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
 }
     .screen-title::first-letter {
         display: inline-block;
@@ -573,6 +578,7 @@ Screen 1: Start screen
 .profile-image {
     width: 200px;
     max-width: 80%;
+    margin-bottom: var(--space-lg);
     height: auto;
     color: var(--icon-color);
 }
@@ -585,7 +591,6 @@ Screen 1: Start screen
     align-items: center;
     /*width: 80%;*/
     /*max-width: 250px;*/
-    margin-top: var(--space-lg);
 }
 
 .profile-button {
@@ -604,6 +609,7 @@ Screen 1: Start screen
     gap: var(--space-md);
 }
     .button-row button {
+        margin-bottom: 0;
         /*padding: var(--space-xs) var(--space-xs);*/
         /*padding: var(--space-xs) var(--space-lg);*/
     }
@@ -616,50 +622,7 @@ Screen 1: Start screen
 /* =========================
 Screen 3: Status screen
 ========================= */
-.profile-statuses {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-md);
-    max-width: 250px;
-    /*width: 80%;*/
-    /*max-width: 650px;*/
-    margin-top: var(--space-lg);
-    /*margin-bottom: var(--space-lg);*/
-    padding: var(--space-lg) var(--space-lg);
 
-
-    border-radius: var(--radius-xl);
-    outline: 1px solid var(--progress-bg);
-    box-shadow: var(--shadow-flat);
-    background: var(--bg-secondary);
-}
-
-.profile-status {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xs);
-    width: 200px;
-    font-size: var(--font-md);
-    outline: 1px solid var(--progress-bg);
-    border-radius: var(--radius-xs);
-    background: var(--bg-main);
-}
-
-.status-item {
-    padding: var(--space-sm);
-    text-align: center;
-}
-
-.status-icon {
-    width: var(--space-xl);
-    background: var(--progress-bg);
-    border-radius: var(--radius-xs) 0 0 var(--radius-xs);
-}
-
-.status-value {
-    /*margin-left: auto;*/
-}
 
 /* =========================
 Screen 4: Progress screen
@@ -669,7 +632,11 @@ Screen 4: Progress screen
 }
 
 .words-stats {
+    width: 100%;
+    max-width: 200px;
+    /*padding: var(--space-md);*/
     margin-bottom: var(--space-lg);
+    /*background: var(--bg-secondary);*/
     color: var(--text-muted);
 }
 
@@ -680,7 +647,11 @@ Screen 4: Progress screen
 
 }
 
-.stats-number {
+.stats-name {
+    /*color: var(--text-accent);*/
+}
+.stats-value {
+    width: 60px;
     margin-left: auto;
     padding-left: var(--space-lg);
 }
