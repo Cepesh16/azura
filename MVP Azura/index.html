@@ -59,6 +59,7 @@
 
             <div class="profile-nav">
                 <button id="profile-start" class="profile-button">Start</button>
+
                 <div class="button-row">
                     <button id="profile-status" class="profile-button">Status</button>
                     <button id="profile-progress" class="profile-button">Progress</button>
@@ -90,27 +91,6 @@
                                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                                     </span>
                                     <div id="total-completed-counter"></div>
-                                </div>
-
-                                <div class="counter-box">
-                                    <span class="icon-wrapper">
-                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
-                                    </span>
-                                    <div id="medium-level-counter"></div>
-                                </div>                            
-                                
-                                <div class="counter-box">
-                                    <span class="icon-wrapper">
-                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
-                                    </span>
-                                    <div id="learned-counter"></div>
-                                </div>
-                            
-                                <div class="counter-box">
-                                    <span class="icon-wrapper">
-                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
-                                    </span>
-                                    <div id="retained-counter"></div>
                                 </div>
                                 
 
@@ -238,6 +218,7 @@
 
         <div id="progress-screen" class="screen">
            
+
             <header class="screen-header">
                 <div class="header-option">
 
@@ -251,10 +232,37 @@
 
             </header>
 
-             <h1 class="screen-title">Progress</h1>
+            <h1 class="screen-title">Progress</h1>
 
-             <button id="progress-words" class="profile-button">
-                Words progress
+            <div class="words-stats">
+                 <div class="stats-box">
+                    <span class="icon-wrapper">
+                        <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+                    </span>
+                    <span>midway</span>
+                    <div id="medium-level-counter" class="stats-number"></div>
+                </div>                            
+                
+                <div class="stats-box">
+                    <span class="icon-wrapper">
+                        <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
+                    </span>
+                    <span>learned</span>
+                    <div id="learned-counter" class="stats-number"></div>
+                </div>
+            
+                <div class="stats-box">
+                    <span class="icon-wrapper">
+                        <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
+                    </span>
+                    <span>retained</span>
+                    <div id="retained-counter" class="stats-number"></div>
+                </div>
+            </div>
+
+
+            <button id="progress-words" class="profile-button">
+                My words
             </button>
 
 

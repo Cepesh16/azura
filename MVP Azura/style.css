@@ -277,13 +277,14 @@ body {
 }
 
 button {
+    max-width: 250px;
+    height: 50px;
     padding: var(--space-xs) var(--space-xl);
     border: 1px solid var(--outline-main);
     border-radius: var(--radius-sm);
     background: var(--bg-secondary);
     font-size: var(--font-md);
     font-weight: 500;
-    height: 50px;
     cursor: pointer;
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-flat);
@@ -346,7 +347,7 @@ select {
 
 
 /* =========================
-Screen common styles
+Screen common/general styles
 ========================= */
 #screen-container {
     width: 100%;
@@ -359,6 +360,7 @@ Screen common styles
 .screen {
     display: none;
     width: 100%;
+    max-width: 320px;
 }
 
 .screen.active {
@@ -383,8 +385,8 @@ Screen common styles
 
 
 .screen-header {
-    width: 80%;
-    max-width: 250px;
+    width: 100%;
+    /*max-width: 250px;*/
     margin-bottom: var(--space-lg);
 }
 
@@ -395,7 +397,7 @@ Screen common styles
 
 
 /* =========================
-Layout 1: Start screen
+Screen 1: Start screen
 ========================= */
 #profile-screen {
 
@@ -550,6 +552,7 @@ Layout 1: Start screen
 
 .screen-title {
     font-size: var(--font-lg);
+    margin-bottom: var(--space-md);
 }
     .screen-title::first-letter {
         display: inline-block;
@@ -580,8 +583,8 @@ Layout 1: Start screen
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
-    max-width: 250px;
+    /*width: 80%;*/
+    /*max-width: 250px;*/
     margin-top: var(--space-lg);
 }
 
@@ -601,23 +604,24 @@ Layout 1: Start screen
     gap: var(--space-md);
 }
     .button-row button {
-        padding: var(--space-xs) var(--space-xs);
+        /*padding: var(--space-xs) var(--space-xs);*/
+        /*padding: var(--space-xs) var(--space-lg);*/
     }
 
 #profile-start {
-
+    max-width: 100%;
 }
 
 
 /* =========================
-Layout 3: Progress screen
+Screen 3: Status screen
 ========================= */
 .profile-statuses {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-md);
-    width: 280px;
+    max-width: 250px;
     /*width: 80%;*/
     /*max-width: 650px;*/
     margin-top: var(--space-lg);
@@ -657,23 +661,47 @@ Layout 3: Progress screen
     /*margin-left: auto;*/
 }
 
-/*Layout 3a progress-words */
-
 /* =========================
-   Words screen
+Screen 4: Progress screen
 ========================= */
+#progress-screen {
+
+}
+
+.words-stats {
+    margin-bottom: var(--space-lg);
+    color: var(--text-muted);
+}
+
+.stats-box {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+
+}
+
+.stats-number {
+    margin-left: auto;
+    padding-left: var(--space-lg);
+}
 
 #progress-words {
-    width: 280px;
-    margin-top: var(--space-lg);
+
 }
+
+
+
+/* =========================
+Screen 4.1: Progress-words
+========================= */
+
 
 .words-controls {
     display: flex;
     flex-direction: row;
     gap: var(--space-sm);
-    width: 280px;
-    max-width: 90%;
+    /*width: 280px;*/
+    /*max-width: 90%;*/
     margin-top: var(--space-md);
 }
 
@@ -770,10 +798,10 @@ Layout 3: Progress screen
 
 
 /* =========================
-Layout 2: Trainer screen
+Screen main: Trainer screen
 ========================= */
 #trainer-screen {
-
+    max-width: 100%;
 }
 
 .header-trainer {
