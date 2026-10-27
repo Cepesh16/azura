@@ -49,7 +49,7 @@
 
             </header>
           
-            <h1 class="screen-title">English trainer</h1>
+            <h1 class="screen-title">Tomo English</h1>
 
             <svg class="profile-image" role="img" aria-label="visual progress">
                 <use href="assets/images/sprite-images.svg#cat"></use>
@@ -195,31 +195,34 @@
 
             <h1 class="screen-title">Status</h1>
 
-            <div class="words-stats">
-                 <div class="stats-box">
-                    <span class="icon-wrapper">
+            <ul class="status-panel">
+                 <li class="status-row left-group">
+                    <span class="status-icon icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                     </span>
-                    <span class="stats-name">age</span>
-                    <span class="stats-value">newborn</span>
-                </div>                            
-                
-                <div class="stats-box">
-                    <span class="icon-wrapper">
+                    <span class="status-name">age</span>
+                    <span class="status-value">newborn</span>
+                </li>                            
+
+            
+                <li class="status-row">
+                    <span class="status-icon icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-book"></use></svg>
                     </span>
-                    <span class="stats-name">education</span>
-                    <span class="stats-value">home</span>
-                </div>
-            
-                <div class="stats-box">
-                    <span class="icon-wrapper">
+                    <span class="status-name">education</span>
+                    <span class="status-value">home</span>
+                </li>
+
+                <li class="status-row right-group">
+                    <span class="status-icon icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
                     </span>
-                    <span class="stats-name">income</span>
-                    <span class="stats-value">dependent</span>
-                </div>
-            </div>
+                    <span class="status-name">income</span>
+                    <span class="status-value">dependent</span>
+                </li>
+
+
+            </ul>
 
 
         </div>
@@ -242,31 +245,31 @@
 
             <h1 class="screen-title">Progress</h1>
 
-            <div class="words-stats">
-                 <div class="stats-box">
+            <ul class="progress-panel">
+                 <li class="progress-panel--row">
                     <span class="icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
                     </span>
-                    <span class="stats-name">midway</span>
-                    <div id="medium-level-counter" class="stats-value"></div>
-                </div>                            
+                    <span class="progress-name">midway</span>
+                    <div id="medium-level-counter" class="progress-value"></div>
+                </li>                            
                 
-                <div class="stats-box">
+                <li class="progress-panel--row">
                     <span class="icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
                     </span>
-                    <span class="stats-name">learned</span>
-                    <div id="learned-counter" class="stats-value"></div>
-                </div>
+                    <span class="progress-name">learned</span>
+                    <div id="learned-counter" class="progress-value"></div>
+                </li>
             
-                <div class="stats-box">
+                <li class="progress-panel--row">
                     <span class="icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
                     </span>
-                    <span class="stats-name">retained</span>
-                    <div id="retained-counter" class="stats-value"></div>
-                </div>
-            </div>
+                    <span class="progress-name">retained</span>
+                    <div id="retained-counter" class="progress-value"></div>
+                </li>
+            </ul>
 
 
             <button id="progress-words" class="profile-button">

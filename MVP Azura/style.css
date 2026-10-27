@@ -280,6 +280,7 @@ button {
     max-width: 250px;
     height: 50px;
     padding: var(--space-xs) var(--space-xl);
+    margin-top: var(--space-md);
     border: 1px solid var(--outline-main);
     border-radius: var(--radius-sm);
     background: var(--bg-secondary);
@@ -364,7 +365,7 @@ Screen common/general styles
     /*padding: var(--space-lg) var(--space-lg) var(--space-xl);*/
 
     /*border-radius: var(--radius-sm);*/
-    /*outline: 1px solid var(--bg-neutral);*/
+    outline: 1px solid var(--bg-neutral);
 }
 
 .screen.active {
@@ -576,7 +577,7 @@ Screen 1: Start screen
 
 
 .profile-image {
-    width: 200px;
+    /*width: 200px;*/
     max-width: 80%;
     margin-bottom: var(--space-lg);
     height: auto;
@@ -589,13 +590,13 @@ Screen 1: Start screen
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*width: 80%;*/
+    width: 100%;
     /*max-width: 250px;*/
 }
 
 .profile-button {
     width: 100%;
-    margin-bottom: var(--space-md);
+    /*margin-bottom: var(--space-md);*/
     /*padding: ;*/
     /*font-size: var(--font-xl);*/
     /*font-weight: bold;*/
@@ -623,6 +624,36 @@ Screen 1: Start screen
 Screen 3: Status screen
 ========================= */
 
+.status-panel {
+    width: 100%;
+    max-width: 250px;
+    margin-bottom: var(--space-xl);
+
+}
+
+.status-row {
+    display: flex;
+    /*justify-content: space-between;*/
+    align-items: center;
+    border-bottom: 1px solid var(--bg-neutral);
+}
+    .status-row:last-child {
+        border-bottom: none;
+    }
+
+.status-row.right-group {
+
+}
+
+
+.status-value {
+    margin-left: auto;
+    /*color: red;*/
+    flex-grow: 1;
+    /*flex-basis: 100px;*/
+    max-width: 100px;
+    text-align: left;
+}
 
 /* =========================
 Screen 4: Progress screen
@@ -631,30 +662,31 @@ Screen 4: Progress screen
 
 }
 
-.words-stats {
+
+.progress-panel {
     width: 100%;
-    max-width: 200px;
-    /*padding: var(--space-md);*/
-    margin-bottom: var(--space-lg);
-    /*background: var(--bg-secondary);*/
-    color: var(--text-muted);
+    max-width: 150px;
 }
 
-.stats-box {
+.progress-panel--row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: var(--space-xs);
+    border-bottom: 1px solid var(--bg-neutral);
+}
+    .progress-panel--row:last-child {
+        border-bottom: none;
+    }
+
+.progress-name {
 
 }
 
-.stats-name {
-    /*color: var(--text-accent);*/
-}
-.stats-value {
-    width: 60px;
+.progress-value {
     margin-left: auto;
-    padding-left: var(--space-lg);
 }
+
+
 
 #progress-words {
 
@@ -772,7 +804,7 @@ Screen 4.1: Progress-words
 Screen main: Trainer screen
 ========================= */
 #trainer-screen {
-    max-width: 100%;
+    max-width: 640px;
 }
 
 .header-trainer {
