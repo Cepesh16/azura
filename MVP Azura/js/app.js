@@ -34,14 +34,18 @@ history.pushState({ appScreen: screenId }, '');
 document.getElementById('profile-start').addEventListener('click', () => {
 showScreen('trainer-screen');
 });
+document.getElementById('profile-status').addEventListener('click', () => {
+    showScreen('status-screen');
+});
+
 document.getElementById('profile-progress').addEventListener('click', () => {
     showScreen('progress-screen');
 });
 
-document.getElementById('progress-view-words').addEventListener('click', () => {
-    renderWordsList();
-    showScreen('words-screen');
-});
+    document.getElementById('progress-words').addEventListener('click', () => {
+        renderWordsList();
+        showScreen('progress-words-screen');
+    });
 
 
 

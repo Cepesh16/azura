@@ -375,7 +375,7 @@ Screen common styles
 
 /*#profile-screen.active,
 #trainer-screen.active,
-#progress-screen.active  {
+#status-screen.active  {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -577,6 +577,9 @@ Layout 1: Start screen
 
 
 .profile-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 80%;
     max-width: 250px;
     margin-top: var(--space-lg);
@@ -585,14 +588,25 @@ Layout 1: Start screen
 .profile-button {
     width: 100%;
     margin-bottom: var(--space-md);
+    /*padding: ;*/
     /*font-size: var(--font-xl);*/
     /*font-weight: bold;*/
     /*background: white;*/
     /*border: 3px solid black;*/
     /*border-radius: 18px;*/
 }
+.button-row {
+    width: 100%;
+    display: flex;
+    gap: var(--space-md);
+}
+    .button-row button {
+        padding: var(--space-xs) var(--space-xs);
+    }
 
+#profile-start {
 
+}
 
 
 /* =========================
@@ -643,20 +657,20 @@ Layout 3: Progress screen
     /*margin-left: auto;*/
 }
 
-/*Layout 3a progress-view-words */
+/*Layout 3a progress-words */
 
 /* =========================
    Words screen
 ========================= */
 
-#progress-view-words {
+#progress-words {
     width: 280px;
     margin-top: var(--space-lg);
 }
 
 .words-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--space-sm);
     width: 280px;
     max-width: 90%;
@@ -683,7 +697,7 @@ Layout 3: Progress screen
     margin-top: var(--space-md);
     color: var(--text-muted);
     font-size: var(--font-sm);
-    text-align: right;
+    text-align: center;
 }
 
 .words-list {
