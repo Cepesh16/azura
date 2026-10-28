@@ -10,14 +10,14 @@ console.log('VERSION:', version);
 
 
 let screenHistory = [];
-let isHandlingPopState = false;
 
 function activateScreen(screenId) {
     document.querySelectorAll('.screen').forEach(screen => {
         screen.classList.remove('active');
     });
 
-    document.getElementById(screenId).classList.add('active');
+    const screen = document.getElementById(screenId);
+    if (screen) screen.classList.add('active');
 }
 
 function showScreen(screenId) {
@@ -26,9 +26,10 @@ function showScreen(screenId) {
     if (!currentScreen || currentScreen.id === screenId) return;
 
     screenHistory.push(currentScreen.id);
-    activateScreen(screenId);
 
     history.pushState({ appScreen: screenId }, '');
+
+    activateScreen(screenId);
 }
 
 // Connect buttons with screens they open
@@ -49,7 +50,7 @@ document.getElementById('progress-words').addEventListener('click', () => {
     showScreen('progress-words-screen');
 });
 
-// On-screen Back buttons
+// On-screen Back buttons use browser history too
 document.querySelectorAll('.back-button').forEach(button => {
     button.addEventListener('click', () => {
         if (screenHistory.length > 0) {
@@ -58,29 +59,16 @@ document.querySelectorAll('.back-button').forEach(button => {
     });
 });
 
-// Establish the initial browser history entry
+// Initialize the current browser history entry.
+// Profile is already active in the HTML.
 history.replaceState({ appScreen: 'profile-screen' }, '');
-history.pushState({ appScreen: 'profile-screen' }, '');
 
 window.addEventListener('popstate', event => {
-    if (isHandlingPopState) return;
-    isHandlingPopState = true;
+    const previousScreen = screenHistory.pop();
 
-    if (screenHistory.length > 0) {
-        const previousScreen = screenHistory.pop();
+    if (previousScreen) {
         activateScreen(previousScreen);
     }
-
-    // Keep a history entry while inside the app.
-    // At the initial Profile screen, the next Back can leave the site.
-    if (screenHistory.length > 0) {
-        history.pushState(
-            { appScreen: document.querySelector('.screen.active').id },
-            ''
-        );
-    }
-
-    isHandlingPopState = false;
 });
 
 
