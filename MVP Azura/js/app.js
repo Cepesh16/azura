@@ -8,32 +8,34 @@ const version = '1.0';
 console.log('VERSION:', version);
 
 
+
 let screenHistory = [];
+let isHandlingPopState = false;
 
-function showScreen(screenId) {
-const currentScreen = document.querySelector('.screen.active');
+function activateScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
 
-
-if (currentScreen && currentScreen.id !== screenId) {
-    screenHistory.push(currentScreen.id);
+    document.getElementById(screenId).classList.add('active');
 }
 
-document.querySelectorAll('.screen').forEach(screen => {
-    screen.classList.remove('active');
-});
+function showScreen(screenId) {
+    const currentScreen = document.querySelector('.screen.active');
 
-document.getElementById(screenId).classList.add('active');
+    if (!currentScreen || currentScreen.id === screenId) return;
 
-// Create a browser history entry for Android/browser Back
-history.pushState({ appScreen: screenId }, '');
+    screenHistory.push(currentScreen.id);
+    activateScreen(screenId);
 
-
+    history.pushState({ appScreen: screenId }, '');
 }
 
 // Connect buttons with screens they open
 document.getElementById('profile-start').addEventListener('click', () => {
-showScreen('trainer-screen');
+    showScreen('trainer-screen');
 });
+
 document.getElementById('profile-status').addEventListener('click', () => {
     showScreen('status-screen');
 });
@@ -42,50 +44,45 @@ document.getElementById('profile-progress').addEventListener('click', () => {
     showScreen('progress-screen');
 });
 
-    document.getElementById('progress-words').addEventListener('click', () => {
-        renderWordsList();
-        showScreen('progress-words-screen');
-    });
-
-
-
-
-// Return to the previous screen
-function goBack() {
-const previousScreen = screenHistory.pop();
-
-
-if (!previousScreen) return;
-
-document.querySelectorAll('.screen').forEach(screen => {
-    screen.classList.remove('active');
+document.getElementById('progress-words').addEventListener('click', () => {
+    renderWordsList();
+    showScreen('progress-words-screen');
 });
 
-document.getElementById(previousScreen).classList.add('active');
-
-
-}
-
-// Your on-screen Back button
+// On-screen Back buttons
 document.querySelectorAll('.back-button').forEach(button => {
     button.addEventListener('click', () => {
-        goBack();
+        if (screenHistory.length > 0) {
+            history.back();
+        }
     });
 });
 
-// Handle Android/browser Back button
+// Establish the initial browser history entry
 history.replaceState({ appScreen: 'profile-screen' }, '');
 history.pushState({ appScreen: 'profile-screen' }, '');
 
-window.addEventListener('popstate', () => {
-goBack();
+window.addEventListener('popstate', event => {
+    if (isHandlingPopState) return;
+    isHandlingPopState = true;
 
+    if (screenHistory.length > 0) {
+        const previousScreen = screenHistory.pop();
+        activateScreen(previousScreen);
+    }
 
-// Keep a history entry so Back can be handled again
-history.pushState({ appScreen: 'current' }, '');
+    // Keep a history entry while inside the app.
+    // At the initial Profile screen, the next Back can leave the site.
+    if (screenHistory.length > 0) {
+        history.pushState(
+            { appScreen: document.querySelector('.screen.active').id },
+            ''
+        );
+    }
 
-
+    isHandlingPopState = false;
 });
+
 
 
 
