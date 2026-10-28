@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.012';
+const version = '1.0';
 console.log('VERSION:', version);
 
 
@@ -50,37 +50,42 @@ document.getElementById('profile-progress').addEventListener('click', () => {
 
 
 
-
- // Return to the previous screen
+// Return to the previous screen
 function goBack() {
-    const previousScreen = screenHistory.pop();
+const previousScreen = screenHistory.pop();
 
-    if (!previousScreen) return;
 
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
+if (!previousScreen) return;
 
-    document.getElementById(previousScreen).classList.add('active');
+document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+});
+
+document.getElementById(previousScreen).classList.add('active');
+
+
 }
 
 // Your on-screen Back button
 document.querySelectorAll('.back-button').forEach(button => {
-    button.addEventListener('click', goBack);
+    button.addEventListener('click', () => {
+        goBack();
+    });
 });
 
-// Initialize browser history for Android/browser Back
+// Handle Android/browser Back button
 history.replaceState({ appScreen: 'profile-screen' }, '');
 history.pushState({ appScreen: 'profile-screen' }, '');
 
-// Handle Android/browser Back button
 window.addEventListener('popstate', () => {
-    goBack();
+goBack();
 
-    // Keep a history entry so Back can be handled again
-    history.pushState({ appScreen: 'app' }, '');
+
+// Keep a history entry so Back can be handled again
+history.pushState({ appScreen: 'current' }, '');
+
+
 });
-
 
 
 
