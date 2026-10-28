@@ -58,12 +58,19 @@
 
 
             <div class="profile-nav">
-                <button id="profile-start" class="profile-button">Start</button>
 
-                <div class="button-row">
-                    <button id="profile-status" class="profile-button">Status</button>
-                    <button id="profile-progress" class="profile-button">Progress</button>
-                </div>
+                <button id="profile-status" class="profile-button">
+                    <span class="icon-wrapper"><svg><use href="assets/icons/sprite.svg#icon-pie-25-filled"></use></svg></span>
+                </button>
+
+                <button id="profile-start" class="profile-button">
+                    <span class="icon-wrapper icon-position"><svg><use href="assets/icons/sprite.svg#icon-start"></use></svg></span>Start</button>
+
+                <!-- <div class="button-row"> -->
+                <button id="profile-progress" class="profile-button">
+                    <span class="icon-wrapper"><svg><use href="assets/icons/sprite.svg#icon-stats-line"></use></svg></span>
+                </button>
+                <!-- </div> -->
             </div>
 
 
@@ -195,7 +202,9 @@
 
             <h1 class="screen-title">Status</h1>
 
-<!--             <ul class="status-panel">
+
+            <h2 class="screen-subtitle">Current status</h2>
+            <ul class="status-panel">
                  <li class="status-row">
                     <span class="status-icon icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
@@ -221,7 +230,7 @@
                     <span class="status-value">dependent</span>
                 </li>
 
-            </ul> -->
+            </ul>
 
 
         </div>

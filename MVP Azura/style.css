@@ -167,7 +167,9 @@ figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary, time, mark {
   margin: 0;
   padding: 0;
-  border: 0;
+  border: 0;  
+  padding-inline: 0;
+  padding-block: 0;
   vertical-align: baseline;
   font: inherit;
 }
@@ -277,9 +279,13 @@ body {
 }
 
 button {
-    max-width: 250px;
+      padding-inline: 0;
+      padding-block: 0;
+
+
+    width: 150px;
     height: 50px;
-    padding: var(--space-xs) var(--space-xl);
+    padding: var(--space-xs) var(--space-xs);
     margin-top: var(--space-md);
     border: 1px solid var(--outline-main);
     border-radius: var(--radius-sm);
@@ -330,6 +336,7 @@ input[type="search"]::-webkit-search-cancel-button {
         height: var(--icon-sm);
         transition: transform var(--transition-fast), color var(--transition-fast);
     }
+
 
 svg {
     color: var(--text-muted);
@@ -602,26 +609,48 @@ Screen 1: Start screen
 
 .profile-nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    gap: var(--space-md);
     width: 100%;
     /*max-width: 250px;*/
 }
 
 .profile-button {
-    width: 100%;
-    /*margin-bottom: var(--space-md);*/
-    /*padding: ;*/
-    /*font-size: var(--font-xl);*/
-    /*font-weight: bold;*/
-    /*background: white;*/
-    /*border: 3px solid black;*/
-    /*border-radius: 18px;*/
+    position: relative;
 }
+
+    .profile-button .icon-wrapper {
+        width: auto;
+        height: auto;
+    }
+        .profile-button .icon-wrapper svg {
+            width: var(--icon-md);
+            height: var(--icon-md);
+        }
+
+.icon-position {
+    position: absolute;
+    top: 50%;
+    left: var(--font-lg);
+    transform: translateY(-50%);
+}
+
+#profile-start {
+    /*width: auto;*/
+    flex-grow: 1;
+}
+#profile-status,
+#profile-progress {
+    width: 50px;
+}
+
 .button-row {
     width: 100%;
     display: flex;
-    gap: var(--space-md);
+    justify-content: space-between;
+    /*gap: var(--space-md);*/
 }
     .button-row button {
         margin-bottom: 0;
@@ -629,9 +658,6 @@ Screen 1: Start screen
         /*padding: var(--space-xs) var(--space-lg);*/
     }
 
-#profile-start {
-    max-width: 100%;
-}
 
 
 /* =========================
