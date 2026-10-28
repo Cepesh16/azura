@@ -299,4 +299,76 @@
     <path d="M18.24 8.32L21.76 12L18.24 15.68"/>
   </symbol>
 
+
+  <!-- 20: Power on/off (Start Session) -->
+  <symbol id="icon-power" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+    <line x1="12" y1="2" x2="12" y2="12" />
+  </symbol>
+
+
+  <!-- ========================================== -->
+  <!-- BUTTON ICONS                      -->
+  <!-- ========================================== -->
+
+  <!-- Play Symbol inside a Rounded Square -->
+  <symbol id="icon-start" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
+  </symbol>
+
+  <!-- Pulse line -->
+  <symbol id="icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+  </symbol>
+
+
+  <!-- ========================================== -->
+  <!-- STATISTICS / ANALYTICS ICONS               -->
+  <!-- ========================================== -->
+
+  <!-- Trending Up Chart with Arrow -->
+  <symbol id="icon-stats-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+    <polyline points="16 7 22 7 22 13" />
+  </symbol>
+
+  <!-- Line Graph with Data Points (Trends over Time) -->
+  <symbol id="icon-stats-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3v18h18" />
+    <path d="M7 14l4-4 4 4 5-6" />
+    <circle cx="7" cy="14" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="11" cy="10" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="15" cy="14" r="1.5" fill="currentColor" stroke="none" />
+    <circle cx="20" cy="8" r="1.5" fill="currentColor" stroke="none" />
+  </symbol>
+
+
+  <!-- Variant 1: 75% empty -->
+  <symbol id="icon-pie-75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 75% Base Slice (Radius 8.5) -->
+    <path d="M18.2 13.8A8.5 8.5 0 1 1 10.2 5.8v8h8z" />
+    <!-- 25% Wedge (Scaled down to Radius 7.5 with uniform offset) -->
+    <path d="M13.2 10.3V2.8a7.5 7.5 0 0 1 7.5 7.5h-7.5z" />
+  </symbol>
+
+  <!-- Variant 2: 25% Filled -->
+  <symbol id="icon-pie-25-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 75% Base Slice (Outlined) -->
+    <path d="M18.2 13.8A8.5 8.5 0 1 1 10.2 5.8v8h8z" />
+    <!-- 25% Wedge (Filled) -->
+    <path d="M13.2 10.3V2.8a7.5 7.5 0 0 1 7.5 7.5h-7.5z" fill="currentColor" stroke="currentColor" />
+  </symbol>
+
+
+  <!-- Variant 3: 75% Filled -->
+  <symbol id="icon-pie-75-filled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 75% Base Slice (Filled) -->
+    <path d="M18.2 13.8A8.5 8.5 0 1 1 10.2 5.8v8h8z" fill="currentColor" stroke="currentColor" />
+    <!-- 25% Wedge (Outlined) -->
+    <path d="M13.2 10.3V2.8a7.5 7.5 0 0 1 7.5 7.5h-7.5z" />
+  </symbol>
+
+
+
 </svg>
