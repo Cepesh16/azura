@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.0';
+const version = '1.012';
 console.log('VERSION:', version);
 
 
@@ -69,7 +69,7 @@ document.getElementById(previousScreen).classList.add('active');
 // Your on-screen Back button
 document.querySelectorAll('.back-button').forEach(button => {
     button.addEventListener('click', () => {
-        goBack();
+        history.back();
     });
 });
 
@@ -78,13 +78,15 @@ history.replaceState({ appScreen: 'profile-screen' }, '');
 history.pushState({ appScreen: 'profile-screen' }, '');
 
 window.addEventListener('popstate', () => {
-goBack();
+    goBack();
 
+    // Keep a history entry so Back can be handled again
+    const currentScreen = document.querySelector('.screen.active');
 
-// Keep a history entry so Back can be handled again
-history.pushState({ appScreen: 'current' }, '');
-
-
+    history.pushState(
+        { appScreen: currentScreen.id },
+        ''
+    );
 });
 
 
