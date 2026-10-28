@@ -50,6 +50,7 @@ export async function fetchSentences() {
 
         // Keep any progress already present in the vocabulary JSON.
         memoryLevel: Number(row.memoryLevel) || 0,
+        everCompleted: Boolean(row.everCompleted),
         everReachedLevel3: Boolean(row.everReachedLevel3),
         everReachedLevel5: Boolean(row.everReachedLevel5),
         correct: Number(row.correct) || 0,
@@ -79,6 +80,9 @@ export async function fetchSentences() {
       return {
         ...row,
         memoryLevel,
+        everCompleted:
+          row.everCompleted ||
+          Boolean(upd.everCompleted),
         everReachedLevel3:
           row.everReachedLevel3 ||
           Boolean(upd.everReachedLevel3) ||
@@ -130,6 +134,7 @@ export async function updateWord(word, outcome = null) {
       0,
       Math.min(5, Number(word.memoryLevel) || 0)
     );
+    existing.everCompleted = Boolean(word.everCompleted);
     existing.everReachedLevel3 = Boolean(word.everReachedLevel3);
     existing.everReachedLevel5 = Boolean(word.everReachedLevel5);
     existing.lastUpdated = new Date().toISOString();

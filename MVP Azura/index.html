@@ -97,7 +97,14 @@
                                     <span class="icon-wrapper">
                                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                                     </span>
-                                    <div id="total-completed-counter"></div>
+                                    <div class="total-completed-counter">0</div>
+                                </div>   
+
+                                <div class="counter-box">
+                                    <span class="icon-wrapper">
+                                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                                    </span>
+                                    <div class="unique-completed-counter">0</div>
                                 </div>
                                 
 
@@ -289,8 +296,24 @@
                     <span class="icon-wrapper">
                         <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
                     </span>
+                    <span class="progress-name">total shown</span>
+                    <span class="total-completed-counter progress-value">0</span>
+                </li>                    
+
+                <li class="progress-panel--row">
+                    <span class="icon-wrapper">
+                        <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+                    </span>
+                    <span class="progress-name">unique shown</span>
+                    <span class="unique-completed-counter progress-value">0</span>
+                </li>                   
+
+                <li class="progress-panel--row">
+                    <span class="icon-wrapper">
+                        <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+                    </span>
                     <span class="progress-name">midway</span>
-                    <span id="medium-level-counter" class="progress-value"></span>
+                    <span class="medium-level-counter progress-value">0</span>
                 </li>                            
                 
                 <li class="progress-panel--row">
@@ -298,7 +321,7 @@
                         <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
                     </span>
                     <span class="progress-name">learned</span>
-                    <span id="learned-counter" class="progress-value"></span>
+                    <span class="learned-counter progress-value">0</span>
                 </li>
             
                 <li class="progress-panel--row">
@@ -306,7 +329,7 @@
                         <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
                     </span>
                     <span class="progress-name">retained</span>
-                    <span id="retained-counter" class="progress-value"></span>
+                    <span class="retained-counter progress-value">0</span>
                 </li>
             </ul>
 
@@ -373,7 +396,7 @@
 
 
 <!-- <script type="module" src="./js/app.js"></script> -->
-<script type="module" src="./js/app.js?v=1.0"></script>
+<script type="module" src="./js/app.js?v=1.01"></script>
 
 
 </body>

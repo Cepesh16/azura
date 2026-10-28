@@ -20,10 +20,13 @@ export function initEls() {
   els.posEl            = document.getElementById('part-of-speech') || null;
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
-  els.totalCompletedEl = document.getElementById('total-completed-counter');
-  els.mediumLevelEl = document.getElementById('medium-level-counter');
-  els.learnedEl = document.getElementById('learned-counter');
-  els.retainedEl = document.getElementById('retained-counter');
+
+  els.totalCompletedEls  = document.getElementsByClassName('total-completed-counter');
+  els.uniqueCompletedEls = document.getElementsByClassName('unique-completed-counter');
+  els.mediumLevelEl      = document.getElementsByClassName('medium-level-counter');
+  els.learnedEl          = document.getElementsByClassName('learned-counter');
+  els.retainedEl         = document.getElementsByClassName('retained-counter');
+
   els.progressCounter  = document.getElementById('progress-counter');
   els.helperEl         = document.getElementById('helper');
 }
@@ -660,10 +663,13 @@ const posEl           = els.posEl           || document.getElementById('part-of-
 const levelEl         = els.levelEl         || document.getElementById('level-indicator');
 
 const progressBar     = els.progressBarEl   || document.getElementById('progress-bar');
-const totalCompletedEl= els.totalCompletedEl|| document.getElementById('total-completed-counter');
-const mediumLevelEl   = els.mediumLevelEl   || document.getElementById('medium-level-counter');
-const learnedEl       = els.learnedEl       || document.getElementById('learned-counter');
-const retainedEl      = els.retainedEl      || document.getElementById('retained-counter');
+
+const totalCompletedEls  = els.totalCompletedEls   || document.getElementsByClassName('total-completed-counter');
+const uniqueCompletedEls = els.uniqueCompletedEls  || document.getElementsByClassName('unique-completed-counter');
+const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClassName('medium-level-counter');
+const learnedEl          = els.learnedEl           || document.getElementsByClassName('learned-counter');
+const retainedEl         = els.retainedEl          || document.getElementsByClassName('retained-counter');
+
 const progressCounter = els.progressCounter || document.getElementById('progress-counter');
 const helperEl        = els.helperEl        || document.getElementById('helper');
 
@@ -719,6 +725,10 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
     const words = state.sentences || [];
 
+    const uniqueCompletedCount = words.filter(
+        word => word.everCompleted
+    ).length;
+
     const mediumLevelCount = words.filter(
       word => word.everReachedLevel3
     ).length;
@@ -733,21 +743,25 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
         Number(word.memoryLevel) === 5
     ).length;
 
-    if (totalCompletedEl) {
-      totalCompletedEl.innerText = `${state.totalCompleted}`;
-    }
 
-    if (mediumLevelEl) {
-      mediumLevelEl.innerText = `${mediumLevelCount}`;
-    }
 
-    if (learnedEl) {
-      learnedEl.innerText = `${learnedCount}`;
-    }
+    Array.from(totalCompletedEls).forEach(el => {
+      el.innerText = `${state.totalCompleted}`;
+    });
 
-    if (retainedEl) {
-      retainedEl.innerText = `${retainedCount}`;
-    }
+    Array.from(uniqueCompletedEls).forEach(el => {
+        el.innerText = `${uniqueCompletedCount}`;
+    });
+    Array.from(mediumLevelEl).forEach(el => {
+      el.innerText = `${mediumLevelCount}`;
+    });
+    Array.from(learnedEl).forEach(el => {
+      el.innerText = `${learnedCount}`;
+    });
+    Array.from(retainedEl).forEach(el => {
+      el.innerText = `${retainedCount}`;
+    });
+
 
     // ========================================================
     // VISIBILITY

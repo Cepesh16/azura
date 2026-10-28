@@ -124,6 +124,7 @@ function finishWord(current, immediateCorrect) {
   state.totalCompleted++;
   localStorage.setItem("totalCompleted", state.totalCompleted);
 
+
   const currentLevel = Math.max(
     0,
     Math.min(5, Number(current.memoryLevel) || 0)
@@ -143,12 +144,16 @@ function finishWord(current, immediateCorrect) {
 }
 
   // These are historical milestones: once true, they stay true.
-  if (current.memoryLevel >= 3) {
+    if (!current.everCompleted) {
+        current.everCompleted = true;
+    }
+    
+    if (current.memoryLevel >= 3) {
     current.everReachedLevel3 = true;
-  }
-  if (current.memoryLevel >= 5) {
+    }
+    if (current.memoryLevel >= 5) {
     current.everReachedLevel5 = true;
-  }
+    }
 
   current.lastSeen = new Date();
 
