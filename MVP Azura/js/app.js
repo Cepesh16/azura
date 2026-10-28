@@ -50,44 +50,37 @@ document.getElementById('profile-progress').addEventListener('click', () => {
 
 
 
-// Return to the previous screen
+
+ // Return to the previous screen
 function goBack() {
-const previousScreen = screenHistory.pop();
+    const previousScreen = screenHistory.pop();
 
+    if (!previousScreen) return;
 
-if (!previousScreen) return;
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
 
-document.querySelectorAll('.screen').forEach(screen => {
-    screen.classList.remove('active');
-});
-
-document.getElementById(previousScreen).classList.add('active');
-
-
+    document.getElementById(previousScreen).classList.add('active');
 }
 
 // Your on-screen Back button
 document.querySelectorAll('.back-button').forEach(button => {
-    button.addEventListener('click', () => {
-        history.back();
-    });
+    button.addEventListener('click', goBack);
 });
 
-// Handle Android/browser Back button
+// Initialize browser history for Android/browser Back
 history.replaceState({ appScreen: 'profile-screen' }, '');
 history.pushState({ appScreen: 'profile-screen' }, '');
 
+// Handle Android/browser Back button
 window.addEventListener('popstate', () => {
     goBack();
 
     // Keep a history entry so Back can be handled again
-    const currentScreen = document.querySelector('.screen.active');
-
-    history.pushState(
-        { appScreen: currentScreen.id },
-        ''
-    );
+    history.pushState({ appScreen: 'app' }, '');
 });
+
 
 
 
