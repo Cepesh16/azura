@@ -845,7 +845,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                 </div>
 
                 <div class="session-state__actions">
-                    <button id="restart-btn">
+                    <button id="restart-btn" class="btn-profile">
                         New session
                     </button>
                 </div>

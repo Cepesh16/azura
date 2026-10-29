@@ -25,16 +25,19 @@
 /*COLORS*/
     /* BACKGROUND */
     --bg-main: #f5f7fa;
-    --bg-secondary: #ffffff;
+    --bg-light: #ffffff;
     --bg-neutral: #ccc;
+    --bg-dim: #8390a2;
+    --bg-dark: #0f172a;
+    --bg-accent: #d97706;
 
     /* TEXT */
-    --text-main: #0f172a;
-    --text-muted: #8390a2;
-    --text-accent: #d97706;
+    --text-main: var(--bg-dark);
+    --text-muted: var(--bg-dim);
+    --text-accent: var(--bg-accent);
 
     /* ICONS */
-    --icon-color: #0f172a;
+    --icon-color: var(--bg-dark);
 
     /* BORDERS */
     --outline-main: #cbd5e1;
@@ -46,10 +49,10 @@
 
 
     /* TOGGLE */
-    --toggle-bg-on: var(--bg-secondary);
-    --toggle-bg-hover: var(--bg-secondary);
+    --toggle-bg-on: var(--bg-light);
+    --toggle-bg-hover: var(--bg-light);
     --toggle-knob-on: #e8e8e8;
-    --toggle-knob-hover: #cbd5e1;
+    --toggle-knob-hover: var(--outline-main);
 
     /* STATES */
     --correct: #03C03C;
@@ -64,9 +67,14 @@
     --level-mid: #ffb74d;
     --level-low: #e57373;
 
+
+    /* OUTLINES */
+    --outline-btn-xs: 1px solid var(--outline-main);
+    --outline-btn-sm: 2px solid var(--outline-main);
+
     /* SHADOWS */
     --color-shadow-flat: #e2e4e6;
-    --color-shadow-soft: #ccc;
+    --color-shadow-soft: var(--bg-neutral);
     --color-shadow-hover: #afb9c5;
 
 
@@ -134,8 +142,8 @@
     --transition-fast: 0.15s ease;
 
 /* FOCUS */
-    --focus: 2px solid transparent; outline-offset: 2px;
-    --focus-visible: 3px solid highlight; outline-offset: 2px;
+    --focus: 2px solid transparent;
+    --focus-visible: 3px solid highlight;
 
 
 }
@@ -283,34 +291,23 @@ body {
 }
 
 button {
-      padding-inline: 0;
-      padding-block: 0;
+    padding-inline: 0;
+    padding-block: 0;
 
-
-    width: 180px;
-    height: 50px;
-    padding: var(--space-xs) var(--space-xs);
-    margin-bottom: var(--space-md);
-    border: 1px solid var(--outline-main);
-    border-radius: var(--radius-sm);
-    background: var(--bg-secondary);
-    font-size: var(--font-md);
-    font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-fast);
-    box-shadow: var(--shadow-flat);
 }
 
     button:hover {
         /*background: var(--button-hover);*/
         color: var(--text-main);
         transform: scale(1.05);
-        /*outline: 1px solid var(--text-muted);*/
-        outline: 2px solid var(--outline-main);
+        outline: var(--outline-btn-sm);
+        
 
     }
 
-    button:focus {
+    button:focus-visible {
         transform: scale(1.05);
     }
 
@@ -432,8 +429,8 @@ Screen common/general styles
     max-width: 320px;
     /*padding: var(--space-lg) var(--space-lg) var(--space-xl);*/
 
-/*    border-radius: var(--radius-sm);
-    outline: 1px solid var(--bg-neutral);*/
+    /*border-radius: var(--radius-sm);*/
+
 }
 
 .screen.active {
@@ -460,6 +457,21 @@ Screen common/general styles
         display: flex;
     }
 
+
+.btn-profile {
+    position: relative;
+    width: 180px;
+    height: 50px;
+    padding: var(--space-xs) var(--space-xs);
+    margin-bottom: var(--space-md);
+
+    border-radius: var(--radius-sm);
+    outline: var(--outline-btn-xs);
+
+    box-shadow: var(--shadow-flat);    
+    background: var(--bg-light);
+    font-size: var(--font-md);
+}
 
 
 /* =========================
@@ -608,12 +620,10 @@ Screen 1: Start screen
 
 #theme-toggle:focus + .slider {
     outline: var(--focus-visible);
-    /*outline: 1px solid var(--text-accent);*/
 }
 
 #theme-toggle:focus:not(:focus-visible) + .slider {
     outline: none;    
-    /*outline: var(--focus);*/
 }
 
 
@@ -622,7 +632,7 @@ Screen 1: Start screen
 }
 
 .switch:hover .slider {
-    outline: 1px solid var(--outline-main);
+    outline: var(--outline-btn-xs);
 }
 
 .switch:hover .slider::before {
@@ -647,7 +657,7 @@ Screen 1: Start screen
 
         font-size: var(--font-xl);
         font-weight: bold;
-        color: var(--bg-secondary);
+        color: var(--bg-light);
         background: var(--bg-neutral);
         border-radius: 6px;
         box-shadow: var(--shadow-flat);
@@ -678,10 +688,6 @@ Screen 1: Start screen
     gap: var(--space-md);
     width: 100%;
     /*max-width: 250px;*/
-}
-
-.profile-button {
-    position: relative;
 }
 
 
@@ -797,7 +803,7 @@ Screen 4.1: Progress-words
     display: flex;
     flex-direction: row;
     gap: var(--space-sm);
-    /*width: 280px;*/
+    width: 280px;
     /*max-width: 90%;*/
     margin-top: var(--space-md);
 }
@@ -810,7 +816,7 @@ Screen 4.1: Progress-words
     padding: var(--space-sm) var(--space-md);
     border: 1px solid var(--outline-main);
     border-radius: var(--radius-sm);
-    background: var(--bg-secondary);
+    background: var(--bg-light);
     color: var(--text-main);
     font: inherit;
 }
@@ -833,8 +839,10 @@ Screen 4.1: Progress-words
     max-width: 90%;
     max-height: 55vh;
     overflow-y: auto;
-    margin-top: var(--space-md);
-    padding: var(--space-xs);
+    margin-top: var(--space-xs);
+    margin-bottom: var(--space-md);
+    /*padding: var(--space-xs);*/
+    padding-right: var(--space-xs);
 }
 
 .word-row {
@@ -845,7 +853,7 @@ Screen 4.1: Progress-words
     padding: var(--space-md);
     border: 1px solid var(--progress-bg);
     border-radius: var(--radius-sm);
-    background: var(--bg-secondary);
+    background: var(--bg-light);
 }
 
 .word-details {
@@ -933,7 +941,7 @@ Loading
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid var(--bg-secondary);
+    border: 4px solid var(--bg-light);
     border-top: 4px solid var(--accent);
     border-radius: var(--radius-circle);
     animation: spin 1.25s linear infinite;
@@ -978,7 +986,7 @@ Main App
         outline: 1px solid var(--progress-bg);
         border-radius: var(--radius-xl);  
         box-shadow: var(--shadow-flat);
-        background: var(--bg-secondary);
+        background: var(--bg-light);
         overflow: hidden;
         text-align: left;
         /*text-align: center;*/
@@ -1021,7 +1029,7 @@ Main App
     .mute-speaker {
         width: 100%;
         height: 100%;
-        transition: var(--transition-normal);
+        transition: var(--transition-fast);
         border-radius: var(--radius-circle);
     }
 
@@ -1051,7 +1059,7 @@ Main App
     /*overflow: hidden;*/
     white-space: nowrap;
 
-    transition-duration: var(--transition-normal);
+    /*transition-duration: var(--transition-normal);*/
 }
 
     /* Use general sibling (~) selectors inside the label so structure is robust */
@@ -1067,28 +1075,36 @@ Main App
         /*transform: rotate(360deg); */
     }
 
+
     .toggleSwitch:active {
         transform: scale(0.90);
     }
 
     .toggleSwitch:hover {
-        /*background: var(--toggle-bg-hover);*/
-        outline: 1px solid var(--outline-main);
+        outline: var(--outline-btn-sm);
     }
     .toggleSwitch:hover {
-        /*background: var(--toggle-bg-hover);*/
-        outline: 1px solid var(--outline-main);
+        outline: var(--outline-btn-sm);
     }
 
     .toggleSwitch:hover svg {
         /*color: var(--toggle-knob-on);*/
     }
 
-    
-    #sound-toggle:focus ~ span  {
+   .toggleSwitch:focus-visible {
+        /*transform: scale(1);*/
+    }
+
+    #sound-toggle:focus-visible ~ span  {
         outline: var(--focus-visible);
-        transition-duration: 0s;
-    }       
+        transform: scale(1.05);
+
+    }    
+    #sound-toggle:focus-visible ~ span svg  {
+        /*transform: scale(1.05);*/
+
+    } 
+
     #sound-toggle:focus:not(:focus-visible) ~ span  {
         outline: none;
     }    
@@ -1101,15 +1117,18 @@ Main App
 /* =========================
 Back button
 ========================= */
-.back-btn {
+.btn-back {
     margin: 0;
     margin-left: auto;
     border: 0;
+    outline: none;
 }
-.back-btn:focus {
-    outline: var(--focus-visible);
-}
-
+    .btn-back:focus-visible {
+        outline: var(--focus-visible);
+    }
+    .btn-back:hover {
+        transform: scale(1);
+    }
 
 
 
@@ -1272,17 +1291,26 @@ input.gap {
 
 
     line-height: 1;
-    outline: 1px solid var(--outline-main);
+    outline: var(--outline-btn-xs);
     outline-offset: 1px;
     border-radius: var(--radius-xs);
     box-shadow: var(--shadow-flat);
 }
 
 input.gap:hover {
-    outline: 2px solid var(--outline-main);
+    outline: var(--outline-btn-sm);
 }
 
+/*input.gap:focus {
+    outline: none;
+    outline: var(--outline-btn-sm);
+}
 
+input.gap:focus-visible {
+    outline: var(--focus-visible);
+}
+
+*/
 
 /* =========================
    Hint Overlay
@@ -1432,17 +1460,23 @@ Translation Row
 
         #translation {
             padding: var(--space-xs) var(--space-md);
-            outline: 1px solid var(--outline-main);
+            outline: var(--outline-btn-xs);
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-flat);
             font-size: var(--font-xl);
             cursor: pointer;
         }
         
-        #translation:hover {
-            outline: 2px solid var(--outline-main);
-            /*color: var(--text-accent);*/
-        }
+            #translation:hover {
+                outline: var(--outline-btn-sm);
+                /*color: var(--text-accent);*/
+            } 
+
+            #translation:focus-visible {
+                outline: var(--focus-visible);
+                /*color: var(--text-accent);*/
+            }
+
 
         #part-of-speech {
             padding-top: 2px;
@@ -1494,7 +1528,7 @@ Level Indicator
             width:  var(--dot-lg);
             height: var(--dot-lg);
             border-radius: var(--radius-circle);
-            outline: 1px solid var(--text-muted);
+            outline: 1px solid var(--bg-neutral);
             box-shadow: var(--shadow-flat);
         }
 
@@ -1706,7 +1740,7 @@ Session summary
 
 [data-theme="dark"] {
     --bg-main: #0b1116;
-    --bg-secondary: #0f1620;
+    --bg-light: #0f1620;
     --bg-neutral: #7b8896;
 
     --text-main: #e6eef6;
@@ -1721,7 +1755,7 @@ Session summary
     --progress-bg: #151a1f;
     --button-hover: var(--bg-main);
 
-    --toggle-bg-on: var(--bg-secondary);
+    --toggle-bg-on: var(--bg-light);
     --toggle-bg-hover: var(--outline-main);
     --toggle-knob-on: #99a4b0;
     --toggle-knob-hover: #e8e8e8;
@@ -1750,7 +1784,7 @@ Session summary
 }
 
 [data-theme="dark"] button {
-    background: var(--bg-secondary);
+    background: var(--bg-light);
     color: var(--text-main);
     border-color: var(--outline-main);
 }
@@ -1760,7 +1794,7 @@ Session summary
 
 
 [data-theme="dark"] .options-card {
-    background: var(--bg-secondary);
+    background: var(--bg-light);
     color: var(--text-main);
 }
 
