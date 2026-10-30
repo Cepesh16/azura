@@ -665,6 +665,7 @@ Screen 1: Start screen
 
 .screen-subtitle {
     text-align: left;
+    margin-bottom: var(--space-sm);
     /*font-weight: bold;*/
     /*color: var(--text-muted);*/
 }
