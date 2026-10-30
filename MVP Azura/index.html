@@ -61,14 +61,15 @@
 
                 <button id="profile-status" class="btn-profile">
                     <span class="icon-wrap-btn">
-                        <svg><use href="assets/icons/sprite.svg#icon-pie-25-filled"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-user"></use></svg>
                     </span>
                 </button>
 
                 <button id="profile-start" class="btn-profile">
-                    <span class="icon-wrap-btn pos-left">
+<!--                     <span class="icon-wrap-btn pos-left">
                         <svg><use href="assets/icons/sprite.svg#icon-start"></use></svg>
-                    </span>Start
+                    </span> -->
+                    Learn
                 </button>
 
                 <!-- <div class="button-row"> -->
@@ -84,7 +85,7 @@
 
         </div>
 
-        <div id="trainer-screen" class="screen">
+        <div id="screen-trainer" class="screen">
 
             <div id="loading">
                 <div class="spinner"></div>
@@ -105,14 +106,14 @@
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                                     </span>
-                                    <div class="total-completed-counter">0</div>
+                                    <div class="id-counter-words-all">0</div>
                                 </div>   
 
                                 <div class="counter-box">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
                                     </span>
-                                    <div class="unique-completed-counter">0</div>
+                                    <div class="id-counter-words-unique">0</div>
                                 </div>
                                 
 
@@ -134,9 +135,9 @@
                             </div>
 
                             <!-- Back button-->
-                            <button class="back-button btn-back icon-wrap-opt">
+                            <button class="id-back-button btn-back icon-wrap-opt">
                                 <span class="flex">
-                                    <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-exit-rounded"></use></svg>
+                                    <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-back-chevron"></use></svg>
                                 </span>
                             </button>
                             
@@ -149,7 +150,7 @@
 
                         <div id="progress-bar"></div>
 
-                        <div id="progress-counter"></div>
+                        <div id="id-counter-progress-bar"></div>
                     </div> 
                     
                 </div>
@@ -199,16 +200,16 @@
 
         </div>
 
-        <div id="status-screen" class="screen">
+        <div id="screen-status" class="screen">
 
 
             <header class="screen-header">
                 <div class="header-option">
 
                     <!-- Back button-->
-                    <button class="back-button btn-back icon-wrap-opt">
+                    <button class="id-back-button btn-back icon-wrap-opt">
                         <span class="flex">
-                            <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-exit-rounded"></use></svg>
+                            <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-back-chevron"></use></svg>
                         </span>
                     </button>
                 </div>
@@ -220,18 +221,18 @@
 
             <h2 class="screen-subtitle">Current status</h2>
             <ul class="status-panel">
+  
                  <li class="status-row">
                     <span class="status-icon icon-wrap">
-                        <svg><use href="assets/icons/sprite.svg#icon-stats"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-cake"></use></svg>
                     </span>
                     <span class="status-name">age:</span>
                     <span class="status-value">newborn</span>
                 </li>                            
 
-            
                 <li class="status-row">
                     <span class="status-icon icon-wrap">
-                        <svg><use href="assets/icons/sprite.svg#icon-book"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-graduation-cap"></use></svg>
                     </span>
                     <span class="status-name">education:</span>
                     <span class="status-value">home</span>
@@ -239,7 +240,7 @@
 
                 <li class="status-row">
                     <span class="status-icon icon-wrap">
-                        <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-money-bill"></use></svg>
                     </span>
                     <span class="status-name">income:</span>
                     <span class="status-value">dependent</span>
@@ -248,18 +249,25 @@
             </ul>
 
 
+            <button class="id-back-button btn-profile">
+                <span class="icon-wrap-btn pos-left">
+                    <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
+                </span>Back
+            </button>
+
+
         </div>
 
-        <div id="progress-screen" class="screen">
+        <div id="screen-progress" class="screen">
            
 
             <header class="screen-header">
                 <div class="header-option">
 
                     <!-- Back button-->
-                    <button class="back-button btn-back icon-wrap-opt">
+                    <button class="id-back-button btn-back icon-wrap-opt">
                         <span class="flex">
-                            <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-exit-rounded"></use></svg>
+                            <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-back-chevron"></use></svg>
                         </span>
                     </button>
                 </div>
@@ -277,7 +285,7 @@
                         <svg><use href="assets/icons/sprite.svg#icon-words-deck"></use></svg>
                     </span>
                     <span class="progress-name">total shown</span>
-                    <span class="total-completed-counter progress-value">0</span>
+                    <span class="id-counter-words-all progress-value">0</span>
                 </li>                    
 
                 <li class="progress-panel--row">
@@ -285,23 +293,23 @@
                         <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
                     </span>
                     <span class="progress-name">unique shown</span>
-                    <span class="unique-completed-counter progress-value">0</span>
+                    <span class="id-counter-words-unique progress-value">0</span>
                 </li>                   
 
                 <li class="progress-panel--row">
                     <span class="icon-wrap">
-                        <svg><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-half-glass"></use></svg>
                     </span>
                     <span class="progress-name">midway</span>
-                    <span class="medium-level-counter progress-value">0</span>
-                </li>                            
+                    <span class="id-counter-words-midway progress-value">0</span>
+                </li> 
                 
                 <li class="progress-panel--row">
                     <span class="icon-wrap">
                         <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
                     </span>
                     <span class="progress-name">learned</span>
-                    <span class="learned-counter progress-value">0</span>
+                    <span class="id-counter-words-learned progress-value">0</span>
                 </li>
             
                 <li class="progress-panel--row">
@@ -309,7 +317,7 @@
                         <svg><use href="assets/icons/sprite.svg#icon-streak"></use></svg>
                     </span>
                     <span class="progress-name">retained</span>
-                    <span class="retained-counter progress-value">0</span>
+                    <span class="id-counter-words-retained progress-value">0</span>
                 </li>
             </ul>
 
@@ -321,7 +329,7 @@
                 My words
             </button>
 
-            <button class="back-button btn-profile">
+            <button class="id-back-button btn-profile">
                 <span class="icon-wrap-btn pos-left">
                     <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
                 </span>Back
@@ -330,14 +338,14 @@
 
         </div>
 
-            <div id="progress-words-screen" class="screen">
+            <div id="screen-vocabulary" class="screen">
 
                 <header class="screen-header">
                     <div class="header-option">
-                        <div class="back-button btn-back icon-wrap-opt">
+                        <div class="id-back-button btn-back icon-wrap-opt">
                             <span class="flex">
                                 <svg class="icon-exit">
-                                    <use href="assets/icons/sprite.svg?v=12111#icon-exit-rounded"></use>
+                                    <use href="assets/icons/sprite.svg?v=12111#icon-back-chevron"></use>
                                 </svg>
                             </span>
                         </div>
@@ -370,7 +378,7 @@
 
                 <div id="words-list" class="words-list"></div>
 
-                <button class="back-button btn-profile">
+                <button class="id-back-button btn-profile">
                     <span class="icon-wrap-btn pos-left">
                         <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
                     </span>Back
@@ -385,7 +393,7 @@
 
 
     <footer id="footer">
-        <div class="version">build 54 stable </div>
+        <div class="version">build 55 stable </div>
     </footer>
 
 

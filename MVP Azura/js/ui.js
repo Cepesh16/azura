@@ -21,13 +21,13 @@ export function initEls() {
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
 
-  els.totalCompletedEls  = document.getElementsByClassName('total-completed-counter');
-  els.uniqueCompletedEls = document.getElementsByClassName('unique-completed-counter');
-  els.mediumLevelEl      = document.getElementsByClassName('medium-level-counter');
-  els.learnedEl          = document.getElementsByClassName('learned-counter');
-  els.retainedEl         = document.getElementsByClassName('retained-counter');
+  els.totalCompletedEls  = document.getElementsByClassName('id-counter-words-all');
+  els.uniqueCompletedEls = document.getElementsByClassName('id-counter-words-unique');
+  els.mediumLevelEl      = document.getElementsByClassName('id-counter-words-midway');
+  els.learnedEl          = document.getElementsByClassName('id-counter-words-learned');
+  els.retainedEl         = document.getElementsByClassName('id-counter-words-retained');
 
-  els.progressCounter  = document.getElementById('progress-counter');
+  els.progressCounter  = document.getElementById('id-counter-progress-bar');
   els.helperEl         = document.getElementById('helper');
 }
 
@@ -664,13 +664,13 @@ const levelEl         = els.levelEl         || document.getElementById('level-in
 
 const progressBar     = els.progressBarEl   || document.getElementById('progress-bar');
 
-const totalCompletedEls  = els.totalCompletedEls   || document.getElementsByClassName('total-completed-counter');
-const uniqueCompletedEls = els.uniqueCompletedEls  || document.getElementsByClassName('unique-completed-counter');
-const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClassName('medium-level-counter');
-const learnedEl          = els.learnedEl           || document.getElementsByClassName('learned-counter');
-const retainedEl         = els.retainedEl          || document.getElementsByClassName('retained-counter');
+const totalCompletedEls  = els.totalCompletedEls   || document.getElementsByClassName('id-counter-words-all');
+const uniqueCompletedEls = els.uniqueCompletedEls  || document.getElementsByClassName('id-counter-words-unique');
+const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClassName('id-counter-words-midway');
+const learnedEl          = els.learnedEl           || document.getElementsByClassName('id-counter-words-learned');
+const retainedEl         = els.retainedEl          || document.getElementsByClassName('id-counter-words-retained');
 
-const progressCounter = els.progressCounter || document.getElementById('progress-counter');
+const progressCounter = els.progressCounter || document.getElementById('id-counter-progress-bar');
 const helperEl        = els.helperEl        || document.getElementById('helper');
 
 

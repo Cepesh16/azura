@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.02';
+const version = '1.01';
 console.log('VERSION:', version);
 
 
@@ -34,24 +34,24 @@ function showScreen(screenId) {
 
 // Connect buttons with screens they open
 document.getElementById('profile-start').addEventListener('click', () => {
-    showScreen('trainer-screen');
+    showScreen('screen-trainer');
 });
 
 document.getElementById('profile-status').addEventListener('click', () => {
-    showScreen('status-screen');
+    showScreen('screen-status');
 });
 
 document.getElementById('profile-progress').addEventListener('click', () => {
-    showScreen('progress-screen');
+    showScreen('screen-progress');
 });
 
 document.getElementById('progress-words').addEventListener('click', () => {
     renderWordsList();
-    showScreen('progress-words-screen');
+    showScreen('screen-vocabulary');
 });
 
 // On-screen Back buttons use browser history too
-document.querySelectorAll('.back-button').forEach(button => {
+document.querySelectorAll('.id-back-button').forEach(button => {
     button.addEventListener('click', () => {
         if (screenHistory.length > 0) {
             history.back();

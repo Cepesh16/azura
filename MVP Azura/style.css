@@ -477,7 +477,7 @@ Screen common/general styles
 /* =========================
 All Screens
 ========================= */
-#trainer-screen {
+#screen-trainer {
     max-width: 640px;
 }
 
@@ -485,11 +485,11 @@ All Screens
     
 }
 
-#status-screen {
+#screen-status {
 
 }
 
-#progress-screen {
+#screen-progress {
 
 }
 
@@ -1201,7 +1201,7 @@ Top Navigation
 
 
 
-    #progress-counter {
+    #id-counter-progress-bar {
         font-size: var(--font-sm);
         color: var(--text-accent);
         font-weight: 500;
