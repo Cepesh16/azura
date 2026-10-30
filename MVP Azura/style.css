@@ -752,10 +752,7 @@ Screen 3 and 4 common
 .progress-panel {
     width: 100%;
     max-width: 260px;
-    margin-bottom: var(--space-xl);
-/*    border: 1px solid var(--bg-neutral);
-    border-radius: var(--radius-sm);*/
-    color: var(--accent);
+    margin-bottom: var(--space-lg);
     color: var(--text-muted);
 
 }
@@ -1620,27 +1617,10 @@ Session summary
 ========================= */
 
 .session-state {
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 }
-
-    .session-state__title {
-        font-size: var(--font-xl);
-        margin-bottom: var(--space-lg);
-    }
-
-    .session-state__stats {
-        margin-bottom: var(--space-lg);
-    }
-
-    .session-state__stat {
-        font-size: 15px;
-        color: var(--text-accent);
-        margin-bottom: var(--space-xs);
-    }
-
-    .session-state__actions {
-
-    }
 
 
 

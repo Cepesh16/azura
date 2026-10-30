@@ -563,6 +563,79 @@
 
 
 
+  <!-- ========================================== -->
+  <!-- 1. CORRECT / SUCCESS ICONS                 -->
+  <!-- ========================================== -->
+
+  <!-- Correct: Clean Checkmark -->
+  <symbol id="icon-correct-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </symbol>
+
+  <!-- Correct: Checkmark inside Circle Badge -->
+  <symbol id="icon-correct-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8 12l3 3 5-5" />
+  </symbol>
+
+
+  <!-- ========================================== -->
+  <!-- 2. WRONG / ERROR ICONS                     -->
+  <!-- ========================================== -->
+
+  <!-- Wrong: Clean Cross / X -->
+  <symbol id="icon-wrong-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </symbol>
+
+  <!-- Wrong: Cross / X inside Circle Badge -->
+  <symbol id="icon-wrong-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M15 9l-6 6" />
+    <path d="M9 9l6 6" />
+  </symbol>
+
+
+  <!-- ========================================== -->
+  <!-- 3. ACCURACY / TARGET ICONS                 -->
+  <!-- ========================================== -->
+
+  <!-- Accuracy: Bullseye / Target Reticle -->
+  <symbol id="icon-accuracy-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5" />
+    <circle cx="12" cy="12" r="1" fill="currentColor" />
+  </symbol>
+
+  <!-- Accuracy: Crosshair with Center Hit Spot -->
+  <symbol id="icon-accuracy-crosshair" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8" />
+    <line x1="12" y1="2" x2="12" y2="6" />
+    <line x1="12" y1="18" x2="12" y2="22" />
+    <line x1="2" y1="12" x2="6" y2="12" />
+    <line x1="18" y1="12" x2="22" y2="12" />
+    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none" />
+  </symbol>
+
+
+
+  <!-- ========================================== -->
+  <!-- AGAIN / RETRY / REPEAT ICONS               -->
+  <!-- ========================================== -->
+
+  <!-- 1. Circular Refresh / Replay Arrow -->
+  <symbol id="icon-again" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+  </symbol>
+
+
+
+
+
+
+
 
 
 

@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.001';
+const version = '1.0001';
 console.log('VERSION:', version);
 
 
@@ -51,12 +51,15 @@ document.getElementById('progress-words').addEventListener('click', () => {
 });
 
 // On-screen Back buttons use browser history too
-document.querySelectorAll('.id-back-button').forEach(button => {
-    button.addEventListener('click', () => {
-        if (screenHistory.length > 0) {
-            history.back();
-        }
-    });
+// Handle all Back buttons, including dynamically created ones
+document.addEventListener('click', event => {
+    const backButton = event.target.closest?.('.id-back-button');
+
+    if (!backButton) return;
+
+    if (screenHistory.length > 0) {
+        history.back();
+    }
 });
 
 // Initialize the current browser history entry.
@@ -159,6 +162,71 @@ function renderWordsList() {
 
 document.getElementById('words-search').addEventListener('input', renderWordsList);
 document.getElementById('words-level-filter').addEventListener('change', renderWordsList);
+
+
+
+// RESET PROGRESS
+function resetProgress() {
+    const confirmed = confirm(
+        'Reset all progress?\n\n' +
+        'All learning history and statistics will be erased. ' +
+        'Every word will return to level 0.\n\n' +
+        'This action cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    // Remove saved vocabulary progress
+    localStorage.removeItem('vocab_updates_v1');
+    // Reset old session data
+    localStorage.removeItem('sessionData');
+
+    // Reset all word progress in memory
+    state.sentences.forEach(word => {
+        word.memoryLevel = 0;
+        word.everCompleted = false;
+        word.everReachedLevel3 = false;
+        word.everReachedLevel5 = false;
+        word.correct = 0;
+        word.wrong = 0;
+        word.lastSeen = null;
+    });
+
+    // Reset total completed counter
+    state.totalCompleted = 0;
+    localStorage.setItem('totalCompleted', '0');
+
+    // Reset session counters
+    state.sessionCount = 0;
+    state.sessionCorrect = 0;
+    state.sessionWrong = 0;
+    state.completedCount = 0;
+
+    // Rebuild the learning session
+    state.queue = buildSessionQueue();
+    state.queueIndex = 0;
+    state.current = state.sentences[state.queue[0]] || null;
+
+    state.userInput = '';
+    state.status = 'waiting';
+
+    // Refresh displayed counters and progress
+    render();
+
+    // Refresh vocabulary list if it is currently displayed
+    const vocabularyScreen = document.getElementById('screen-vocabulary');
+
+    if (vocabularyScreen?.classList.contains('active')) {
+        renderWordsList();
+    }
+
+    alert('Your progress has been reset.');
+}
+
+// Connect Reset Progress button
+document.getElementById('reset-progress').addEventListener('click', resetProgress);
+
+
 
 
 
