@@ -195,6 +195,9 @@
     <path d="M12 5v1M7 10h1M16 10h1M8.5 6.5l.7.7M15.5 6.5l-.7.7"/>
   </symbol>
 
+
+<!-- TOGGLE SOUND -->
+<!-- 14,15 -->
   <!-- 14. Sound / Speaker Icon (Waves) -->
   <symbol
     id="icon-sound-waves"
@@ -233,6 +236,8 @@
     <line x1="16" y1="9" x2="22" y2="15"/>
   </symbol>
 
+
+<!-- Not used -->
   <!-- 16. Audio Waves Icon -->
   <symbol
     id="icon-audio-waves"
@@ -269,6 +274,9 @@
     <path d="M15.68 8.32 22.08 16M22.08 8.32 15.68 16"/>
   </symbol>
 
+
+
+<!-- EXIT ICON -->
   <!-- 18. Exit Icon -->
   <symbol
     id="icon-exit"
@@ -305,6 +313,32 @@
     <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
     <line x1="12" y1="2" x2="12" y2="12" />
   </symbol>
+
+
+
+  <!-- ========================================== -->
+  <!-- GO TO PREVIOUS SCREEN / BACK ICONS         -->
+  <!-- ========================================== -->
+
+  <!-- 1. Left Arrow -->
+  <symbol id="icon-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
+  </symbol>
+
+  <!-- 2. Chevron Left (Clean Mobile UI Back Arrow) -->
+  <symbol id="icon-back-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </symbol>
+
+  <!-- 3. Curved Return Arrow (Undo / Jump Back) -->
+  <symbol id="icon-back-curve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 14L4 9l5-5" />
+    <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
+  </symbol>
+
+
+
 
 
   <!-- ========================================== -->
@@ -372,27 +406,6 @@
   </symbol>
 
 
-
-  <!-- ========================================== -->
-  <!-- GO TO PREVIOUS SCREEN / BACK ICONS         -->
-  <!-- ========================================== -->
-
-  <!-- 1. Left Arrow -->
-  <symbol id="icon-back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="19" y1="12" x2="5" y2="12" />
-    <polyline points="12 19 5 12 12 5" />
-  </symbol>
-
-  <!-- 2. Chevron Left (Clean Mobile UI Back Arrow) -->
-  <symbol id="icon-back-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="15 18 9 12 15 6" />
-  </symbol>
-
-  <!-- 3. Curved Return Arrow (Undo / Jump Back) -->
-  <symbol id="icon-back-curve" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9 14L4 9l5-5" />
-    <path d="M20 20v-7a4 4 0 0 0-4-4H4" />
-  </symbol>
 
 
 

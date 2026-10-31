@@ -62,7 +62,7 @@ export function buildSessionQueue() {
 // =========================
 async function nextSentence() {
 clearAutoSubmit();
-    const translationRow = document.getElementById('translation-row');
+    const translationRow = document.getElementById('panel-translation');
     const sentenceArea = document.getElementById('sentence-area');
 
     if (!sentenceArea) return;
@@ -107,7 +107,7 @@ state.inputLocked = false;
     render();
 // fade in elements before new sentence
     const newSentenceArea = document.getElementById('sentence-area');
-    const newTranslationRow  = document.getElementById('translation-row');
+    const newTranslationRow  = document.getElementById('panel-translation');
     await Promise.all([
         newSentenceArea ? fadeIn(newSentenceArea) : Promise.resolve(),
         newTranslationRow ? fadeIn(newTranslationRow) : Promise.resolve()
@@ -307,7 +307,7 @@ state.inputLocked = false;
     render();
 
     const sentenceArea = document.getElementById('sentence-area');
-    const translationRow= document.getElementById('translation-row');
+    const translationRow= document.getElementById('panel-translation');
 
     await Promise.all([
         fadeIn(sentenceArea),

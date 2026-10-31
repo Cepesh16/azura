@@ -306,7 +306,7 @@ button {
         
 
     }
-
+/* Button pushed effect */
     button:focus-visible {
         transform: scale(1.05);
     }
@@ -453,7 +453,7 @@ Screen common/general styles
 
 }
 
-    .header-option {
+    .panel-options {
         display: flex;
     }
 
@@ -500,7 +500,7 @@ Screen 1: Start screen
 
 
 /*THEME TOGGLE*/
-.switch {
+.toggle-theme {
     position: relative;
     display: inline-block;
     margin-left: auto;
@@ -510,7 +510,7 @@ Screen 1: Start screen
     transition: var(--transition-normal);
 }
 
-    .switch input {
+    .toggle-theme input {
         position: absolute;
         width: 1px;
         height: 1px;
@@ -523,7 +523,7 @@ Screen 1: Start screen
         white-space: nowrap;
     }
 
-    .slider {
+    .toggle-theme__slider {
         position: absolute;
         top: 0;
         left: 0;
@@ -539,7 +539,7 @@ Screen 1: Start screen
         box-shadow: var(--shadow-flat);
     }
 
-    .slider:before {
+    .toggle-theme__slider:before {
         position: absolute;
         content: "";
         height: var(--toggle-knob-size);
@@ -556,8 +556,8 @@ Screen 1: Start screen
     }
 
     /* sun / moon icons: vertically centered and placed with padding */
-    .sun svg,
-    .moon svg {
+    .toggle-theme__on svg,
+    .toggle-theme__off svg {
         width: var(--toggle-knob-size);
         height: var(--toggle-knob-size);
 
@@ -577,28 +577,28 @@ Screen 1: Start screen
         backface-visibility: hidden;
     }
 
-    .sun svg {
+    .toggle-theme__on svg {
         right: var(--toggle-padding);
     }
 
-    .moon svg {
+    .toggle-theme__off svg {
         left: var(--toggle-padding);
     }
 
 /* trigger the animations on hover */
-/*.switch:hover .sun svg {
+/*.toggle-theme:hover .toggle-theme__on svg {
     animation: rotate-icon 15s linear infinite;
 }
 
-.switch:hover .moon svg {
+.toggle-theme:hover .toggle-theme__off svg {
     animation: tilt-icon 4s linear infinite;
 }
 */
-.switch .sun svg {
+.toggle-theme .toggle-theme__on svg {
     animation: rotate-icon 15s linear infinite;
 }
 
-.switch .moon svg {
+.toggle-theme .toggle-theme__off svg {
     animation: tilt-icon 4s linear infinite;
 }
 
@@ -614,35 +614,42 @@ Screen 1: Start screen
         100% { transform: translateY(-50%) rotate(0deg); }
     }
 
-#theme-toggle:checked + .slider {
+#toggle-theme__checkbox:checked + .toggle-theme__slider {
     background-color: var(--toggle-bg-on);
 }
 
-#theme-toggle:focus + .slider {
+#toggle-theme__checkbox:focus + .toggle-theme__slider {
     outline: var(--focus-visible);
 }
 
-#theme-toggle:focus:not(:focus-visible) + .slider {
+#toggle-theme__checkbox:focus:not(:focus-visible) + .toggle-theme__slider {
     outline: none;    
 }
 
 
-#theme-toggle:checked + .slider:before {
+#toggle-theme__checkbox:checked + .toggle-theme__slider:before {
     transform: translateX(calc(var(--toggle-width) - var(--toggle-knob-size) - (var(--toggle-padding) * 2)));
 }
 
-.switch:hover .slider {
+.toggle-theme:hover .toggle-theme__slider {
     outline: var(--outline-btn-xs);
 }
 
-.switch:hover .slider::before {
+.toggle-theme:hover .toggle-theme__slider::before {
     background: var(--toggle-knob-hover);
     box-shadow: var(--shadow-soft-hover);
 }
 
-.switch:active {
+.toggle-theme:active {
     transform: scale(0.90);
 }
+
+
+
+
+
+
+
 
 
 .screen-title {
@@ -681,7 +688,7 @@ Screen 1: Start screen
 
 
 
-.profile-nav {
+.start-nav {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1016,29 +1023,28 @@ Screen main: Trainer screen
 
 
 /*SOUND TOGGLE*/
-/* The switch - the box around the speaker*/
-.toggleSwitch {
+.toggle-sound {
     position: relative;
     /*overflow: hidden;*/
 }
 
-    .toggle-box .toggleSwitch :is(.speaker, .mute-speake) {
+    .toggle-box .toggle-sound :is(.toggle-sound__on, .toggle-sound__off) {
         /*color: var(--text-accent);*/
     }
 
-    .speaker,
-    .mute-speaker {
+    .toggle-sound__on,
+    .toggle-sound__off {
         width: 100%;
         height: 100%;
         transition: var(--transition-fast);
         border-radius: var(--radius-circle);
     }
 
-    .mute-speaker {
+    .toggle-sound__off {
         z-index: 2;
     }
 
-    .speaker {
+    .toggle-sound__on {
         position: absolute;
         opacity: 0;
         z-index: 3;
@@ -1048,7 +1054,7 @@ Screen main: Trainer screen
 
 
 /* Hide native checkbox but keep it accessible to assistive tech */
-.toggleSwitch > input[type="checkbox"] {
+.toggle-sound > input[type="checkbox"] {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1064,49 +1070,50 @@ Screen main: Trainer screen
 }
 
     /* Use general sibling (~) selectors inside the label so structure is robust */
-    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+    .toggle-sound > input[type="checkbox"]:checked ~ .toggle-sound__off {
         opacity: 0;
     }
 
-    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker {
+    .toggle-sound > input[type="checkbox"]:checked ~ .toggle-sound__on {
         opacity: 1;
     }
-    .toggleSwitch > input[type="checkbox"]:checked ~ .speaker,
-    .toggleSwitch > input[type="checkbox"]:checked ~ .mute-speaker {
+    .toggle-sound > input[type="checkbox"]:checked ~ .toggle-sound__on,
+    .toggle-sound > input[type="checkbox"]:checked ~ .toggle-sound__off {
         /*transform: rotate(360deg); */
     }
 
-
-    .toggleSwitch:active {
+/* Button pushed effect */
+    .toggle-sound:active {
         transform: scale(0.90);
     }
 
-    .toggleSwitch:hover {
+    .toggle-sound:hover {
         outline: var(--outline-btn-sm);
     }
-    .toggleSwitch:hover {
+    .toggle-sound:hover {
         outline: var(--outline-btn-sm);
     }
 
-    .toggleSwitch:hover svg {
+    .toggle-sound:hover svg {
         /*color: var(--toggle-knob-on);*/
     }
 
-   .toggleSwitch:focus-visible {
+   .toggle-sound:focus-visible {
         /*transform: scale(1);*/
     }
 
-    #sound-toggle:focus-visible ~ span  {
+/* Button pushed effect */
+    #toggle-sound__checkbox:focus-visible ~ span  {
         outline: var(--focus-visible);
         transform: scale(1.05);
 
     }    
-    #sound-toggle:focus-visible ~ span svg  {
+    #toggle-sound__checkbox:focus-visible ~ span svg  {
         /*transform: scale(1.05);*/
 
     } 
 
-    #sound-toggle:focus:not(:focus-visible) ~ span  {
+    #toggle-sound__checkbox:focus:not(:focus-visible) ~ span  {
         outline: none;
     }    
 
@@ -1380,7 +1387,7 @@ input.gap.flash-wrong {
 Translation Row
 ========================= */
 
-#translation-row {
+#panel-translation {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1388,26 +1395,25 @@ Translation Row
     margin-bottom: var(--space-lg);
 }
 
-    #translation-box {
+    #translation__box {
         position: relative;
         display: flex;
         flex-direction: row;
         align-items: center;
-
+        cursor: pointer;
+        transition: all var(--transition-fast);
     }
 
-        #explanation-toggle {
+
+        #translation__toggle {
             position: absolute;
             left: calc(var(--space-md) * -2.5);
-            /*width: 100%;*/
-            /*height: 100%;*/
             padding: var(--space-md) var(--space-md);
 
             font-size: var(--font-lg);
             line-height: 1;
             color: var(--text-muted);
 
-            cursor: pointer;
             user-select: none;
 
             transition:
@@ -1415,31 +1421,31 @@ Translation Row
                 color var(--transition-fast);
         }
 
-    #translation-box:hover #explanation-toggle {
+
+
+    #translation__box:hover #translation__toggle {
         color: var(--text-accent);
         transform: scale(1.15);
     }
-        #explanation-toggle:hover {
+        #translation__toggle:hover {
             transform: scale(1.15);
             color: var(--text-accent);
         }
 
-        #explanation-toggle:active {
+        #translation__toggle:active {
             transform: scale(0.9);
         }
 
-        #explanation {
+        #translation__explanation {
+            height: 80px;
+            overflow: hidden;
             margin-top: var(--space-sm);
 
             font-size: var(--font-md);
             color: var(--text-muted);
 
             text-align: center;
-        height: 80px;
-        overflow: hidden;
 
-/*            max-height: 0;
-            overflow: hidden;*/
             opacity: 0;
 
             transition:
@@ -1450,27 +1456,25 @@ Translation Row
             transform: translateY(-4px);
         }
 
-        #explanation.show {
+        #translation__explanation.show {
         /*max-height: 80px;*/
             opacity: 1;
             transform: translateY(0);
         }
 
-        #translation {
+        #translation__word {
             padding: var(--space-xs) var(--space-md);
             outline: var(--outline-btn-xs);
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-flat);
             font-size: var(--font-xl);
-            cursor: pointer;
         }
         
-            #translation:hover {
+            #translation__word:hover {
                 outline: var(--outline-btn-sm);
-                /*color: var(--text-accent);*/
             } 
 
-            #translation:focus-visible {
+            #translation__word:focus-visible {
                 outline: var(--focus-visible);
                 /*color: var(--text-accent);*/
             }
@@ -1632,7 +1636,7 @@ Session summary
 /* =========================
  ANIMATION 
 ========================= */
-#translation-row,
+#panel-translation,
 #sentence-area,
 #session-state,
 #progress-row {
@@ -1690,14 +1694,14 @@ Session summary
         /*font-size: var(--font-lg);*/
     }
 
-    #translation {
+    #translation__word {
         /*font-size: var(--font-lg);*/
     }
 
 /* =========================
  Responsive tweaks
  ========================= */
-    #translation-row {
+    #panel-translation {
 
     }
 

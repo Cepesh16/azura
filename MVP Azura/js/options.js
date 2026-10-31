@@ -4,7 +4,7 @@ export function initOptions() {
     const btn = document.getElementById('options-btn');
     const modal = document.getElementById('options-modal');
     const save = document.getElementById('save-options');
-    const toggle = document.getElementById('sound-toggle');
+    const toggle = document.getElementById('toggle-sound__checkbox');
 
     // =========================
     // 🔊 SOUND TOGGLE (existing)
@@ -27,7 +27,7 @@ export function initOptions() {
     // =========================
     // 🌗 THEME TOGGLE (new)
     // =========================
-    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggle = document.getElementById('toggle-theme__checkbox');
 
     // Apply saved theme on load
     const savedTheme = localStorage.getItem('theme'); // 'dark' or 'light' or null

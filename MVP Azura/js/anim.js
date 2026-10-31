@@ -59,7 +59,7 @@ function waitForTransition(el, timeoutMs = 350) {
 //
 // Element becomes invisible BUT keeps its layout space.
 // Used for:
-//   - translation-row
+//   - panel-translation
 //   - progress-row
 //   - normal sentence transitions
 // ============================================================

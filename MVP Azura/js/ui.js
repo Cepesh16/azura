@@ -13,9 +13,9 @@ export function initEls() {
   els.sentenceAreaEl   = document.getElementById('sentence-area');
   els.sentenceEl       = document.getElementById('sentence');
 
-  els.translationEl    = document.getElementById('translation');
-  els.explanationEl    = document.getElementById('explanation');
-  els.toggleBtn        = document.getElementById('explanation-toggle');
+  els.translationEl    = document.getElementById('translation__word');
+  els.explanationEl    = document.getElementById('translation__explanation');
+  els.toggleBtn        = document.getElementById('translation__toggle');
 
   els.posEl            = document.getElementById('part-of-speech') || null;
   els.levelEl          = document.getElementById('level-indicator');
@@ -655,9 +655,9 @@ const sentenceAreaEl  = els.sentenceAreaEl  || document.getElementById('sentence
 
 const sentenceEl      = els.sentenceEl      || document.getElementById('sentence');
 
-const translationEl   = els.translationEl   || document.getElementById('translation');
-const explanationEl   = els.explanationEl   || document.getElementById('explanation');
-const toggleBtn       = els.toggleBtn       || document.getElementById('explanation-toggle');
+const translationEl   = els.translationEl   || document.getElementById('translation__word');
+const explanationEl   = els.explanationEl   || document.getElementById('translation__explanation');
+const toggleBtn       = els.toggleBtn       || document.getElementById('translation__toggle');
 
 const posEl           = els.posEl           || document.getElementById('part-of-speech');
 const levelEl         = els.levelEl         || document.getElementById('level-indicator');
@@ -1076,7 +1076,6 @@ if (explanationEl && toggleBtn) {
 
     // CLICK on translation text ALSO triggers it
     if (translationEl) {
-        translationEl.style.cursor = 'pointer';
         translationEl.onclick = toggleExplanation;
     }
 }
