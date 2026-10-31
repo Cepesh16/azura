@@ -33,24 +33,24 @@ function showScreen(screenId) {
 }
 
 // Connect buttons with screens they open
-document.getElementById('profile-start').addEventListener('click', () => {
+document.getElementById('btn-screen-start').addEventListener('click', () => {
     showScreen('screen-trainer');
 });
 
-document.getElementById('profile-status').addEventListener('click', () => {
+document.getElementById('btn-screen-status').addEventListener('click', () => {
     showScreen('screen-status');
 });
 
-document.getElementById('profile-progress').addEventListener('click', () => {
+document.getElementById('btn-screen-progress').addEventListener('click', () => {
     showScreen('screen-progress');
 });
 
-    document.getElementById('progress-words').addEventListener('click', () => {
+    document.getElementById('btn-screen-progress-words').addEventListener('click', () => {
         renderWordsList();
         showScreen('screen-vocabulary');
     });
 
-document.getElementById('profile-setting').addEventListener('click', () => {
+document.getElementById('btn-screen-settings').addEventListener('click', () => {
     showScreen('screen-settings');
 });
 
@@ -71,7 +71,7 @@ document.addEventListener('click', event => {
 
 // Initialize the current browser history entry.
 // Profile is already active in the HTML.
-history.replaceState({ appScreen: 'profile-screen' }, '');
+history.replaceState({ appScreen: 'screen-start' }, '');
 
 window.addEventListener('popstate', event => {
     const previousScreen = screenHistory.pop();

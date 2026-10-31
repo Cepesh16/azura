@@ -481,7 +481,7 @@ All Screens
     max-width: 640px;
 }
 
-#profile-screen {
+#screen-start {
     
 }
 
@@ -692,13 +692,13 @@ Screen 1: Start screen
 }
 
 
-#profile-start {
+#btn-screen-start {
     /*width: auto;*/
     flex-grow: 0.25;
 }
-#profile-status,
-#profile-progress,
-#profile-setting {
+#btn-screen-status,
+#btn-screen-progress,
+#btn-screen-settings {
     /*width: 50px;*/
     width: calc(var(--space-lg) * 2.5);
 }
@@ -787,14 +787,14 @@ Screen 4: Progress screen
 
 
 
-#progress-words {
+#btn-screen-progress-words {
 
 }
 
 
 
 /* =========================
-Screen 4.1: Progress-words
+Screen 4.1: Progress words screen
 ========================= */
 
 
@@ -1140,12 +1140,12 @@ Top Navigation
 .stats-row {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
+    gap: var(--space-xs);
 }
-    .counter-box {
+    .counter-wrap {
         display: flex;
         align-items: center;
-        gap: var(--space-xs);
+        /*gap: var(--space-xs);*/
                 color: var(--text-muted);
     }
             .icon-counter {
