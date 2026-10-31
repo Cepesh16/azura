@@ -59,26 +59,34 @@
 
             <div class="profile-nav">
 
-                <button id="profile-status" class="btn-profile">
-                    <span class="icon-wrap-btn">
-                        <svg><use href="assets/icons/sprite.svg#icon-user"></use></svg>
-                    </span>
-                </button>
+                <div class="btn-row">
+                    <button id="profile-start" class="btn-profile">
+                    <!-- <span class="icon-wrap-btn pos-left">
+                            <svg><use href="assets/icons/sprite.svg#icon-start"></use></svg>
+                        </span> -->
+                        Learn
+                    </button>
+                    </div>
+                <div class="btn-row">
 
-                <button id="profile-start" class="btn-profile">
-<!--                     <span class="icon-wrap-btn pos-left">
-                        <svg><use href="assets/icons/sprite.svg#icon-start"></use></svg>
-                    </span> -->
-                    Learn
-                </button>
+                    <button id="profile-status" class="btn-profile">
+                        <span class="icon-wrap-btn">
+                            <svg><use href="assets/icons/sprite.svg#icon-user"></use></svg>
+                        </span>
+                    </button>
 
-                <!-- <div class="button-row"> -->
-                <button id="profile-progress" class="btn-profile">
-                    <span class="icon-wrap-btn">
-                        <svg><use href="assets/icons/sprite.svg#icon-stats-line"></use></svg>
-                    </span>
-                </button>
-                <!-- </div> -->
+                    <button id="profile-progress" class="btn-profile">
+                        <span class="icon-wrap-btn">
+                            <svg><use href="assets/icons/sprite.svg#icon-stats-line"></use></svg>
+                        </span>
+                    </button>
+
+                    <button id="profile-setting" class="btn-profile">
+                        <span class="icon-wrap-btn">
+                            <svg><use href="assets/icons/sprite.svg#icon-settings-dual-gear"></use></svg>
+                        </span>
+                    </button>
+                </div>
 
             </div>
 
@@ -321,13 +329,6 @@
                 </li>
             </ul>
 
-            <button id="reset-progress" class="btn-profile">
-                <span class="icon-wrap-btn pos-left">
-                    <svg><use href="assets/icons/sprite.svg#icon-trash"></use></svg>
-                </span>
-                Reset
-            </button>
-
             <button id="progress-words" class="btn-profile">
                 <span class="icon-wrap-btn pos-left">
                     <svg><use href="assets/icons/sprite.svg#icon-words-list-az"></use></svg>
@@ -341,8 +342,8 @@
                 </span>Back
             </button>
 
-
         </div>
+
 
             <div id="screen-vocabulary" class="screen">
 
@@ -391,6 +392,45 @@
                 </button>
 
             </div>
+
+        <div id="screen-settings" class="screen">
+
+            <header class="screen-header">
+                <div class="header-option">
+
+                    <!-- Back button-->
+                    <button class="id-back-button btn-back icon-wrap-opt">
+                        <span class="flex">
+                            <svg class="icon-exit"><use href="assets/icons/sprite.svg?v=12111#icon-back-chevron"></use></svg>
+                        </span>
+                    </button>
+                </div>
+
+            </header>
+
+            <h1 class="screen-title">Settings</h1>
+
+
+            <h2 class="screen-subtitle">General</h2>
+
+
+            <button id="reset-progress" class="btn-profile">
+                <span class="icon-wrap-btn pos-left">
+                    <svg><use href="assets/icons/sprite.svg#icon-trash"></use></svg>
+                </span>
+                Reset
+            </button>
+
+            <button class="id-back-button btn-profile">
+                <span class="icon-wrap-btn pos-left">
+                    <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
+                </span>Back
+            </button>
+
+
+        </div>
+
+
 
 
         <!-- future screens can be added here -->

@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.56';
+const version = '1.563';
 console.log('VERSION:', version);
 
 
@@ -45,10 +45,17 @@ document.getElementById('profile-progress').addEventListener('click', () => {
     showScreen('screen-progress');
 });
 
-document.getElementById('progress-words').addEventListener('click', () => {
-    renderWordsList();
-    showScreen('screen-vocabulary');
+    document.getElementById('progress-words').addEventListener('click', () => {
+        renderWordsList();
+        showScreen('screen-vocabulary');
+    });
+
+document.getElementById('profile-setting').addEventListener('click', () => {
+    showScreen('screen-settings');
 });
+
+
+
 
 // On-screen Back buttons use browser history too
 // Handle all Back buttons, including dynamically created ones

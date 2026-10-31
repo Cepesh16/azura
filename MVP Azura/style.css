@@ -683,7 +683,7 @@ Screen 1: Start screen
 
 .profile-nav {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     gap: var(--space-md);
@@ -694,21 +694,22 @@ Screen 1: Start screen
 
 #profile-start {
     /*width: auto;*/
-    flex-grow: 1;
+    flex-grow: 0.25;
 }
 #profile-status,
-#profile-progress {
+#profile-progress,
+#profile-setting {
     /*width: 50px;*/
     width: calc(var(--space-lg) * 2.5);
 }
 
-.button-row {
+.btn-row {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    /*gap: var(--space-md);*/
+    justify-content: center;
+    gap: var(--space-md);
 }
-    .button-row button {
+    .btn-row button {
         margin-bottom: 0;
         /*padding: var(--space-xs) var(--space-xs);*/
         /*padding: var(--space-xs) var(--space-lg);*/
