@@ -446,7 +446,7 @@ Screen common/general styles
 
 
 
-.screen-header {
+.header-screen {
     width: 100%;
     /*max-width: 250px;*/
     margin-bottom: var(--space-lg);
@@ -901,15 +901,6 @@ Screen 4.1: Progress words screen
 
 
 
-/* =========================
-Screen main: Trainer screen
-========================= */
-
-.header-trainer {
-    margin-bottom: calc(var(--space-lg) * 1);
-    padding: 0 var(--space-lg);
-}
-
 
 /* =========================
 Loading
@@ -954,8 +945,10 @@ Loading
 
 
 /* =========================
-Main App
+Screen main: Trainer screen
 ========================= */
+
+
 
 #app {
     display: flex;
@@ -976,27 +969,15 @@ Main App
     transform: translateY(0);
 }
 
-    #container {
-        display: flex;
-        justify-content: center;
-        /*width: min(500px, 90vw);*/
-        margin-bottom: var(--space-lg);
-        padding: var(--space-lg);
-        outline: 1px solid var(--progress-bg);
-        border-radius: var(--radius-xl);  
-        box-shadow: var(--shadow-flat);
-        background: var(--bg-light);
-        overflow: hidden;
-        text-align: left;
-        /*text-align: center;*/
-    }
-
-    #card {
-
-    }
 
 
-    #option-row {
+
+.header-trainer {
+    margin-bottom: calc(var(--space-lg) * 1);
+    padding: 0 var(--space-lg);
+}
+
+    #panel-trainer {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1004,11 +985,32 @@ Main App
         margin-bottom: var(--space-lg);
     }
 
-        .toggle-row {
+        .panel-trainer__actions {
             display: flex;
             align-items: center;
             gap: var(--space-md);
         }
+
+
+
+#content-trainer {
+    display: flex;
+    justify-content: center;
+    /*width: min(500px, 90vw);*/
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    outline: 1px solid var(--progress-bg);
+    border-radius: var(--radius-xl);  
+    box-shadow: var(--shadow-flat);
+    background: var(--bg-light);
+    overflow: hidden;
+    text-align: left;
+    /*text-align: center;*/
+}
+
+    #card {
+
+    }
 
 
 
@@ -1137,7 +1139,7 @@ Back button
 Top Navigation
 ========================= */
 
-.stats-row {
+.panel-trainer__counters {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
@@ -1200,7 +1202,7 @@ Top Navigation
 
 
 
-    #id-counter-progress-bar {
+    #counter-progress-bar {
         font-size: var(--font-sm);
         color: var(--text-accent);
         font-weight: 500;
@@ -1213,9 +1215,6 @@ Top Navigation
 /* =========================
 Learning Area
 ========================= */
-#content {
-
-}
 
 #card {
 
@@ -1664,12 +1663,12 @@ Session summary
         margin: var(--space-md) var(--space-md) 0 var(--space-md);*/
     }
 
-    #option-row,
+    #panel-trainer,
     #progress-row {
 
     }
 
-    #option-row {
+    #panel-trainer {
        /*padding: 0 var(--space-md);*/
     }
 
@@ -1679,7 +1678,7 @@ Session summary
     }
 
 
-    #container {
+    #content-trainer {
         /*padding: var(--space-lg) var(--space-md);*/
     }
 

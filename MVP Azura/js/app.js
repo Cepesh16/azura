@@ -60,7 +60,7 @@ document.getElementById('btn-screen-settings').addEventListener('click', () => {
 // On-screen Back buttons use browser history too
 // Handle all Back buttons, including dynamically created ones
 document.addEventListener('click', event => {
-    const backButton = event.target.closest?.('.id-back-button');
+    const backButton = event.target.closest?.('.id-btn-back');
 
     if (!backButton) return;
 

@@ -27,7 +27,7 @@ export function initEls() {
   els.learnedEl          = document.getElementsByClassName('id-counter-words-learned');
   els.retainedEl         = document.getElementsByClassName('id-counter-words-retained');
 
-  els.progressCounter  = document.getElementById('id-counter-progress-bar');
+  els.progressCounter  = document.getElementById('counter-progress-bar');
   els.helperEl         = document.getElementById('helper');
 }
 
@@ -670,7 +670,7 @@ const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClas
 const learnedEl          = els.learnedEl           || document.getElementsByClassName('id-counter-words-learned');
 const retainedEl         = els.retainedEl          || document.getElementsByClassName('id-counter-words-retained');
 
-const progressCounter = els.progressCounter || document.getElementById('id-counter-progress-bar');
+const progressCounter = els.progressCounter || document.getElementById('counter-progress-bar');
 const helperEl        = els.helperEl        || document.getElementById('helper');
 
 
@@ -859,7 +859,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                     Again
                 </button>
 
-                <button class="id-back-button btn-profile">
+                <button class="id-btn-back btn-profile">
                     <span class="icon-wrap-btn pos-left">
                         <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
                     </span>Back
