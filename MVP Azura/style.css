@@ -63,6 +63,7 @@
     --hint: #b2b2b2;
 
     /* LEVEL COLORS */
+    --level-indicator-0: transparent;
     --level-indicator-1: #e57373;
     --level-indicator-2: #ffb74d;
     --level-indicator-3: #fff176;
@@ -1540,9 +1541,14 @@ Level Indicator
             border-radius: var(--radius-circle);
             outline: 1px solid var(--bg-neutral);
             box-shadow: var(--shadow-flat);
+            /*background: var(--level-indicator-0);*/
         }
 
-        .level-dot.level-0,
+        .level-dot.level-0 { 
+            background: var(--level-indicator-0);
+            outline-color: var(--level-indicator-0);
+        }
+
         .level-dot.level-1 { 
             background: var(--level-indicator-1);
             outline-color: var(--level-indicator-1);
@@ -1767,11 +1773,12 @@ Session summary
 
     --hint: #3a4048;
 
-    --level-indicator-5: #7bd389;
-    --level-indicator-4: #aed581;
-    --level-indicator-3: #fff176;
-    --level-indicator-2: #ffb86b;
+    --level-indicator-0: transparent;
     --level-indicator-1: #ff8a8a;
+    --level-indicator-2: #ffb86b;
+    --level-indicator-3: #fff176;
+    --level-indicator-4: #aed581;
+    --level-indicator-5: #7bd389;
 
     /* SHADOWS */
     --shadow-flat: 1px 2px 0px #17212f;
