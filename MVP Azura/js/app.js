@@ -136,33 +136,45 @@ function renderWordsList() {
         row.className = 'word-row';
 
         const name = document.createElement('span');
-        name.className = 'word-name';
+        name.className = 'word-english';
         name.textContent = word.answer;
+
+        const translation = document.createElement('span');
+        translation.className = 'word-translation';
+        translation.textContent = word.translation;
 
         const levelLabel = document.createElement('span');
         levelLabel.className = 'word-level';
         levelLabel.textContent = `${level}/5`;
 
-        const bar = document.createElement('div');
-        bar.className = 'word-level-bar';
-        bar.setAttribute('role', 'img');
-        bar.setAttribute('aria-label', `Level ${level} out of 5`);
+const dots = document.createElement('div');
+dots.className = 'level-dots word-level-dots';
+dots.setAttribute('role', 'img');
+dots.setAttribute('aria-label', `Level ${level} out of 5`);
 
-        for (let i = 1; i <= 5; i++) {
-            const segment = document.createElement('span');
-            segment.className =
-                i <= level
-                    ? 'word-level-segment filled'
-                    : 'word-level-segment';
+for (let i = 1; i <= 5; i++) {
+    const dot = document.createElement('span');
 
-            bar.appendChild(segment);
-        }
+    dot.className = 'level-dot';
 
-        const details = document.createElement('div');
-        details.className = 'word-details';
-        details.append(name, bar);
+    // Fill dots up to the current memory level
+    if (i <= level) {
+        dot.classList.add(`level-${level}`);
+    }
 
-        row.append(details, levelLabel);
+    dots.appendChild(dot);
+}
+
+        const itemEnglish = document.createElement('div');
+        itemEnglish.className = 'word-item-english';
+        itemEnglish.append(name, dots);
+
+        const itemTranslation = document.createElement('div');
+        itemTranslation.className = 'word-item-translation';
+        // itemTranslation.append(translation, levelLabel);
+        itemTranslation.append(translation);
+
+        row.append(itemEnglish, itemTranslation);
         list.appendChild(row);
     });
 }

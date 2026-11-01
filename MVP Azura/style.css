@@ -63,9 +63,11 @@
     --hint: #b2b2b2;
 
     /* LEVEL COLORS */
-    --level-high: #81c784;
-    --level-mid: #ffb74d;
-    --level-low: #e57373;
+    --level-indicator-1: #e57373;
+    --level-indicator-2: #ffb74d;
+    --level-indicator-3: #fff176;
+    --level-indicator-4: #aed581;
+    --level-indicator-5: #81c784;
 
 
     /* OUTLINES */
@@ -853,51 +855,60 @@ Screen 4.1: Progress words screen
 
 .word-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
-    padding: var(--space-md);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
     border: 1px solid var(--progress-bg);
     border-radius: var(--radius-sm);
     background: var(--bg-light);
 }
 
-.word-details {
+
+
+.word-item-english,
+.word-item-translation {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex: 1;
-    flex-direction: column;
+    width: 100%;
+    flex-direction: row;
     gap: var(--space-sm);
     min-width: 0;
 }
 
-.word-name {
+/* Memory level indicator inside the words list */
+.word-english .word-level-dots {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--dot-md);
+}
+
+.word-level-dots .level-dot {
+    width: var(--dot-lg);
+    height: var(--dot-lg);
+    flex-shrink: 0;
+}
+
+
+.word-english {
     overflow-wrap: anywhere;
     color: var(--text-main);
     font-size: var(--font-md);
 }
 
+.word-translation {
+    color: var(--text-muted);
+}
+
 .word-level {
     flex-shrink: 0;
+    margin-left: auto;
     color: var(--text-muted);
     font-size: var(--font-sm);
     font-weight: 500;
-}
-
-.word-level-bar {
-    display: flex;
-    gap: 3px;
-    width: 100%;
-}
-
-.word-level-segment {
-    flex: 1;
-    height: 5px;
-    border-radius: var(--radius-xs);
-    background: var(--progress-bg);
-}
-
-.word-level-segment.filled {
-    background: var(--text-muted);
 }
 
 .words-empty {
@@ -905,6 +916,7 @@ Screen 4.1: Progress words screen
     color: var(--text-muted);
     text-align: center;
 }
+
 
 
 
@@ -1516,13 +1528,9 @@ Level Indicator
 
     .level-dots {
         display: flex;
-        gap: var(--dot-md);
         justify-content: center;
-        /*padding: var(--space-xs) var(--space-md);*/
-        /*padding: var(--space-sm);*/
+        gap: var(--dot-md);
         border-radius: var(--radius-md);
-        /*background: var(--bg-main);*/
-        /*box-shadow: var(--shadow-flat);*/
     }
 
 
@@ -1536,20 +1544,28 @@ Level Indicator
 
         .level-dot.level-0,
         .level-dot.level-1 { 
-            background: var(--level-low);
-            outline-color: var(--level-low);
+            background: var(--level-indicator-1);
+            outline-color: var(--level-indicator-1);
         }
 
-        .level-dot.level-2,
+        .level-dot.level-2 { 
+            background: var(--level-indicator-2);
+            outline-color: var(--level-indicator-2);
+        }
+
         .level-dot.level-3 { 
-            background: var(--level-mid);
-            outline-color: var(--level-mid);
+            background: var(--level-indicator-3);
+            outline-color: var(--level-indicator-3);
         }
 
-        .level-dot.level-4,
+        .level-dot.level-4 { 
+            background: var(--level-indicator-4);
+            outline-color: var(--level-indicator-4);
+        }
+
         .level-dot.level-5 { 
-            background: var(--level-high);
-            outline-color: var(--level-high);
+            background: var(--level-indicator-5);
+            outline-color: var(--level-indicator-5);
         }
 
 /* =========================
@@ -1751,9 +1767,11 @@ Session summary
 
     --hint: #3a4048;
 
-    --level-low: #ff8a8a;
-    --level-mid: #ffb86b;
-    --level-high: #7bd389;
+    --level-indicator-5: #7bd389;
+    --level-indicator-4: #aed581;
+    --level-indicator-3: #fff176;
+    --level-indicator-2: #ffb86b;
+    --level-indicator-1: #ff8a8a;
 
     /* SHADOWS */
     --shadow-flat: 1px 2px 0px #17212f;
