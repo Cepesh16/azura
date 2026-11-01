@@ -761,7 +761,7 @@ Screen 3 and 4 common
 ========================= */
 
 .status-panel,
-.progress-panel {
+.panel-progress {
     width: 100%;
     max-width: 260px;
     margin-bottom: var(--space-lg);
@@ -776,13 +776,13 @@ Screen 4: Progress screen
 
 
 
-.progress-panel--row {
+.panel-progress--row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--bg-neutral);
 }
-    .progress-panel--row:last-child {
+    .panel-progress--row:last-child {
         border-bottom: none;
     }
 
@@ -808,30 +808,38 @@ Screen 4.1: Progress words screen
 ========================= */
 
 
-.words-controls {
+.controls-words {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     gap: var(--space-sm);
     width: 280px;
     /*max-width: 90%;*/
-    margin-top: var(--space-md);
 }
 
-#words-search,
-#words-level-filter {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 44px;
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--outline-main);
-    border-radius: var(--radius-sm);
-    background: var(--bg-light);
-    color: var(--text-main);
-    font: inherit;
-}
+    #search-words,
+    #filter-level-words {
+        box-sizing: border-box;
+        padding-block: var(--space-xs);
+        padding-inline: var(--space-md);
+        border: 1px solid var(--outline-main);
+        border-radius: var(--radius-sm);
+        background: var(--bg-light);
+        color: var(--text-main);
+        font: inherit;
+    }
+
+    #search-words {
+        min-width: 120px;
+    }
+    #filter-level-words {
+        min-width: 120px;
+    }
 
 
-.words-count {
+
+/*Counter */
+.count-words {
     width: 280px;
     max-width: 90%;
     margin-top: var(--space-md);
@@ -840,10 +848,10 @@ Screen 4.1: Progress words screen
     text-align: center;
 }
 
-.words-list {
+.list-words {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
+    /*gap: var(--space-sm);*/
     width: 280px;
     max-width: 90%;
     max-height: 55vh;
@@ -854,69 +862,75 @@ Screen 4.1: Progress words screen
     padding-right: var(--space-xs);
 }
 
-.word-row {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--progress-bg);
-    border-radius: var(--radius-sm);
-    background: var(--bg-light);
-}
+    .word-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        /*gap: var(--space-sm);*/
+        padding-block: var(--space-xs) var(--space-xs);
+        padding-inline: var(--space-xs) var(--space-xs);
+        /*border-radius: var(--radius-sm);*/
+        border-bottom: 1px solid var(--bg-neutral);
+        /*background: var(--bg-light);*/
+    }
 
+    .word-row:last-child {
+        border-bottom: none;
+    }
 
+/*    .word-row:hover {
+        background: var(--toggle-knob-on);
+    }*/
 
-.word-item-english,
-.word-item-translation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-    width: 100%;
-    flex-direction: row;
-    gap: var(--space-sm);
-    min-width: 0;
-}
+        .word-item-english,
+        .word-item-translation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            flex-direction: row;
+            gap: var(--space-sm);
+            min-width: 0;
+        }
 
-/* Memory level indicator inside the words list */
-.word-english .word-level-dots {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: var(--dot-md);
-}
+            .word-english {
+                overflow-wrap: anywhere;
+                font-size: var(--font-md);
+                color: var(--text-main);
+            }
 
-.word-level-dots .level-dot {
-    width: var(--dot-lg);
-    height: var(--dot-lg);
-    flex-shrink: 0;
-}
+            .word-translation {
+                color: var(--text-muted);
+            }
 
+            /* Memory level indicator inside the words list */
+            .word-english .word-level-dots {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: var(--dot-md);
+            }
 
-.word-english {
-    overflow-wrap: anywhere;
-    color: var(--text-main);
-    font-size: var(--font-md);
-}
+                .word-level-dots .level-dot {
+                    width: var(--dot-lg);
+                    height: var(--dot-lg);
+                    flex-shrink: 0;
+                }
 
-.word-translation {
-    color: var(--text-muted);
-}
+            .word-level {
+                flex-shrink: 0;
+                margin-left: auto;
+                color: var(--text-muted);
+                font-size: var(--font-sm);
+                font-weight: 500;
+            }
 
-.word-level {
-    flex-shrink: 0;
-    margin-left: auto;
-    color: var(--text-muted);
-    font-size: var(--font-sm);
-    font-weight: 500;
-}
-
-.words-empty {
-    padding: var(--space-md);
-    color: var(--text-muted);
-    text-align: center;
-}
+            .words-empty {
+                padding: var(--space-md);
+                color: var(--text-muted);
+                text-align: center;
+            }
 
 
 
@@ -1164,7 +1178,7 @@ Top Navigation
     align-items: center;
     gap: var(--space-xs);
 }
-    .counter-wrap {
+    .count-wrap {
         display: flex;
         align-items: center;
         /*gap: var(--space-xs);*/
@@ -1222,7 +1236,7 @@ Top Navigation
 
 
 
-    #counter-progress-bar {
+    #count-progress-bar {
         font-size: var(--font-sm);
         color: var(--text-accent);
         font-weight: 500;

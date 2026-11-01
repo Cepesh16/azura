@@ -21,13 +21,13 @@ export function initEls() {
   els.levelEl          = document.getElementById('level-indicator');
   els.progressBarEl    = document.getElementById('progress-bar');
 
-  els.totalCompletedEls  = document.getElementsByClassName('id-counter-words-all');
-  els.uniqueCompletedEls = document.getElementsByClassName('id-counter-words-unique');
-  els.mediumLevelEl      = document.getElementsByClassName('id-counter-words-midway');
-  els.learnedEl          = document.getElementsByClassName('id-counter-words-learned');
-  els.retainedEl         = document.getElementsByClassName('id-counter-words-retained');
+  els.totalCompletedEls  = document.getElementsByClassName('id-count-words-all');
+  els.uniqueCompletedEls = document.getElementsByClassName('id-count-words-unique');
+  els.mediumLevelEl      = document.getElementsByClassName('id-count-words-midway');
+  els.learnedEl          = document.getElementsByClassName('id-count-words-learned');
+  els.retainedEl         = document.getElementsByClassName('id-count-words-retained');
 
-  els.progressCounter  = document.getElementById('counter-progress-bar');
+  els.progressCounter  = document.getElementById('count-progress-bar');
   els.helperEl         = document.getElementById('helper');
 }
 
@@ -664,13 +664,13 @@ const levelEl         = els.levelEl         || document.getElementById('level-in
 
 const progressBar     = els.progressBarEl   || document.getElementById('progress-bar');
 
-const totalCompletedEls  = els.totalCompletedEls   || document.getElementsByClassName('id-counter-words-all');
-const uniqueCompletedEls = els.uniqueCompletedEls  || document.getElementsByClassName('id-counter-words-unique');
-const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClassName('id-counter-words-midway');
-const learnedEl          = els.learnedEl           || document.getElementsByClassName('id-counter-words-learned');
-const retainedEl         = els.retainedEl          || document.getElementsByClassName('id-counter-words-retained');
+const totalCompletedEls  = els.totalCompletedEls   || document.getElementsByClassName('id-count-words-all');
+const uniqueCompletedEls = els.uniqueCompletedEls  || document.getElementsByClassName('id-count-words-unique');
+const mediumLevelEl      = els.mediumLevelEl       || document.getElementsByClassName('id-count-words-midway');
+const learnedEl          = els.learnedEl           || document.getElementsByClassName('id-count-words-learned');
+const retainedEl         = els.retainedEl          || document.getElementsByClassName('id-count-words-retained');
 
-const progressCounter = els.progressCounter || document.getElementById('counter-progress-bar');
+const progressCounter = els.progressCounter || document.getElementById('count-progress-bar');
 const helperEl        = els.helperEl        || document.getElementById('helper');
 
 
@@ -816,9 +816,9 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                     Session complete
                 </div>
 
-                <ul class="progress-panel">
+                <ul class="panel-progress">
 
-                     <li class="progress-panel--row">
+                     <li class="panel-progress--row">
                         <span class="icon-wrap">
                             <svg><use href="assets/icons/sprite.svg#icon-correct-check"></use></svg>
                         </span>
@@ -826,7 +826,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                         <span class="progress-value">${state.sessionCorrect} / ${state.sessionCount}</span>
                     </li>   
 
-                     <li class="progress-panel--row">
+                     <li class="panel-progress--row">
                         <span class="icon-wrap">
                             <svg><use href="assets/icons/sprite.svg#icon-wrong-x"></use></svg>
                         </span>
@@ -834,7 +834,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                         <span class="progress-value">${state.sessionWrong}</span>
                     </li>   
 
-                     <li class="progress-panel--row">
+                     <li class="panel-progress--row">
                         <span class="icon-wrap">
                             <svg><use href="assets/icons/sprite.svg#icon-accuracy-target"></use></svg>
                         </span>

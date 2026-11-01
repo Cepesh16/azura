@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.57';
+const version = '1.571';
 console.log('VERSION:', version);
 
 
@@ -85,11 +85,11 @@ window.addEventListener('popstate', event => {
 
 
 function renderWordsList() {
-    const list = document.getElementById('words-list');
+    const list = document.getElementById('list-words');
     if (!list) return;
 
-    const searchInput = document.getElementById('words-search');
-    const levelFilter = document.getElementById('words-level-filter');
+    const searchInput = document.getElementById('search-words');
+    const levelFilter = document.getElementById('filter-level-words');
 
     const search = searchInput.value.trim().toLowerCase();
     const selectedLevel = levelFilter.value;
@@ -110,7 +110,7 @@ function renderWordsList() {
         .sort((a, b) => a.answer.localeCompare(b.answer));
 
 
-        const wordsCount = document.getElementById('words-count');
+        const wordsCount = document.getElementById('count-words');
 
         if (wordsCount) {
             wordsCount.textContent = `Words: ${words.length}`;
@@ -179,8 +179,8 @@ for (let i = 1; i <= 5; i++) {
     });
 }
 
-document.getElementById('words-search').addEventListener('input', renderWordsList);
-document.getElementById('words-level-filter').addEventListener('change', renderWordsList);
+document.getElementById('search-words').addEventListener('input', renderWordsList);
+document.getElementById('filter-level-words').addEventListener('change', renderWordsList);
 
 
 
