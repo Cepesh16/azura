@@ -816,41 +816,45 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                     Session complete
                 </div>
 
-                <ul class="panel-progress">
+                <table class="screen-table table-session">
+                    <tbody>
+                         <tr class="table-row">
+                            <td class="row-icon">
+                                <svg><use href="assets/icons/sprite.svg#icon-correct-check"></use></svg>
+                            </td>
+                            <td class="row-name">Correct:</td>
+                            <td class="row-value">${state.sessionCorrect} / ${state.sessionCount}</td>
+                        </tr>   
 
-                     <li class="panel-progress--row">
-                        <span class="icon-wrap">
-                            <svg><use href="assets/icons/sprite.svg#icon-correct-check"></use></svg>
-                        </span>
-                        <span class="progress-name">Correct:</span>
-                        <span class="progress-value">${state.sessionCorrect} / ${state.sessionCount}</span>
-                    </li>   
+                         <tr class="table-row">
+                            <td class="row-icon">
+                                <svg><use href="assets/icons/sprite.svg#icon-wrong-x"></use></svg>
+                            </td>
+                            <td class="row-name">Wrong:</td>
+                            <td class="row-value">${state.sessionWrong}</td>
+                        </tr>   
 
-                     <li class="panel-progress--row">
-                        <span class="icon-wrap">
-                            <svg><use href="assets/icons/sprite.svg#icon-wrong-x"></use></svg>
-                        </span>
-                        <span class="progress-name">Wrong:</span>
-                        <span class="progress-value">${state.sessionWrong}</span>
-                    </li>   
+                         <tr class="table-row">
+                            <td class="row-icon">
+                                <svg><use href="assets/icons/sprite.svg#icon-accuracy-target"></use></svg>
+                            </td>
+                            <td class="row-name">Accuracy:</td>
+                            <td class="row-value">
+                                ${
+                                    Math.round(
+                                        (
+                                            state.sessionCorrect /
+                                            state.sessionCount
+                                        ) * 100
+                                    )
+                                }%
+                            </td>
+                        </tr> 
+                    </tbody>
+                </table>
 
-                     <li class="panel-progress--row">
-                        <span class="icon-wrap">
-                            <svg><use href="assets/icons/sprite.svg#icon-accuracy-target"></use></svg>
-                        </span>
-                        <span class="progress-name">Accuracy:</span>
-                        <span class="progress-value">
-                            ${
-                                Math.round(
-                                    (
-                                        state.sessionCorrect /
-                                        state.sessionCount
-                                    ) * 100
-                                )
-                            }%
-                        </span>
-                    </li> 
-                </ul>  
+
+
 
                 <button id="restart-btn" class="btn-profile">
                     <span class="icon-wrap-btn pos-left">

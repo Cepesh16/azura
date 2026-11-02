@@ -461,6 +461,34 @@ Screen common/general styles
     }
 
 
+.screen-title {
+    font-size: var(--font-lg);
+    margin-bottom: var(--space-lg);
+}
+    .screen-title::first-letter {
+        display: inline-block;
+        margin-right: var(--dot-xs);
+        padding: 0px var(--dot-lg) 0px var(--dot-lg);
+        padding: 0px var(--dot-md) 0px;
+
+        font-size: var(--font-xl);
+        font-weight: bold;
+        color: var(--bg-light);
+        background: var(--bg-neutral);
+        border-radius: 6px;
+        box-shadow: var(--shadow-flat);
+    }
+
+.screen-subtitle {
+    text-align: left;
+    margin-bottom: var(--space-sm);
+    /*font-weight: bold;*/
+    /*color: var(--text-muted);*/
+}
+
+
+
+
 .btn-profile {
     position: relative;
     width: 180px;
@@ -647,45 +675,14 @@ Screen 1: Start screen
     transform: scale(0.90);
 }
 
+/*=========================================*/
 
-
-
-
-
-
-
-
-.screen-title {
-    font-size: var(--font-lg);
-    margin-bottom: var(--space-lg);
-}
-    .screen-title::first-letter {
-        display: inline-block;
-        margin-right: var(--dot-xs);
-        padding: 0px var(--dot-lg) 0px var(--dot-lg);
-        padding: 0px var(--dot-md) 0px;
-
-        font-size: var(--font-xl);
-        font-weight: bold;
-        color: var(--bg-light);
-        background: var(--bg-neutral);
-        border-radius: 6px;
-        box-shadow: var(--shadow-flat);
-    }
-
-.screen-subtitle {
-    text-align: left;
-    margin-bottom: var(--space-sm);
-    /*font-weight: bold;*/
-    /*color: var(--text-muted);*/
-}
 
 
 .profile-image {
-    /*width: 200px;*/
-    max-width: 80%;
+    width: 100%;
+    height: 160px;
     margin-bottom: var(--space-lg);
-    height: auto;
     color: var(--icon-color);
 }
 
@@ -701,22 +698,10 @@ Screen 1: Start screen
     /*max-width: 250px;*/
 }
 
-
-#btn-screen-start {
-    /*width: auto;*/
-    flex-grow: 0.25;
-}
-#btn-screen-status,
-#btn-screen-progress,
-#btn-screen-settings {
-    /*width: 50px;*/
-    width: calc(var(--space-lg) * 2.5);
-}
-
 .btn-row {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: var(--space-md);
 }
     .btn-row button {
@@ -726,75 +711,182 @@ Screen 1: Start screen
     }
 
 
+#btn-screen-start {
+    width: 100%;
+    /*flex-grow: 0.75;*/
+}
+#btn-screen-status,
+#btn-screen-progress,
+#btn-screen-settings {
+    /*width: 50px;*/
+    /*width: calc(var(--space-lg) * 3.5);*/
+    /*width: auto;*/
+}
+
+
+
+
 
 /* =========================
 Screen 3: Status screen
 ========================= */
 
 
-.status-row {
-    display: flex;
-    /*justify-content: space-between;*/
-    align-items: center;
-    border-bottom: 1px solid var(--bg-neutral);
-}
-    .status-row:last-child {
-        border-bottom: none;
-    }
-
-
-.status-name {
-
-}
-
-.status-value {
-    margin-left: auto;
-    flex-grow: 1;
-    /*flex-basis: 100px;*/
-    max-width: 90px;
-    text-align: left;
-}
 
 
 /* =========================
 Screen 3 and 4 common
 ========================= */
 
-.status-panel,
-.panel-progress {
-    width: 100%;
-    max-width: 260px;
+/* Table template */
+.screen-table {
+    width: 260px;
     margin-bottom: var(--space-lg);
     color: var(--text-muted);
-
+    border-collapse: collapse; /* Prevents double borders */
 }
+
+    .screen-table .table-row {
+        border-bottom: 1px solid var(--bg-neutral);
+    }
+
+        .screen-table .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .screen-table .table-row td {
+            vertical-align: middle;
+            padding-block: var(--space-xs);
+            padding-inline: var(--space-xs);
+        }
+        
+        .screen-table .table-row td:first-child {
+
+        }
+
+        .screen-table .table-row td:last-child {
+
+        }
+
+            .screen-table .table-row .row-icon {
+                width: 1%; 
+                white-space: nowrap;
+                text-align: center; /* Centers the SVG horizontally inside the cell */
+            }
+
+                .screen-table .table-row .row-icon svg {
+                    display: block;
+                    width: var(--font-lg);
+                    height: var(--font-lg);
+                }
+
+            .screen-table .table-row .row-name {
+                width: 100%; 
+                white-space: nowrap;
+            }
+
+            .screen-table .table-row .row-value {
+                text-align: left;
+                white-space: nowrap;
+            }
+
 
 /* =========================
 Screen 4: Progress screen
 ========================= */
 
-
-
-
-.panel-progress--row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--bg-neutral);
+.table-session {
+    /*width: 260px;*/
 }
-    .panel-progress--row:last-child {
-        border-bottom: none;
+    .table-session .table-row {
+
+    }
+    .table-session .table-row .row-icon {
+
+    }
+    .table-session .table-row .row-name {
+
+    }
+    .table-session .table-row .row-value {
+        text-align: right;
     }
 
-.progress-name {
+.table-progress {
 
 }
 
-.progress-value {
-    margin-left: auto;
-    padding-right: var(--space-xs);
+    .table-progress .table-row {
+
+    }
+
+    .table-progress .table-row .row-icon {
+
+    }
+    
+    .table-progress .table-row .row-name {
+
+    }
+
+    .table-progress .table-row .row-value {
+        text-align: right;
+    }
+
+
+
+
+.table-status {
+
 }
 
+    .table-status .table-row {
+
+    }
+
+    .table-status .table-row .row-icon {
+
+    }
+
+    .table-status .table-row .row-name {
+    }
+
+    .table-status .table-row .row-value {
+    }
+
+
+.table-settings {
+
+}
+
+    .table-settings .table-row {
+
+    }
+
+    .table-settings .table-row .row-icon {
+
+    }
+
+    .table-settings .table-row .row-name {
+        white-space: normal;
+    }
+
+    .table-settings .table-row .row-value {
+    }
+
+        #reset-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            height: 30px;
+            margin-bottom: 0;
+            background: var(--wrong);
+            color: var(--bg-light);
+        }
+
+            #reset-progress svg {
+                /*display: block;*/
+                color: var(--bg-light);
+            }
 
 
 #btn-screen-progress-words {
@@ -933,6 +1025,9 @@ Screen 4.1: Progress words screen
             }
 
 
+/* =========================
+Screen 5: Settings screen
+========================= */
 
 
 
@@ -1661,6 +1756,7 @@ Session summary
         display: flex;
         flex-direction: column;
         align-items: center;
+        /*width: 320px;*/
 }
 
 
