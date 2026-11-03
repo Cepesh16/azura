@@ -889,10 +889,11 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
                 <button id="restart-btn" class="btn-profile">
                     <span class="icon-wrap-btn pos-left">
-                        <svg><use href="assets/icons/sprite.svg#icon-again"></use></svg>
+                        <svg><use href="assets/icons/sprite.svg#icon-continue-play"></use></svg>
                     </span>
-                    Again
+                    Continue
                 </button>
+
 
                 <button class="id-btn-back btn-profile">
                     <span class="icon-wrap-btn pos-left">

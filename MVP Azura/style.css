@@ -288,6 +288,7 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
     /*padding-top: calc(var(--space-xl) * 2);*/
     background: var(--bg-main);
     color: var(--text-main);
@@ -701,7 +702,7 @@ Screen 1: Start screen
 .btn-row {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--space-md);
 }
     .btn-row button {
@@ -712,7 +713,7 @@ Screen 1: Start screen
 
 
 #btn-screen-start {
-    width: 100%;
+    /*width: 100%;*/
     /*flex-grow: 0.75;*/
 }
 #btn-screen-status,
@@ -1038,8 +1039,11 @@ Loading
 #footer {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    width: 320px;
+    /*width: 100%;*/
     padding-bottom: var(--space-xl);
+    font-size: var(--font-xs);
     color: var(--text-muted);
 }
 
