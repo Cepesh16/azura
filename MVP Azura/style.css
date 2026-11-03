@@ -812,6 +812,8 @@ Screen 4: Progress screen
         text-align: right;
     }
 
+
+
 .table-progress {
 
 }
@@ -868,6 +870,7 @@ Screen 4: Progress screen
 
     .table-settings .table-row .row-name {
         white-space: normal;
+        font-size: var(--font-sm);
     }
 
     .table-settings .table-row .row-value {
@@ -1042,7 +1045,7 @@ Loading
     align-items: flex-start;
     width: 320px;
     /*width: 100%;*/
-    padding-bottom: var(--space-xl);
+    padding-block: var(--space-md);
     font-size: var(--font-xs);
     color: var(--text-muted);
 }
@@ -1765,6 +1768,14 @@ Session summary
 
 
 
+.session-state .btn-profile {
+    width: 200px;
+}
+
+
+#btn-session-continue {
+    /*width: 200px;*/
+}
 
 
 

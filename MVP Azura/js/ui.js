@@ -843,9 +843,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
         sessionStateEl.innerHTML = `
             <div class="session-state session-state--end">
 
-                <div class="screen-title">
-                    Session complete
-                </div>
+                <h1 class="screen-title">Сессия завершена</h1>
 
                 <table class="screen-table table-session">
                     <tbody>
@@ -853,7 +851,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                             <td class="row-icon">
                                 <svg><use href="assets/icons/sprite.svg#icon-correct-check"></use></svg>
                             </td>
-                            <td class="row-name">Correct:</td>
+                            <td class="row-name">Правильных:</td>
                             <td class="row-value">${state.sessionCorrect} / ${state.sessionCount}</td>
                         </tr>   
 
@@ -861,7 +859,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                             <td class="row-icon">
                                 <svg><use href="assets/icons/sprite.svg#icon-wrong-x"></use></svg>
                             </td>
-                            <td class="row-name">Wrong:</td>
+                            <td class="row-name">Неверных:</td>
                             <td class="row-value">${state.sessionWrong}</td>
                         </tr>   
 
@@ -869,7 +867,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
                             <td class="row-icon">
                                 <svg><use href="assets/icons/sprite.svg#icon-accuracy-target"></use></svg>
                             </td>
-                            <td class="row-name">Accuracy:</td>
+                            <td class="row-name">Точность:</td>
                             <td class="row-value">
                                 ${
                                     Math.round(
@@ -887,18 +885,18 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
 
 
-                <button id="restart-btn" class="btn-profile">
+                <button id="btn-session-continue" class="btn-profile">
                     <span class="icon-wrap-btn pos-left">
                         <svg><use href="assets/icons/sprite.svg#icon-continue-play"></use></svg>
                     </span>
-                    Continue
+                    Продолжить
                 </button>
 
 
                 <button class="id-btn-back btn-profile">
                     <span class="icon-wrap-btn pos-left">
                         <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
-                    </span>Back
+                    </span>Назад
                 </button>
 
             </div>
@@ -906,7 +904,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
         const btn =
             document.getElementById(
-                'restart-btn'
+                'btn-session-continue'
             );
 
         if (btn) {
@@ -1189,7 +1187,7 @@ if (explanationEl && toggleBtn) {
         if (!hasUserFocused) {
 
             helperEl.innerText =
-                'Tap to start';
+                'Нажми на пропуск чтобы начать';
 
             helperEl.classList.add(
                 'show'
@@ -1200,7 +1198,7 @@ if (explanationEl && toggleBtn) {
         ) {
 
             helperEl.innerText =
-                'Type the missing word and press Enter';
+                'Напиши пропущенное слово и нажми Enter';
 
             helperEl.classList.add(
                 'show'
@@ -1212,7 +1210,7 @@ if (explanationEl && toggleBtn) {
         ) {
 
             helperEl.innerText =
-                'Press Enter to reveal hint';
+                'Нажми Enter чтобы увидеть подсказку';
 
             helperEl.classList.add(
                 'show'
@@ -1223,7 +1221,7 @@ if (explanationEl && toggleBtn) {
         ) {
 
             helperEl.innerText =
-                'Type the correct word';
+                'Напиши пропущенное слово';
 
             helperEl.classList.add(
                 'show'
@@ -1234,7 +1232,7 @@ if (explanationEl && toggleBtn) {
         ) {
 
             helperEl.innerText =
-                'Good';
+                'Хорошо';
 
             helperEl.classList.add(
                 'show'

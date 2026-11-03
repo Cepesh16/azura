@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.59';
+const version = '1.591';
 console.log('VERSION:', version);
 
 
@@ -110,10 +110,10 @@ function renderWordsList() {
         .sort((a, b) => a.answer.localeCompare(b.answer));
 
 
-        const wordsCount = document.getElementById('count-words');
+        const wordsCount = document.getElementById('count-filtered-words');
 
         if (wordsCount) {
-            wordsCount.textContent = `Words: ${words.length}`;
+            wordsCount.textContent = `Слов: ${words.length}`;
         }
 
     list.replaceChildren();
@@ -121,7 +121,7 @@ function renderWordsList() {
     if (words.length === 0) {
         const empty = document.createElement('p');
         empty.className = 'words-empty';
-        empty.textContent = 'No words found.';
+        empty.textContent = 'Таких слов пока нет.';
         list.appendChild(empty);
         return;
     }
