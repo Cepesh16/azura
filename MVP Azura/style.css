@@ -72,8 +72,8 @@
 
 
     /* OUTLINES */
-    --outline-btn-xs: 1px solid var(--outline-main);
-    --outline-btn-sm: 2px solid var(--outline-main);
+    --btn-outline-xs: 1px solid var(--outline-main);
+    --btn-outline-sm: 2px solid var(--outline-main);
 
     /* SHADOWS */
     --color-shadow-flat: #e2e4e6;
@@ -305,7 +305,7 @@ button {
         /*background: var(--button-hover);*/
         color: var(--text-main);
         transform: scale(1.05);
-        outline: var(--outline-btn-sm);
+        outline: var(--btn-outline-sm);
         
 
     }
@@ -497,7 +497,7 @@ Screen common/general styles
     margin-bottom: var(--space-md);
 
     border-radius: var(--radius-sm);
-    outline: var(--outline-btn-xs);
+    outline: var(--btn-outline-xs);
 
     box-shadow: var(--shadow-flat);    
     background: var(--bg-light);
@@ -663,7 +663,7 @@ Screen 1: Start screen
 }
 
 .toggle-theme:hover .toggle-theme__slider {
-    outline: var(--outline-btn-xs);
+    outline: var(--btn-outline-xs);
 }
 
 .toggle-theme:hover .toggle-theme__slider::before {
@@ -1210,10 +1210,10 @@ Screen main: Trainer screen
     }
 
     .toggle-sound:hover {
-        outline: var(--outline-btn-sm);
+        outline: var(--btn-outline-sm);
     }
     .toggle-sound:hover {
-        outline: var(--outline-btn-sm);
+        outline: var(--btn-outline-sm);
     }
 
     .toggle-sound:hover svg {
@@ -1418,19 +1418,19 @@ input.gap {
 
 
     line-height: 1;
-    outline: var(--outline-btn-xs);
+    outline: var(--btn-outline-xs);
     outline-offset: 1px;
     border-radius: var(--radius-xs);
     box-shadow: var(--shadow-flat);
 }
 
 input.gap:hover {
-    outline: var(--outline-btn-sm);
+    outline: var(--btn-outline-sm);
 }
 
 /*input.gap:focus {
     outline: none;
-    outline: var(--outline-btn-sm);
+    outline: var(--btn-outline-sm);
 }
 
 input.gap:focus-visible {
@@ -1586,14 +1586,14 @@ Translation Row
 
         #translation__word {
             padding: var(--space-xs) var(--space-md);
-            outline: var(--outline-btn-xs);
+            outline: var(--btn-outline-xs);
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-flat);
             font-size: var(--font-xl);
         }
         
             #translation__word:hover {
-                outline: var(--outline-btn-sm);
+                outline: var(--btn-outline-sm);
             } 
 
             #translation__word:focus-visible {

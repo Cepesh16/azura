@@ -1,5 +1,6 @@
 import { state, clearAutoSubmit } from './state.js';
 import { submitAnswer, startNewSession } from './logic.js';
+import { ageThresholds, educationThresholds, incomeThresholds, getStatus } from './statuses.js';
 
 let hasUserFocused = false;
 
@@ -26,6 +27,11 @@ export function initEls() {
   els.mediumLevelEl      = document.getElementsByClassName('id-count-words-midway');
   els.learnedEl          = document.getElementsByClassName('id-count-words-learned');
   els.retainedEl         = document.getElementsByClassName('id-count-words-retained');
+  
+  els.ageStatus = document.getElementById('age-status');
+  els.educationStatus = document.getElementById('education-status');
+  els.incomeStatus = document.getElementById('income-status');
+  
 
   els.progressCounter  = document.getElementById('count-progress-bar');
   els.helperEl         = document.getElementById('helper');
@@ -744,6 +750,31 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
     ).length;
 
 
+    // STATUS SYSTEM
+
+    // Select the counter used for status progression.
+    // StatusProgress using counter as a base to change statuses.
+    // Change value to 'learnedCount' to change based on learning words milestone.
+    const statusProgress = state.totalCompleted;
+
+    // Calculate current statuses.
+    const ageStatus = getStatus(ageThresholds, statusProgress);
+    const educationStatus = getStatus(educationThresholds, statusProgress);
+    const incomeStatus = getStatus(incomeThresholds, statusProgress);
+
+
+    // Update status elements
+    if (els.ageStatus) {
+        els.ageStatus.textContent = ageStatus;
+    }
+
+    if (els.educationStatus) {
+        els.educationStatus.textContent = educationStatus;
+    }
+
+    if (els.incomeStatus) {
+        els.incomeStatus.textContent = incomeStatus;
+    }
 
     Array.from(totalCompletedEls).forEach(el => {
       el.innerText = `${state.totalCompleted}`;
@@ -1024,32 +1055,32 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
     if (!canReuseInput) {
 
-      // create fresh HTML (old input will be removed from DOM so its listeners are cleaned up)
-      sentenceEl.innerHTML = createGapSentence(current);
+        // create fresh HTML (old input will be removed from DOM so its listeners are cleaned up)
+        sentenceEl.innerHTML = createGapSentence(current);
 
         // --- after sentenceEl.innerHTML = createGapSentence(current)
-const gapInput = document.getElementById('gap-input');
+        const gapInput = document.getElementById('gap-input');
 
-if (gapInput) {
-    const answer = (current.formattedAnswer || current.answer || '') || '';
+        if (gapInput) {
+            const answer = (current.formattedAnswer || current.answer || '') || '';
 
-    gapInput.maxLength = answer.length;
+            gapInput.maxLength = answer.length;
 
-    adjustGapWidth(gapInput, current);
+            adjustGapWidth(gapInput, current);
 
-    renderHint(gapInput, current);
+            renderHint(gapInput, current);
 
-    state.userInput = gapInput.value || '';
-}
+            state.userInput = gapInput.value || '';
+        }
 
     } else { // canReuseInput === true
-      // existingInput is still in the DOM for the same current.id — update layout & hint
-      const answer = (current.formattedAnswer || current.answer || '') || '';
-      existingInput.maxLength = answer.length || 0;
-      adjustGapWidth(existingInput, current);
-      renderHint(existingInput, current);
-      state.userInput = existingInput.value || '';
-      // no attach/reattach here because listeners should already be present
+        // existingInput is still in the DOM for the same current.id — update layout & hint
+        const answer = (current.formattedAnswer || current.answer || '') || '';
+        existingInput.maxLength = answer.length || 0;
+        adjustGapWidth(existingInput, current);
+        renderHint(existingInput, current);
+        state.userInput = existingInput.value || '';
+        // no attach/reattach here because listeners should already be present
     }
 
 // keep translation updated (this is fine where you had it)
