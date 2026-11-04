@@ -335,7 +335,10 @@ MY FRAMEWORK
     align-items: center;
     justify-content: center;
 }
-
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
 
 
 .icon-wrap-opt {
@@ -488,6 +491,15 @@ Screen common/general styles
 }
 
 
+.nav-btn {
+
+}
+
+.nav-btn .id-btn-back {
+    /*width: 160px;*/
+    /*height: 40px;*/
+    background: transparent;
+}
 
 
 .btn-profile {
@@ -1566,7 +1578,7 @@ Translation Row
         }
 
         #translation__explanation {
-            height: 80px;
+            /*height: 80px;*/
             overflow: hidden;
             margin-top: var(--space-sm);
 
