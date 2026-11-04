@@ -32,19 +32,21 @@
             
             <header class="header-screen">
                 <div class="panel-options">
-                            <label class="toggle-theme">
-                                <!-- Theme SVG Wrapper for Animation -->
-                                <span class="toggle-theme__on">
-                                    <!-- Sun Icon (Light Mode) -->
-                                    <svg><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
-                                </span>
-                                <span class="toggle-theme__off">
-                                    <!-- Moon Icon (Dark Mode) -->
-                                    <svg><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
-                                </span>
-                                <input id="toggle-theme__checkbox" type="checkbox">
-                                <span class="toggle-theme__slider"></span>
-                            </label>
+
+                    <label class="toggle-theme">
+                        <!-- Theme SVG Wrapper for Animation -->
+                        <span class="toggle-theme__on">
+                            <!-- Sun Icon (Light Mode) -->
+                            <svg><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                        </span>
+                        <span class="toggle-theme__off">
+                            <!-- Moon Icon (Dark Mode) -->
+                            <svg><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
+                        </span>
+                        <input id="toggle-theme__checkbox" type="checkbox">
+                        <span class="toggle-theme__slider"></span>
+                    </label>
+
                 </div>
 
             </header>
@@ -93,9 +95,10 @@
 
 
         <footer id="footer">
-            <div class="footer-version">build 59 stable</div>
-            <div class="footer-update">Removed back button from trainer panel.</div>
-            <div class="footer-update">Made navigation button wrapper.</div>
+            <div class="footer-version">build 59.3 stable</div>
+            <div class="footer-update">Trainer screen: removed back and moved to card sound toggle.
+</div>
+            <div class="footer-update">Added wrapper for buttons for screens navigation panel.</div>
             <div class="footer-update"></div>
         </footer>
 
@@ -153,18 +156,7 @@
 
                         <div class="panel-trainer__actions">
 
-                            <div class="toggle-box">
-                                <label class="toggle-sound icon-wrap-opt" for="toggle-sound__checkbox">
-                                    <input id="toggle-sound__checkbox" type="checkbox">
-                                    <span class="toggle-sound__on flex">
-                                        <!-- Sound SVG Wrapper for Animation -->
-                                            <svg><use href="assets/icons/sprite.svg?v=121#icon-sound-waves"></use></svg>
-                                    </span>
-                                    <span class="toggle-sound__off flex">
-                                            <svg><use href="assets/icons/sprite.svg#icon-sound-mute"></use></svg>
-                                    </span>
-                                </label>
-                            </div>
+<!-- SOUND 999 -->
 
                             
                         </div>   
@@ -188,6 +180,19 @@
 
                 
                 <main id="content-trainer">
+
+                        <div class="toggle-sound-wrap">
+                            <label class="toggle-sound icon-wrap-opt" for="toggle-sound__checkbox">
+                                <input id="toggle-sound__checkbox" type="checkbox">
+                                <span class="toggle-sound__on flex">
+                                    <!-- Sound SVG Wrapper for Animation -->
+                                        <svg><use href="assets/icons/sprite.svg?v=121#icon-sound-waves"></use></svg>
+                                </span>
+                                <span class="toggle-sound__off flex">
+                                        <svg><use href="assets/icons/sprite.svg#icon-sound-mute"></use></svg>
+                                </span>
+                            </label>
+                        </div>
 
                         <div id="card">
                     
@@ -485,7 +490,7 @@
 
 
 <!-- <script type="module" src="./js/app.js"></script> -->
-<script type="module" src="./js/app.js?v=1.592"></script>
+<script type="module" src="./js/app.js?v=1.593"></script>
 
 
 </body>

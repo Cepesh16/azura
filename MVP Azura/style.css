@@ -1103,7 +1103,7 @@ Screen main: Trainer screen
     flex-direction: column;
     /*justify-content: center;*/
     flex: 1;
-    /*align-items: center;*/
+    align-items: stretch;
     width: min(560px, 95%);
 
     opacity: 0;
@@ -1142,6 +1142,7 @@ Screen main: Trainer screen
 
 
 #content-trainer {
+    position: relative;
     display: flex;
     justify-content: center;
     /*width: min(500px, 90vw);*/
@@ -1164,12 +1165,20 @@ Screen main: Trainer screen
 
 
 /*SOUND TOGGLE*/
+
+.toggle-sound-wrap {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-md);
+}
+
+
 .toggle-sound {
     position: relative;
     /*overflow: hidden;*/
 }
 
-    .toggle-box .toggle-sound :is(.toggle-sound__on, .toggle-sound__off) {
+    .toggle-sound-wrap .toggle-sound :is(.toggle-sound__on, .toggle-sound__off) {
         /*color: var(--text-accent);*/
     }
 
@@ -1797,6 +1806,7 @@ Session summary
 ========================= */
 #panel-translation,
 #sentence-area,
+.toggle-sound-wrap,
 #session-state,
 #progress-row {
     transition: opacity var(--transition-long), transform var(--transition-long);

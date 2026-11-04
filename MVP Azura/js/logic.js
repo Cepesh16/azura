@@ -60,10 +60,13 @@ export function buildSessionQueue() {
 // =========================
 // NEXT SENTENCE
 // =========================
+
 async function nextSentence() {
-clearAutoSubmit();
-    const translationRow = document.getElementById('panel-translation');
+    clearAutoSubmit();
+
     const sentenceArea = document.getElementById('sentence-area');
+    const translationRow = document.getElementById('panel-translation');
+    const toggleSoundWrap = document.querySelector('.toggle-sound-wrap');
 
     if (!sentenceArea) return;
 
@@ -74,12 +77,14 @@ clearAutoSubmit();
         const progressRow = document.getElementById('progress-row');
 
         state.status = 'finished';
-// fade out elemnts after session is finished
-    await Promise.all([
-        fadeOutAndHide(sentenceArea),
-        translationRow ? fadeOut(translationRow) : Promise.resolve(),
-        progressRow ? fadeOut(progressRow) : Promise.resolve()
-    ]);
+
+        // Fade out elements after session is finished
+        await Promise.all([
+            fadeOutAndHide(sentenceArea),
+            toggleSoundWrap ? fadeOut(toggleSoundWrap) : Promise.resolve(),
+            translationRow ? fadeOut(translationRow) : Promise.resolve(),
+            progressRow ? fadeOut(progressRow) : Promise.resolve()
+        ]);
 
         render();
 
@@ -88,31 +93,37 @@ clearAutoSubmit();
 
         return;
     }
-// fade out elements after answer
-    await Promise.all([ 
-        sentenceArea ? fadeOut(sentenceArea) : Promise.resolve(),
+
+    // Fade out elements after answer
+    await Promise.all([
+        fadeOut(sentenceArea),
+        toggleSoundWrap ? fadeOut(toggleSoundWrap) : Promise.resolve(),
         translationRow ? fadeOut(translationRow) : Promise.resolve()
     ]);
 
-    // 🔥 DIRECT current update (NO LOOKUPS ELSEWHERE)
     state.current = state.sentences[state.queue[state.queueIndex]];
 
-state.userInput = '';
-state.status = 'waiting';
-state.answeredWithHint = false;
-state.isSubmitting = false;
-state.answerComplete = false;
-state.inputLocked = false;
+    state.userInput = '';
+    state.status = 'waiting';
+    state.answeredWithHint = false;
+    state.isSubmitting = false;
+    state.answerComplete = false;
+    state.inputLocked = false;
 
     render();
-// fade in elements before new sentence
+
+    // Fade in elements before new sentence
     const newSentenceArea = document.getElementById('sentence-area');
-    const newTranslationRow  = document.getElementById('panel-translation');
+    const newToggleSoundWrap = document.querySelector('.toggle-sound-wrap');
+    const newTranslationRow = document.getElementById('panel-translation');
+
     await Promise.all([
         newSentenceArea ? fadeIn(newSentenceArea) : Promise.resolve(),
+        newToggleSoundWrap ? fadeIn(newToggleSoundWrap) : Promise.resolve(),
         newTranslationRow ? fadeIn(newTranslationRow) : Promise.resolve()
     ]);
 }
+
 
 // =========================
 // FINISH WORD
@@ -306,12 +317,25 @@ state.inputLocked = false;
 
     render();
 
-    const sentenceArea = document.getElementById('sentence-area');
-    const translationRow= document.getElementById('panel-translation');
+const sentenceArea = document.getElementById('sentence-area');
+const toggleSoundWrap = document.querySelector('.toggle-sound-wrap');
+const translationRow = document.getElementById('panel-translation');
 
-    await Promise.all([
-        fadeIn(sentenceArea),
-        fadeIn(translationRow),
-        fadeIn(progressRow)
-    ]);
+console.log('Before fadeIn:', {
+    className: toggleSoundWrap?.className,
+    opacity: toggleSoundWrap
+        ? getComputedStyle(toggleSoundWrap).opacity
+        : null,
+    display: toggleSoundWrap
+        ? getComputedStyle(toggleSoundWrap).display
+        : null
+});
+
+await Promise.all([
+    sentenceArea ? fadeIn(sentenceArea) : Promise.resolve(),
+    toggleSoundWrap ? fadeIn(toggleSoundWrap) : Promise.resolve(),
+    translationRow ? fadeIn(translationRow) : Promise.resolve(),
+    progressRow ? fadeIn(progressRow) : Promise.resolve()
+]);
+
 }
