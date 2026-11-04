@@ -95,10 +95,9 @@
 
 
         <footer id="footer">
-            <div class="footer-version">build 59.3 stable</div>
-            <div class="footer-update">Trainer screen: removed back and moved to card sound toggle.
-</div>
-            <div class="footer-update">Added wrapper for buttons for screens navigation panel.</div>
+            <div class="footer-version">build 60 stable</div>
+            <div class="footer-update">Trainer counters centered, tooltip added. Sound toggle bg changed.</div>
+            <div class="footer-update"></div>
             <div class="footer-update"></div>
         </footer>
 
@@ -122,14 +121,14 @@
 
                         <div class="panel-trainer__counters">
                             
-                                <div class="count-wrap">
+                                <div class="count-wrap" title="Всего завершенных слов">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-words-deck"></use></svg>
                                     </span>
                                     <div class="id-count-words-all">0</div>
                                 </div>   
 
-                                <div class="count-wrap">
+                                <div class="count-wrap" title="Всего уникальных слов">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
                                     </span>
@@ -137,14 +136,14 @@
                                 </div>
 
 
-                                <div class="count-wrap">
+                                <div class="count-wrap" title="Слов на полпути">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-half-glass"></use></svg>
                                     </span>
                                     <div class="id-count-words-midway">0</div>
                                 </div>
                                 
-                                <div class="count-wrap">
+                                <div class="count-wrap" title="Выученных слов">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-completed"></use></svg>
                                     </span>
@@ -153,13 +152,6 @@
                                 
 
                         </div>
-
-                        <div class="panel-trainer__actions">
-
-<!-- SOUND 999 -->
-
-                            
-                        </div>   
 
 
                     </div>  
@@ -181,7 +173,7 @@
                 
                 <main id="content-trainer">
 
-                        <div class="toggle-sound-wrap">
+                        <div class="toggle-sound-wrap" title="Вкл/выкл звук">
                             <label class="toggle-sound icon-wrap-opt" for="toggle-sound__checkbox">
                                 <input id="toggle-sound__checkbox" type="checkbox">
                                 <span class="toggle-sound__on flex">
@@ -235,19 +227,10 @@
 
         </div>
 
+
         <div id="screen-status" class="screen">
 
-
-<!--             <header class="header-screen">
-                <div class="panel-options">
-
-
-                </div>
-
-            </header> -->
-
             <h1 class="screen-title">Статус</h1>
-
             <h2 class="screen-subtitle">Текущий статус</h2>
 
             <table class="screen-table table-status">
@@ -287,23 +270,12 @@
 
         </div>
 
+
         <div id="screen-progress" class="screen">
            
-<!-- 
-            <header class="header-screen">
-                <div class="panel-options">
-
-                </div>
-            </header>
- -->
-
 
             <h1 class="screen-title">Прогресс</h1>
-
-
-
             <h2 class="screen-subtitle">Количество слов</h2>
-
 
             <table class="screen-table table-progress">
                 <tbody>
@@ -311,7 +283,7 @@
                         <td class="row-icon">
                             <svg><use href="assets/icons/sprite.svg#icon-words-deck"></use></svg>
                         </td>
-                        <td class="row-name">показано всего</td>
+                        <td class="row-name">всего показано</td>
                         <td class="id-count-words-all row-value">0</td>
                     </tr>                    
 
@@ -319,7 +291,7 @@
                         <td class="row-icon">
                             <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
                         </td>
-                        <td class="row-name">показано уникальных</td>
+                        <td class="row-name">уникальных показов</td>
                         <td class="id-count-words-unique row-value">0</td>
                     </tr>                   
 
@@ -372,12 +344,6 @@
 
             <div id="screen-vocabulary" class="screen">
 
-<!--                 <header class="header-screen">
-                    <div class="panel-options">
-
-
-                    </div>
-                </header> -->
 
                 <h1 class="screen-title">Мои слова</h1>
 
@@ -417,18 +383,9 @@
             </div>
 
         <div id="screen-settings" class="screen">
-<!-- 
-            <header class="header-screen">
-                <div class="panel-options">
 
-
-                </div>
-            </header>
- -->
 
             <h1 class="screen-title">Настройки</h1>
-
-
             <h2 class="screen-subtitle">Общие</h2>
 
             <table class="screen-table table-settings">
@@ -490,7 +447,7 @@
 
 
 <!-- <script type="module" src="./js/app.js"></script> -->
-<script type="module" src="./js/app.js?v=1.593"></script>
+<script type="module" src="./js/app.js?v=1.6"></script>
 
 
 </body>

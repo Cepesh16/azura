@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.593';
+const version = '1.6';
 console.log('VERSION:', version);
 
 
@@ -187,10 +187,10 @@ document.getElementById('filter-level-words').addEventListener('change', renderW
 // RESET PROGRESS
 function resetProgress() {
     const confirmed = confirm(
-        'Reset all progress?\n\n' +
-        'All learning history and statistics will be erased. ' +
-        'Every word will return to level 0.\n\n' +
-        'This action cannot be undone.'
+        'Сброить весь прогресс?\n\n' +
+        'Вся история обучения и статистика будут удалены. ' +
+        'Каждое слово вернется на уровень 0.\n\n' +
+        'Это действие нельзя отменить.'
     );
 
     if (!confirmed) return;
@@ -239,7 +239,7 @@ function resetProgress() {
         renderWordsList();
     }
 
-    alert('Your progress has been reset.');
+    alert('Ваш прогресс был сброшен.');
 }
 
 // Connect Reset Progress button

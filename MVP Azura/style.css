@@ -343,7 +343,8 @@ MY FRAMEWORK
 
 .icon-wrap-opt {
     border-radius: var(--radius-circle);   
-    background: var(--toggle-bg-on); 
+    /*background: var(--toggle-bg-on); */
+    background: var(--bg-main); 
     box-shadow: var(--shadow-flat);
     
     transition: transform var(--transition-normal);
@@ -453,17 +454,6 @@ Screen common/general styles
 
 
 
-.header-screen {
-    width: 100%;
-    /*max-width: 250px;*/
-    margin-bottom: var(--space-lg);
-
-}
-
-    .panel-options {
-        display: flex;
-    }
-
 
 .screen-title {
     font-size: var(--font-lg);
@@ -541,6 +531,17 @@ All Screens
 Screen 1: Start screen
 ========================= */
 
+
+.header-screen {
+    width: 100%;
+    /*max-width: 250px;*/
+    margin-bottom: var(--space-lg);
+
+}
+
+    .panel-options {
+        display: flex;
+    }
 
 
 /*THEME TOGGLE*/
@@ -1127,17 +1128,11 @@ Screen main: Trainer screen
 
     #panel-trainer {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         font-size: var(--font-sm);
         margin-bottom: var(--space-lg);
     }
-
-        .panel-trainer__actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-md);
-        }
 
 
 
