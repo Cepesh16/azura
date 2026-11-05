@@ -885,7 +885,7 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
 
                 <div class="session-state-actions">
-                    <button id="btn-session-continue" class="btn-profile">
+                    <button id="btn-session-continue" class="btn-profile btn-profile--action">
                         <span class="icon-wrap-btn pos-left">
                             <svg><use href="assets/icons/sprite.svg#icon-continue-play"></use></svg>
                         </span>

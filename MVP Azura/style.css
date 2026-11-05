@@ -24,33 +24,35 @@
 
 /*COLORS*/
     /* BACKGROUND */
-    --bg-main: #f5f7fa;
-    --bg-light: #ffffff;
-    --bg-neutral: #ccc;
-    --bg-dim: #8390a2;
-    --bg-dark: #0f172a;
-    --bg-accent: #d97706;
+    --color-main: #f5f7fa;
+    --color-light: #ffffff;
+    --color-neutral: #ccc;
+    --color-dim: #8390a2;
+    --color-dark: #0f172a;
+    --color-accent-primary: #29AB87;
+    --color-accent-secondary: #d97706;
+
 
     /* TEXT */
-    --text-main: var(--bg-dark);
-    --text-muted: var(--bg-dim);
-    --text-accent: var(--bg-accent);
+    --text-main: var(--color-dark);
+    --text-muted: var(--color-dim);
+    --text-accent: var(--color-accent-secondary);
 
     /* ICONS */
-    --icon-color: var(--bg-dark);
+    --icon-color: var(--color-dark);
 
     /* BORDERS */
+    /* OUTLINES */
     --outline-main: #cbd5e1;
 
     /* UI COLORS */
-    --accent: #48bb78;
     --progress-bg: #e2e8f0;
-    --button-hover: var(--bg-main);
+    --button-hover: var(--color-main);
 
 
     /* TOGGLE */
-    --toggle-bg-on: var(--bg-light);
-    --toggle-bg-hover: var(--bg-light);
+    --toggle-bg-on: var(--color-light);
+    --toggle-bg-hover: var(--color-light);
     --toggle-knob-on: #e8e8e8;
     --toggle-knob-hover: var(--outline-main);
 
@@ -72,12 +74,12 @@
 
 
     /* OUTLINES */
-    --btn-outline-xs: 1px solid var(--outline-main);
-    --btn-outline-sm: 2px solid var(--outline-main);
+    --outline-static: 1px solid var(--outline-main);
+    --outline-hover: 2px solid var(--outline-main);
 
     /* SHADOWS */
     --color-shadow-flat: #e2e4e6;
-    --color-shadow-soft: var(--bg-neutral);
+    --color-shadow-soft: var(--color-neutral);
     --color-shadow-hover: #afb9c5;
 
 
@@ -198,7 +200,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  background: var(--bg-main);
+  background: var(--color-main);
   color: var(--text-main);
   font-family: Arial, sans-serif;
 }
@@ -290,7 +292,7 @@ body {
     flex-direction: column;
     align-items: center;
     /*padding-top: calc(var(--space-xl) * 2);*/
-    background: var(--bg-main);
+    background: var(--color-main);
     color: var(--text-main);
 }
 
@@ -304,9 +306,9 @@ button {
 
     button:hover {
         /*background: var(--button-hover);*/
-        color: var(--text-main);
+        /*color: var(--text-main);*/
         transform: scale(1.05);
-        outline: var(--btn-outline-sm);
+        outline: var(--outline-hover);
         
 
     }
@@ -344,7 +346,7 @@ MY FRAMEWORK
 .icon-wrap-opt {
     border-radius: var(--radius-circle);   
     /*background: var(--toggle-bg-on); */
-    background: var(--bg-main); 
+    background: var(--color-main); 
     box-shadow: var(--shadow-flat);
     
     transition: transform var(--transition-normal);
@@ -467,8 +469,8 @@ Screen common/general styles
 
         font-size: var(--font-xl);
         font-weight: bold;
-        color: var(--bg-light);
-        background: var(--bg-neutral);
+        color: var(--color-light);
+        background: var(--color-neutral);
         border-radius: 6px;
         box-shadow: var(--shadow-flat);
     }
@@ -502,11 +504,34 @@ Screen common/general styles
     margin-bottom: var(--space-md);
 
     border-radius: var(--radius-sm);
-    outline: var(--btn-outline-xs);
+    outline: var(--outline-static);
 
     box-shadow: var(--shadow-flat);    
-    background: var(--bg-light);
+    background: var(--color-light);
     font-size: var(--font-md);
+}
+
+.btn-profile svg {
+    /*color: var(--color-light);*/
+}
+
+.btn-profile--action {
+    background: var(--color-accent-primary);
+    /*outline: 2px solid #49796B;*/
+}
+
+/*.btn-profile--action:hover {
+    background: var(--level-indicator-5);
+    color: var(--color-light);
+}*/
+.btn-profile--action,
+.btn-profile--action svg {
+    color: var(--color-light);
+    /*color: var(--color-darkd);*/
+}
+
+.btn-profile--action:hover svg {
+    color: var(--color-light);
 }
 
 
@@ -679,7 +704,7 @@ Screen 1: Start screen
 }
 
 .toggle-theme:hover .toggle-theme__slider {
-    outline: var(--btn-outline-xs);
+    outline: var(--outline-static);
 }
 
 .toggle-theme:hover .toggle-theme__slider::before {
@@ -763,7 +788,7 @@ Screen 3 and 4 common
 }
 
     .screen-table .table-row {
-        border-bottom: 1px solid var(--bg-neutral);
+        border-bottom: 1px solid var(--color-neutral);
     }
 
         .screen-table .table-row:last-child {
@@ -899,12 +924,12 @@ Screen 4: Progress screen
             height: 30px;
             margin-bottom: 0;
             background: var(--wrong);
-            color: var(--bg-light);
+            color: var(--color-light);
         }
 
             #reset-progress svg {
                 /*display: block;*/
-                color: var(--bg-light);
+                color: var(--color-light);
             }
 
 
@@ -935,7 +960,7 @@ Screen 4.1: Progress words screen
         padding-inline: var(--space-md);
         border: 1px solid var(--outline-main);
         border-radius: var(--radius-sm);
-        background: var(--bg-light);
+        background: var(--color-light);
         color: var(--text-main);
         font: inherit;
     }
@@ -981,8 +1006,8 @@ Screen 4.1: Progress words screen
         padding-block: var(--space-xs) var(--space-xs);
         padding-inline: var(--space-xs) var(--space-xs);
         /*border-radius: var(--radius-sm);*/
-        border-bottom: 1px solid var(--bg-neutral);
-        /*background: var(--bg-light);*/
+        border-bottom: 1px solid var(--color-neutral);
+        /*background: var(--color-light);*/
     }
 
     .word-row:last-child {
@@ -1077,14 +1102,14 @@ Loading
 }
     #loading-text {
         font-size: var(--font-xl);
-        color: var(--accent);
+        color: var(--color-accent-primary);
     }
 
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid var(--bg-light);
-    border-top: 4px solid var(--accent);
+    border: 4px solid var(--color-light);
+    border-top: 4px solid var(--color-accent-primary);
     border-radius: var(--radius-circle);
     animation: spin 1.25s linear infinite;
     margin-bottom: var(--space-lg);
@@ -1149,7 +1174,7 @@ Screen main: Trainer screen
     outline: 1px solid var(--progress-bg);
     border-radius: var(--radius-xl);  
     box-shadow: var(--shadow-flat);
-    background: var(--bg-light);
+    background: var(--color-light);
     overflow: hidden;
     text-align: left;
     /*text-align: center;*/
@@ -1177,7 +1202,7 @@ Screen main: Trainer screen
 }
 
     .toggle-sound-wrap .toggle-sound :is(.toggle-sound__on, .toggle-sound__off) {
-        /*color: var(--text-accent);*/
+        
     }
 
     .toggle-sound__on,
@@ -1236,10 +1261,10 @@ Screen main: Trainer screen
     }
 
     .toggle-sound:hover {
-        outline: var(--btn-outline-sm);
+        outline: var(--outline-hover);
     }
     .toggle-sound:hover {
-        outline: var(--btn-outline-sm);
+        outline: var(--outline-hover);
     }
 
     .toggle-sound:hover svg {
@@ -1344,7 +1369,6 @@ Top Navigation
             content: "";
             position: absolute;
             inset: 0;
-            background: var(--accent);
             background: var(--text-muted);
             transform: scaleX(0);
             transform-origin: left;
@@ -1444,19 +1468,19 @@ input.gap {
 
 
     line-height: 1;
-    outline: var(--btn-outline-xs);
+    outline: var(--outline-static);
     outline-offset: 1px;
     border-radius: var(--radius-xs);
     box-shadow: var(--shadow-flat);
 }
 
 input.gap:hover {
-    outline: var(--btn-outline-sm);
+    outline: var(--outline-hover);
 }
 
 /*input.gap:focus {
     outline: none;
-    outline: var(--btn-outline-sm);
+    outline: var(--outline-hover);
 }
 
 input.gap:focus-visible {
@@ -1612,14 +1636,14 @@ Translation Row
 
         #translation__word {
             padding: var(--space-xs) var(--space-md);
-            outline: var(--btn-outline-xs);
+            outline: var(--outline-static);
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-flat);
             font-size: var(--font-xl);
         }
         
             #translation__word:hover {
-                outline: var(--btn-outline-sm);
+                outline: var(--outline-hover);
             } 
 
             #translation__word:focus-visible {
@@ -1674,7 +1698,7 @@ Level Indicator
             width:  var(--dot-lg);
             height: var(--dot-lg);
             border-radius: var(--radius-circle);
-            outline: 1px solid var(--bg-neutral);
+            outline: 1px solid var(--color-neutral);
             box-shadow: var(--shadow-flat);
             /*background: var(--level-indicator-0);*/
         }
@@ -1900,9 +1924,9 @@ Session summary
    ========================= */
 
 [data-theme="dark"] {
-    --bg-main: #0b1116;
-    --bg-light: #0f1620;
-    --bg-neutral: #7b8896;
+    --color-main: #0b1116;
+    --color-light: #0f1620;
+    --color-neutral: #7b8896;
 
     --text-main: #e6eef6;
     --text-accent: #F4C430;
@@ -1912,11 +1936,11 @@ Session summary
 
     --outline-main: #1f2a33;
 
-    --accent: #7bd389;
+    --color-accent-primary: #7bd389;
     --progress-bg: #151a1f;
-    --button-hover: var(--bg-main);
+    --button-hover: var(--color-main);
 
-    --toggle-bg-on: var(--bg-light);
+    --toggle-bg-on: var(--color-light);
     --toggle-bg-hover: var(--outline-main);
     --toggle-knob-on: #99a4b0;
     --toggle-knob-hover: #e8e8e8;
@@ -1944,11 +1968,11 @@ Session summary
 /* small tweaks so switches & spinner look good on dark */
 [data-theme="dark"] .spinner {
     border: 4px solid var(--text-muted);
-    border-top: 4px solid var(--accent);
+    border-top: 4px solid var(--color-accent-primary);
 }
 
 [data-theme="dark"] button {
-    background: var(--bg-light);
+    background: var(--color-light);
     color: var(--text-main);
     border-color: var(--outline-main);
 }
@@ -1958,7 +1982,7 @@ Session summary
 
 
 [data-theme="dark"] .options-card {
-    background: var(--bg-light);
+    background: var(--color-light);
     color: var(--text-main);
 }
 

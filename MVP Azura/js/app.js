@@ -4,7 +4,7 @@ import { buildSessionQueue } from './logic.js';
 import { render, initEls } from './ui.js';
 import { initOptions } from './options.js';
 
-const version = '1.6';
+const version = '1.61';
 console.log('VERSION:', version);
 
 
