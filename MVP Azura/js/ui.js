@@ -884,20 +884,15 @@ const helperEl        = els.helperEl        || document.getElementById('helper')
 
 
 
+                <div class="session-state-actions">
+                    <button id="btn-session-continue" class="btn-profile">
+                        <span class="icon-wrap-btn pos-left">
+                            <svg><use href="assets/icons/sprite.svg#icon-continue-play"></use></svg>
+                        </span>
+                        Учить
+                    </button>
 
-                <button id="btn-session-continue" class="btn-profile">
-                    <span class="icon-wrap-btn pos-left">
-                        <svg><use href="assets/icons/sprite.svg#icon-continue-play"></use></svg>
-                    </span>
-                    Продолжить
-                </button>
-
-
-                <button class="id-btn-back btn-profile">
-                    <span class="icon-wrap-btn pos-left">
-                        <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
-                    </span>Назад
-                </button>
+                </div>
 
             </div>
         `;

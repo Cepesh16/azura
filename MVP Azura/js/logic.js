@@ -64,11 +64,12 @@ export function buildSessionQueue() {
 async function nextSentence() {
     clearAutoSubmit();
 
-    const sentenceArea = document.getElementById('sentence-area');
+    const cardContainer = document.getElementById('card-container');
+    // const sentenceArea = document.getElementById('sentence-area');
     const translationRow = document.getElementById('panel-translation');
     const toggleSoundWrap = document.querySelector('.toggle-sound-wrap');
 
-    if (!sentenceArea) return;
+    if (!cardContainer) return;
 
     state.queueIndex++;
 
@@ -80,9 +81,9 @@ async function nextSentence() {
 
         // Fade out elements after session is finished
         await Promise.all([
-            fadeOutAndHide(sentenceArea),
+            fadeOutAndHide(cardContainer),
             toggleSoundWrap ? fadeOut(toggleSoundWrap) : Promise.resolve(),
-            translationRow ? fadeOut(translationRow) : Promise.resolve(),
+            translationRow ? fadeOutAndHide(translationRow) : Promise.resolve(),
             progressRow ? fadeOut(progressRow) : Promise.resolve()
         ]);
 
@@ -96,7 +97,7 @@ async function nextSentence() {
 
     // Fade out elements after answer
     await Promise.all([
-        fadeOut(sentenceArea),
+        fadeOut(cardContainer),
         toggleSoundWrap ? fadeOut(toggleSoundWrap) : Promise.resolve(),
         translationRow ? fadeOut(translationRow) : Promise.resolve()
     ]);
@@ -113,12 +114,12 @@ async function nextSentence() {
     render();
 
     // Fade in elements before new sentence
-    const newSentenceArea = document.getElementById('sentence-area');
+    const newCardContainer = document.getElementById('card-container');
     const newToggleSoundWrap = document.querySelector('.toggle-sound-wrap');
     const newTranslationRow = document.getElementById('panel-translation');
 
     await Promise.all([
-        newSentenceArea ? fadeIn(newSentenceArea) : Promise.resolve(),
+        newCardContainer ? fadeIn(newCardContainer) : Promise.resolve(),
         newToggleSoundWrap ? fadeIn(newToggleSoundWrap) : Promise.resolve(),
         newTranslationRow ? fadeIn(newTranslationRow) : Promise.resolve()
     ]);
@@ -317,7 +318,7 @@ state.inputLocked = false;
 
     render();
 
-const sentenceArea = document.getElementById('sentence-area');
+const cardContainer = document.getElementById('card-container');
 const toggleSoundWrap = document.querySelector('.toggle-sound-wrap');
 const translationRow = document.getElementById('panel-translation');
 
@@ -332,7 +333,7 @@ console.log('Before fadeIn:', {
 });
 
 await Promise.all([
-    sentenceArea ? fadeIn(sentenceArea) : Promise.resolve(),
+    cardContainer ? fadeIn(cardContainer) : Promise.resolve(),
     toggleSoundWrap ? fadeIn(toggleSoundWrap) : Promise.resolve(),
     translationRow ? fadeIn(translationRow) : Promise.resolve(),
     progressRow ? fadeIn(progressRow) : Promise.resolve()

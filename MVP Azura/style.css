@@ -492,6 +492,8 @@ Screen common/general styles
 }
 
 
+
+
 .btn-profile {
     position: relative;
     width: 180px;
@@ -1055,7 +1057,8 @@ Loading
 #footer {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     width: 320px;
     /*width: 100%;*/
     padding-block: var(--space-md);
@@ -1136,7 +1139,7 @@ Screen main: Trainer screen
 
 
 
-#content-trainer {
+#card-container {
     position: relative;
     display: flex;
     justify-content: center;
@@ -1782,16 +1785,24 @@ Session summary
         /*width: 320px;*/
 }
 
+.session-state-actions {
+    display: flex;
+    flex-direction: column;
+}
 
+.session-state-actions .btn-profile {
 
-.session-state .btn-profile {
-    width: 200px;
+}
+
+.session-state-actions #btn-session-continue {
+
+}
+
+.session-state-actions .id-btn-back {
+    background: transparent;
 }
 
 
-#btn-session-continue {
-    /*width: 200px;*/
-}
 
 
 
@@ -1799,6 +1810,7 @@ Session summary
 /* =========================
  ANIMATION 
 ========================= */
+#card-container,
 #panel-translation,
 #sentence-area,
 .toggle-sound-wrap,
@@ -1809,7 +1821,7 @@ Session summary
 
 .fade-hidden {
     opacity: 0;
-    transform: translateY(4px);
+    transform: translateY(-4px);
     pointer-events: none;
 }
 
@@ -1846,7 +1858,7 @@ Session summary
     }
 
 
-    #content-trainer {
+    #card-container {
         /*padding: var(--space-lg) var(--space-md);*/
     }
 

@@ -25,7 +25,7 @@ ignoreNextInput: false,
     soundEnabled: true,
 
     // Session control
-    sessionLimit: 3, // number of words per seesion
+    sessionLimit: 2, // number of words per seesion
     sessionCount: 0,
     completedCount: 0,
     totalCompleted: Number(localStorage.getItem('totalCompleted')) || 0,

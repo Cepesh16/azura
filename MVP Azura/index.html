@@ -95,10 +95,8 @@
 
 
         <footer id="footer">
-            <div class="footer-version">build 60 stable</div>
-            <div class="footer-update">Trainer counters centered, tooltip added. Sound toggle bg changed.</div>
-            <div class="footer-update"></div>
-            <div class="footer-update"></div>
+            <div class="footer-version">build 61 stable</div>
+            <div class="footer-update">Card container fade in/out, translation display none after session</div>
         </footer>
 
 
@@ -121,14 +119,14 @@
 
                         <div class="panel-trainer__counters">
                             
-                                <div class="count-wrap" title="Всего завершенных слов">
+                                <div class="count-wrap" title="Всего показанных слов">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-words-deck"></use></svg>
                                     </span>
                                     <div class="id-count-words-all">0</div>
                                 </div>   
 
-                                <div class="count-wrap" title="Всего уникальных слов">
+                                <div class="count-wrap" title="Уникальных слов">
                                     <span class="icon-wrap">
                                         <svg><use href="assets/icons/sprite.svg#icon-star"></use></svg>
                                     </span>
@@ -171,7 +169,7 @@
 
 
                 
-                <main id="content-trainer">
+                <main id="card-container">
 
                         <div class="toggle-sound-wrap" title="Вкл/выкл звук">
                             <label class="toggle-sound icon-wrap-opt" for="toggle-sound__checkbox">
@@ -188,7 +186,7 @@
 
                         <div id="card">
                     
-                            <div id="session-state" class="session-state fade-hidden"></div>
+                            
 
                             <div id="sentence-area">
                                 <div id="level-indicator"></div>  
@@ -213,14 +211,14 @@
 
                 </div>
 
-
-            <div class="nav-btn flex">
-                    <button class="id-btn-back btn-profile">
-                        <span class="icon-wrap-btn pos-left">
-                            <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
-                        </span>Назад
-                    </button>
-            </div>
+                <div id="session-state" class="session-state fade-hidden"></div>
+                    <div class="nav-btn flex">
+                        <button class="id-btn-back btn-profile">
+                            <span class="icon-wrap-btn pos-left">
+                                <svg><use href="assets/icons/sprite.svg#icon-back-chevron"></use></svg>
+                            </span>Назад
+                        </button>
+                    </div>
 
 
             </div>
