@@ -147,8 +147,8 @@
     --transition-fast: 0.15s ease;
 
 /* FOCUS */
-    --focus: 2px solid transparent;
-    --focus-visible: 3px solid highlight;
+    --focus-outline-color: 2px solid transparent;
+    --focus-visible-outline-color: 3px solid highlight;
 
 
 }
@@ -207,7 +207,7 @@ body {
 
 /* 5) accessible focus outline if removed later */
 :focus { outline: var(--focus); }
-:focus-visible { outline: var(--focus-visible); }
+:focus-visible { outline: var(--focus-visible-outline-color); }
 
 /* -----------------------------
    Input / search-specific rules
@@ -315,6 +315,7 @@ button {
 /* Button pushed effect */
     button:focus-visible {
         transform: scale(1.05);
+        outline: var(--focus-visible-outline-color);
     }
 
     button:active {
@@ -691,7 +692,7 @@ Screen 1: Start screen
 }
 
 #toggle-theme__checkbox:focus + .toggle-theme__slider {
-    outline: var(--focus-visible);
+    outline: var(--focus-visible-outline-color);
 }
 
 #toggle-theme__checkbox:focus:not(:focus-visible) + .toggle-theme__slider {
@@ -1202,7 +1203,7 @@ Screen main: Trainer screen
 }
 
     .toggle-sound-wrap .toggle-sound :is(.toggle-sound__on, .toggle-sound__off) {
-        
+
     }
 
     .toggle-sound__on,
@@ -1277,7 +1278,7 @@ Screen main: Trainer screen
 
 /* Button pushed effect */
     #toggle-sound__checkbox:focus-visible ~ span  {
-        outline: var(--focus-visible);
+        outline: var(--focus-visible-outline-color);
         transform: scale(1.05);
 
     }    
@@ -1305,7 +1306,7 @@ Back button
     outline: none;
 }
     .btn-back:focus-visible {
-        outline: var(--focus-visible);
+        outline: var(--focus-visible-outline-color);
     }
     .btn-back:hover {
         transform: scale(1);
@@ -1484,7 +1485,7 @@ input.gap:hover {
 }
 
 input.gap:focus-visible {
-    outline: var(--focus-visible);
+    outline: var(--focus-visible-outline-color);
 }
 
 */
@@ -1647,7 +1648,7 @@ Translation Row
             } 
 
             #translation__word:focus-visible {
-                outline: var(--focus-visible);
+                outline: var(--focus-visible-outline-color);
                 /*color: var(--text-accent);*/
             }
 
