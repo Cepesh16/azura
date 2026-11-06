@@ -23,41 +23,75 @@
 </head>
 <body>
 
+<div class="container-main">
+    
+    <header class="header-main">
+        <div class="panel-options">
+  
+            <h1 class="screen-title">
+                <span>Tomo</span>
+                <span>English</span>
+            </h1>
+            <label class="toggle-theme">
+                <!-- Theme SVG Wrapper for Animation -->
+                <span class="toggle-theme__on">
+                    <!-- Sun Icon (Light Mode) -->
+                    <svg><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
+                </span>
+                <span class="toggle-theme__off">
+                    <!-- Moon Icon (Dark Mode) -->
+                    <svg><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
+                </span>
+                <input id="toggle-theme__checkbox" type="checkbox">
+                <span class="toggle-theme__slider"></span>
+            </label>
 
+        </div>
+
+    </header>
 
 <!-- SCREENS -->
     <div id="screen-container">
 
+
         <div id="screen-start" class="screen active">
             
-            <header class="header-screen">
-                <div class="panel-options">
 
-                    <label class="toggle-theme">
-                        <!-- Theme SVG Wrapper for Animation -->
-                        <span class="toggle-theme__on">
-                            <!-- Sun Icon (Light Mode) -->
-                            <svg><use href="assets/icons/sprite.svg#icon-sun"></use></svg>
-                        </span>
-                        <span class="toggle-theme__off">
-                            <!-- Moon Icon (Dark Mode) -->
-                            <svg><use href="assets/icons/sprite.svg#icon-moon"></use></svg>
-                        </span>
-                        <input id="toggle-theme__checkbox" type="checkbox">
-                        <span class="toggle-theme__slider"></span>
-                    </label>
 
-                </div>
 
-            </header>
-          
-            <h1 class="screen-title">Tomo English</h1>
+
+            <h2 class="screen-subtitle">Текущий статус</h2>
+
+            <table class="screen-table table-status">
+                <tbody>
+                    <tr class="table-row">
+                        <td class="row-icon">
+                            <svg><use href="assets/icons/sprite.svg#icon-cake"></use></svg>
+                        </td>
+                        <td class="row-name">возраст:</td>
+                        <td id="age-status" class="row-value">новорожденный</td>
+                    </tr>
+                    <tr class="table-row">
+                        <td class="row-icon">
+                            <svg><use href="assets/icons/sprite.svg#icon-graduation-cap"></use></svg>
+                        </td>
+                        <td class="row-name">образование:</td>
+                        <td id="education-status" class="row-value">отсутствует</td>
+                    </tr>
+                    <tr class="table-row">
+                        <td class="row-icon">
+                            <svg><use href="assets/icons/sprite.svg#icon-money-bill"></use></svg>
+                        </td>
+                        <td class="row-name">доход:</td>
+                        <td id="income-status" class="row-value">зависимый</td>
+                    </tr>
+                </tbody>
+            </table>
+
 
             <svg class="profile-image" role="img" aria-label="visual progress">
                 <use href="assets/images/sprite-images.svg#cat"></use>
             </svg>
-
-
 
             <div class="start-nav">
 
@@ -93,14 +127,8 @@
 
             </div>
 
-
-        <footer id="footer">
-            <div class="footer-version">build 61.2 stable</div>
-            <div class="footer-update">Focus outline color added for buttons</div>
-        </footer>
-
-
         </div>
+
 
         <div id="screen-trainer" class="screen">
 
@@ -442,7 +470,13 @@
 
 
 
+</div> <!-- container-main -->
 
+
+<footer id="footer">
+    <div class="footer-version">build 61.3 stable</div>
+    <div class="footer-update">Header, footer out of container. Status to main screen</div>
+</footer>
 
 <!-- <script type="module" src="./js/app.js"></script> -->
 <script type="module" src="./js/app.js?v=1.62"></script>

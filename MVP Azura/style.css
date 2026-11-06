@@ -24,22 +24,25 @@
 
 /*COLORS*/
     /* BACKGROUND */
-    --color-main: #f5f7fa;
+    --color-main: #f0f7fa;
     --color-light: #ffffff;
     --color-neutral: #ccc;
     --color-dim: #8390a2;
     --color-dark: #0f172a;
-    --color-accent-primary: #29AB87;
+    --color-accent-primary: #55B985;
+    /*--color-accent-primary: #29AB87;*/
     --color-accent-secondary: #d97706;
+    --color-accent-neutral: #81c784;
 
 
     /* TEXT */
-    --text-main: var(--color-dark);
+    --text-dark: var(--color-dark);
     --text-muted: var(--color-dim);
-    --text-accent: var(--color-accent-secondary);
+    --text-accent-secondary: var(--color-accent-secondary);
+    --text-light: var(--color-light);
 
     /* ICONS */
-    --icon-color: var(--color-dark);
+    --svg-image-color: var(--color-dark);
 
     /* BORDERS */
     /* OUTLINES */
@@ -75,7 +78,7 @@
 
     /* OUTLINES */
     --outline-static: 1px solid var(--outline-main);
-    --outline-hover: 2px solid var(--outline-main);
+    --outline-hover: 2px solid var(--color-accent-primary);
 
     /* SHADOWS */
     --color-shadow-flat: #e2e4e6;
@@ -201,7 +204,7 @@ body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   background: var(--color-main);
-  color: var(--text-main);
+  color: var(--text-dark);
   font-family: Arial, sans-serif;
 }
 
@@ -249,7 +252,7 @@ select:-webkit-autofill {
 }
 
 /* ensure caret color matches your accent */
-input.gap { caret-color: var(--text-accent); }
+input.gap { caret-color: var(--text-accent-secondary); }
 
 /* keep placeholders subtle */
 ::placeholder { color: var(--text-muted); opacity: 1; }
@@ -286,14 +289,17 @@ html, body {
 body {
     font-family: Arial, sans-serif;
     font-family: Raleway, sans-serif;
-    min-height: 100dvh;
+    /* Fallback for old browsers */
+    min-height: 100vh; 
+    /* Modern dynamic solution */
+    min-height: 100dvh; 
     margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     /*padding-top: calc(var(--space-xl) * 2);*/
     background: var(--color-main);
-    color: var(--text-main);
+    color: var(--text-dark);
 }
 
 button {
@@ -306,7 +312,7 @@ button {
 
     button:hover {
         /*background: var(--button-hover);*/
-        /*color: var(--text-main);*/
+        /*color: var(--text-dark);*/
         transform: scale(1.05);
         outline: var(--outline-hover);
         
@@ -409,6 +415,8 @@ MY FRAMEWORK
 
 svg {
     color: var(--text-muted);
+    color: var(--color-accent-primary);
+    color: var(--color-accent-neutral);
 }
 
 
@@ -423,16 +431,75 @@ select {
 
 
 
+/* ====================================
+SITE CSS STYLES
+=======================================*/
+.container-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+#screen-container {
+    width: 100%;
+    height: 100%;
+    /*flex: 1;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-block: var(--space-lg);
+}
+
+
+.header-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-block: var(--space-lg);
+    padding-inline: var(--space-md);
+    background: var(--color-light);
+}
+
+    .panel-options {
+        width: 100%;
+        max-width: 640px;
+        /*min-width: 320px;*/
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+
+
+
+
+#footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    /*width: 320px;*/
+    /*height: 100px;*/
+    padding-block: var(--space-md);
+    background: var(--color-dark);
+    color: var(--text-light);
+    font-size: var(--font-xs);
+}
+
+
+
 /* =========================
 Screen common/general styles
 ========================= */
-#screen-container {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .screen {
     display: none;
@@ -459,22 +526,33 @@ Screen common/general styles
 
 
 .screen-title {
+    display: flex;
+    gap: var(--space-xs);
     font-size: var(--font-lg);
-    margin-bottom: var(--space-lg);
+    /*margin-bottom: var(--space-lg);*/
 }
-    .screen-title::first-letter {
-        display: inline-block;
+    .screen-title span::first-letter {
+        /*display: inline-block;*/
         margin-right: var(--dot-xs);
-        padding: 0px var(--dot-lg) 0px var(--dot-lg);
+        border-radius: 6px;
         padding: 0px var(--dot-md) 0px;
 
-        font-size: var(--font-xl);
-        font-weight: bold;
         color: var(--color-light);
+        color: var(--color-accent-primary);
+        background: var(--color-accent-primary);
         background: var(--color-neutral);
-        border-radius: 6px;
+        background: var(--color-light);
         box-shadow: var(--shadow-flat);
     }
+
+    .screen-title span:nth-child(1)::first-letter {
+    }
+
+    .screen-title span:nth-child(2)::first-letter {
+        
+    }
+
+
 
 .screen-subtitle {
     text-align: left;
@@ -512,12 +590,15 @@ Screen common/general styles
     font-size: var(--font-md);
 }
 
+
 .btn-profile svg {
     /*color: var(--color-light);*/
+    color: var(--color-accent-primary);
 }
 
 .btn-profile--action {
     background: var(--color-accent-primary);
+    color: var(--color-light);
     /*outline: 2px solid #49796B;*/
 }
 
@@ -525,15 +606,16 @@ Screen common/general styles
     background: var(--level-indicator-5);
     color: var(--color-light);
 }*/
-.btn-profile--action,
+
+.btn-profile--action:hover svg {
+    /*color: var(--color-light);*/
+}
+
 .btn-profile--action svg {
     color: var(--color-light);
     /*color: var(--color-darkd);*/
 }
 
-.btn-profile--action:hover svg {
-    color: var(--color-light);
-}
 
 
 /* =========================
@@ -560,16 +642,6 @@ Screen 1: Start screen
 ========================= */
 
 
-.header-screen {
-    width: 100%;
-    /*max-width: 250px;*/
-    margin-bottom: var(--space-lg);
-
-}
-
-    .panel-options {
-        display: flex;
-    }
 
 
 /*THEME TOGGLE*/
@@ -705,7 +777,7 @@ Screen 1: Start screen
 }
 
 .toggle-theme:hover .toggle-theme__slider {
-    outline: var(--outline-static);
+    outline: var(--outline-hover);
 }
 
 .toggle-theme:hover .toggle-theme__slider::before {
@@ -725,7 +797,7 @@ Screen 1: Start screen
     width: 100%;
     height: 160px;
     margin-bottom: var(--space-lg);
-    color: var(--icon-color);
+    color: var(--svg-image-color);
 }
 
 
@@ -962,7 +1034,7 @@ Screen 4.1: Progress words screen
         border: 1px solid var(--outline-main);
         border-radius: var(--radius-sm);
         background: var(--color-light);
-        color: var(--text-main);
+        color: var(--text-dark);
         font: inherit;
     }
 
@@ -1034,7 +1106,7 @@ Screen 4.1: Progress words screen
             .word-english {
                 overflow-wrap: anywhere;
                 font-size: var(--font-md);
-                color: var(--text-main);
+                color: var(--text-dark);
             }
 
             .word-translation {
@@ -1079,18 +1151,6 @@ Screen 5: Settings screen
 /* =========================
 Loading
 ========================= */
-
-#footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    width: 320px;
-    /*width: 100%;*/
-    padding-block: var(--space-md);
-    font-size: var(--font-xs);
-    color: var(--text-muted);
-}
 
 
 #loading {
@@ -1384,7 +1444,7 @@ Top Navigation
 
     #count-progress-bar {
         font-size: var(--font-sm);
-        color: var(--text-accent);
+        color: var(--text-accent-secondary);
         font-weight: 500;
         white-space: nowrap;
     }
@@ -1459,8 +1519,8 @@ input.gap {
 
     text-align: center;
 
-    color: var(--text-accent);
-    caret-color: var(--text-accent);
+    color: var(--text-accent-secondary);
+    caret-color: var(--text-accent-secondary);
 
     white-space: nowrap;
 
@@ -1597,12 +1657,12 @@ Translation Row
 
 
     #translation__box:hover #translation__toggle {
-        color: var(--text-accent);
+        color: var(--text-accent-secondary);
         transform: scale(1.15);
     }
         #translation__toggle:hover {
             transform: scale(1.15);
-            color: var(--text-accent);
+            color: var(--text-accent-secondary);
         }
 
         #translation__toggle:active {
@@ -1649,7 +1709,7 @@ Translation Row
 
             #translation__word:focus-visible {
                 outline: var(--focus-visible-outline-color);
-                /*color: var(--text-accent);*/
+                /*color: var(--text-accent-secondary);*/
             }
 
 
@@ -1863,7 +1923,7 @@ Session summary
 
 @media (max-width: 480px) {
     body {
-    padding-top: var(--space-lg);
+    /*padding-top: var(--space-lg);*/
 /*        margin-top: var(--space-lg);
         margin: var(--space-md) var(--space-md) 0 var(--space-md);*/
     }
@@ -1929,11 +1989,11 @@ Session summary
     --color-light: #0f1620;
     --color-neutral: #7b8896;
 
-    --text-main: #e6eef6;
-    --text-accent: #F4C430;
+    --text-dark: #e6eef6;
+    --text-accent-secondary: #F4C430;
     --text-muted: #78848f;
 
-    --icon-color: #88949f;
+    --svg-image-color: #88949f;
 
     --outline-main: #1f2a33;
 
@@ -1972,19 +2032,25 @@ Session summary
     border-top: 4px solid var(--color-accent-primary);
 }
 
+
 [data-theme="dark"] button {
     background: var(--color-light);
-    color: var(--text-main);
+    color: var(--text-dark);
     border-color: var(--outline-main);
 }
+
 [data-theme="dark"] button:hover {
     background: var(--button-hover);
+}
+
+[data-theme="dark"] .btn-profile--action svg {
+    color: var(--color-accent-primary);
 }
 
 
 [data-theme="dark"] .options-card {
     background: var(--color-light);
-    color: var(--text-main);
+    color: var(--text-dark);
 }
 
 
@@ -2002,7 +2068,7 @@ Session summary
 
 /* keep overlay hint contrast */
 [data-theme="dark"] .hint { color: rgba(255,255,255,0.18); }
-[data-theme="dark"] .typed { color: var(--text-accent); }
+[data-theme="dark"] .typed { color: var(--text-accent-secondary); }
 [data-theme="dark"] .typed.wrong { color: var(--wrong); }
 
 
