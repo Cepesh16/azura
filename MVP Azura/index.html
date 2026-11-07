@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="app-version" content="2026-08-06-1.3111">
+<!-- When update version only change here -->
+    <meta name="app-version" content="1.64">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -474,12 +475,20 @@
 
 
 <footer id="footer">
-    <div class="footer-version">build 63.2 stable</div>
-    <div class="footer-update">Header, Footer border-top, transparent. Profile image hidden.</div>
+    <div class="footer-version">build 63.3 fix</div>
+    <div class="footer-update">Version update in one place. Meta 'content' in html head</div>
 </footer>
 
 <!-- <script type="module" src="./js/app.js"></script> -->
-<script type="module" src="./js/app.js?v=1.63.2"></script>
+<!-- <script type="module" src="./js/app.js?v=1.63.2"></script> -->
+<!-- When update version only change meta tag 'app-version' -->
+<script type="module">
+    const version = document.querySelector(
+        'meta[name="app-version"]'
+    ).content;
+
+    import(`./js/app.js?v=${encodeURIComponent(version)}`);
+</script>
 
 
 </body>
