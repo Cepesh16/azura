@@ -462,9 +462,10 @@ SITE CSS STYLES
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-block: var(--space-lg);
+    padding-block: var(--space-md);
     padding-inline: var(--space-md);
-    background: var(--color-light);
+    background: var(--color-main);
+    border-bottom: var(--outline-static);
 }
 
     .panel-options {
@@ -490,8 +491,9 @@ SITE CSS STYLES
     /*width: 320px;*/
     /*height: 100px;*/
     padding-block: var(--space-md);
-    background: var(--color-dark);
-    color: var(--text-light);
+    border-top: var(--outline-static);
+    /*background: var(--color-dark);*/
+    color: var(--text-dark);
     font-size: var(--font-xs);
 }
 
